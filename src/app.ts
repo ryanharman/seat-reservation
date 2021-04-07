@@ -1,8 +1,9 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 import http from "http";
-import logging from "./config/logging";
-import config from "./config/config";
-import sampleRoutes from "./routes/sample";
+import logging from "./utilities/logging";
+import { config } from "./utilities/config";
+import officeRoutes from "./routes/office";
+import "./database"; // initialise the database
 
 const NAMESPACE = "Server";
 const app: Application = express();
@@ -45,7 +46,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // Routes
-app.use("/sample", sampleRoutes);
+app.use("/office", officeRoutes);
 
 // Error handling
 app.use((req: Request, res: Response) => {
@@ -61,6 +62,6 @@ const httpServer = http.createServer(app);
 httpServer.listen(config.server.port, () => {
   logging.info(
     NAMESPACE,
-    `Server running on ${config.server.hostname}:${config.server.port}`
+    `Server running on ${config.server.host}:${config.server.port}`
   );
 });
