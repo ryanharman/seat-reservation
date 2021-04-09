@@ -12,9 +12,9 @@ const JWT_SECRET = process.env.JWT_SECRET || "secret";
 const SESSION_SECRET = process.env.SESSION_SECRET || "secret";
 
 export const DB = {
-  USER: process.env.DB_USER || "secret",
-  PASSWORD: process.env.DB_USER_PWD || "secret",
-  HOST: process.env.DB_HOST || "secret",
+  USER: process.env.DB_USER || "",
+  PASSWORD: process.env.DB_USER_PWD || "",
+  HOST: process.env.DB_HOST || "",
   NAME: process.env.DB_NAME || "SeatReservation",
   PORT: process.env.DB_PORT || 5000,
 };
