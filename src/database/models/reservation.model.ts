@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types, Document } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import { IOffice } from "./office.model";
 
 const ReservationSchema: Schema = new mongoose.Schema(

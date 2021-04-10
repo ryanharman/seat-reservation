@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { DB } from "./../utilities/config";
-import logging from "./../utilities/logging";
+import { DB } from "../utilities/config";
+import logging from "../utilities/logging";
 
 const NAMESPACE = "Database";
 

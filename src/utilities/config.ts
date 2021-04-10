@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: ".env" });
 
-const SERVER_PORT = process.env.SERVER_PORT || 5000;
+const SERVER_PORT = process.env.SERVER_PORT || 3000;
 const SERVER_HOST = process.env.SERVER_PORT || "localhost";
 const ENVIRONMENT = process.env.APP_ENV || "dev";
 const IS_PRODUCTION = ENVIRONMENT === "production";
@@ -16,7 +16,7 @@ export const DB = {
   PASSWORD: process.env.DB_USER_PWD || "",
   HOST: process.env.DB_HOST || "",
   NAME: process.env.DB_NAME || "SeatReservation",
-  PORT: process.env.DB_PORT || 5000,
+  PORT: process.env.DB_PORT || 3000,
 };
 
 const SERVER = {
