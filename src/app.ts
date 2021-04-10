@@ -3,6 +3,7 @@ import http from "http";
 import logging from "./utilities/logging";
 import { config } from "./utilities/config";
 import officeRoutes from "./routes/office";
+import reservationRoutes from "./routes/reservation";
 import "./database"; // initialise the database
 
 const NAMESPACE = "Server";
@@ -47,6 +48,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 // Routes
 app.use("/office", officeRoutes);
+app.use("/reservation", reservationRoutes);
 
 // Error handling
 app.use((req: Request, res: Response) => {

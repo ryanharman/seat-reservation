@@ -1,12 +1,15 @@
 import mongoose, { Schema, Types, Document } from "mongoose";
 import { IOffice } from "./office.model";
 
-const ReservationSchema: Schema = new mongoose.Schema({
-  dateBooked: Date,
-  seatBooked: Number,
-  office: { type: Schema.Types.ObjectId, ref: "Office" },
-  user: String,
-});
+const ReservationSchema: Schema = new mongoose.Schema(
+  {
+    dateBooked: Date,
+    seatBooked: Number,
+    office: { type: Schema.Types.ObjectId, ref: "Office" },
+    user: String,
+  },
+  { collection: "Reservation" }
+);
 
 export interface IReservation extends Document {
   dateBooked: Date;
