@@ -41,6 +41,22 @@ const reservationsByUser = (req: Request, res: Response) => {
   });
 };
 
+// Get reservations by office
+const reservationsByOffice = (req: Request, res: Response) => {
+  logging.info(NAMESPACE, `Get Reservations by office route called`);
+
+  const filter = { office: req.body.office };
+  Reservation.find({ filter }, (err: Errback, reservations: IReservation) => {
+    if (err) {
+      console.log(
+        logging.error(NAMESPACE, `Get Reservations by office route error`, err)
+      );
+    } else {
+      res.send(reservations);
+    }
+  });
+};
+
 // Get reservation by id
 const reservationById = (req: Request, res: Response) => {
   logging.info(NAMESPACE, "Get Reservation by Id route called");
@@ -121,6 +137,7 @@ export default {
   reservations,
   reservationById,
   reservationsByUser,
+  reservationsByOffice,
   postReservation,
   postReservations,
   updateReservation,
