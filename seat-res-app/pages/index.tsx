@@ -1,4 +1,6 @@
 import Head from "next/head";
+import React from "react";
+import Checkbox from "../components/ui/Checkbox";
 import PageHeader from "../components/ui/Header";
 
 export default function Home() {
@@ -11,7 +13,7 @@ export default function Home() {
       </Head>
 
       <PageHeader />
-
+      <Checkbox onChange={() => console.log("pressed")} height={"16"} width={"16"} />
       <footer></footer>
     </div>
   );
