@@ -1,5 +1,16 @@
 import React from "react";
 
+interface IButtonProps {
+  primary: boolean;
+  disabled: boolean;
+  submission: boolean;
+  nextState: boolean;
+  onClick: Function;
+  icon: Function;
+  children: React.ReactNode;
+  className: string;
+}
+
 // Classes for styling taken from ../styles/globals.css
 // TODO: disabled styling
 const Button = ({
@@ -11,7 +22,7 @@ const Button = ({
   nextState,
   children,
   className = "",
-}) => {
+}: IButtonProps) => {
   const buttonIconStyling = primary
     ? "btn-icon btn-primary"
     : submission
@@ -37,9 +48,7 @@ const Button = ({
           onClick={() => onClick()}
           type="button"
           disabled={disabled}
-          className={`${
-            primary ? "btn btn-primary" : "btn btn-secondary"
-          } ${className}`}
+          className={`${primary ? "btn btn-primary" : "btn btn-secondary"} ${className}`}
         >
           {children}
         </button>
