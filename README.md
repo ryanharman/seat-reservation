@@ -21,14 +21,14 @@ The application will be developed in TypeScript for both frontend and backend.
 #### Frontend
 
 Next JS
-TailwindCSS / StyledComponents
-Axios / React Query
+- TailwindCSS / StyledComponents
+- Axios / React Query
 
 #### Backend
 
-Express Apollo Server
-GraphQL
-PostgreSQL
-Express-session
-Redis (Session storage)
-Archon2 (Password hashing if auth is not managed externally)
+- Express Apollo Server
+- GraphQL
+- PostgreSQL
+- Express-session
+- Redis (Session storage)
+- Archon2 (Password hashing if auth is not managed externally)
