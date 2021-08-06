@@ -3,11 +3,16 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { HelloResolver } from "./graphql/resolvers/hello";
 import { ReservationResolver } from "./graphql/resolvers/reservation";
+import { createConnection } from "typeorm";
+import { RegisterResolver } from "./graphql/resolvers/user/Register";
 
 const main = async () => {
+  // postgres connection
+  await createConnection();
+
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, ReservationResolver],
+      resolvers: [HelloResolver, ReservationResolver, RegisterResolver],
     }),
   });
 

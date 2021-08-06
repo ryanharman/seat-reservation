@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon dist/app.js",
     "watch": "tsc -w",
+    "start": "nodemon dist/app.js",
     "dev": "nodemon src/app.ts",
     "build": "tsc -p ."
   },

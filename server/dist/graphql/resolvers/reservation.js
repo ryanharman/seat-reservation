@@ -12,23 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReservationResolver = void 0;
 require("reflect-metadata");
 const type_graphql_1 = require("type-graphql");
-let BookingType = class BookingType {
-};
-__decorate([
-    type_graphql_1.Field(),
-    __metadata("design:type", String)
-], BookingType.prototype, "seat", void 0);
-__decorate([
-    type_graphql_1.Field(),
-    __metadata("design:type", String)
-], BookingType.prototype, "office", void 0);
-__decorate([
-    type_graphql_1.Field(),
-    __metadata("design:type", String)
-], BookingType.prototype, "workspace", void 0);
-BookingType = __decorate([
-    type_graphql_1.ObjectType()
-], BookingType);
 let Reservation = class Reservation {
 };
 __decorate([
@@ -45,7 +28,7 @@ __decorate([
 ], Reservation.prototype, "bookedItemId", void 0);
 __decorate([
     type_graphql_1.Field(),
-    __metadata("design:type", BookingType)
+    __metadata("design:type", String)
 ], Reservation.prototype, "bookingType", void 0);
 __decorate([
     type_graphql_1.Field(),

@@ -8,10 +8,13 @@ const apollo_server_express_1 = require("apollo-server-express");
 const type_graphql_1 = require("type-graphql");
 const hello_1 = require("./graphql/resolvers/hello");
 const reservation_1 = require("./graphql/resolvers/reservation");
+const typeorm_1 = require("typeorm");
+const Register_1 = require("./graphql/resolvers/user/Register");
 const main = async () => {
+    await typeorm_1.createConnection();
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: await type_graphql_1.buildSchema({
-            resolvers: [hello_1.HelloResolver, reservation_1.ReservationResolver],
+            resolvers: [hello_1.HelloResolver, reservation_1.ReservationResolver, Register_1.RegisterResolver],
         }),
     });
     const app = express_1.default();
