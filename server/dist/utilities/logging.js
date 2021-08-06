@@ -41,3 +41,4 @@ exports.default = {
     error,
     debug,
 };
+//# sourceMappingURL=logging.js.map

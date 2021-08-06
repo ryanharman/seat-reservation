@@ -20,10 +20,7 @@ const warn = (namespace: string, message: string, object?: any) => {
 
 const error = (namespace: string, message: string, object?: any) => {
   if (object) {
-    console.log(
-      `[${getTimeStamp()}] [ERROR] [${namespace}] ${message}`,
-      object
-    );
+    console.log(`[${getTimeStamp()}] [ERROR] [${namespace}] ${message}`, object);
   } else {
     console.log(`[${getTimeStamp()}] [ERROR] [${namespace}] ${message}`);
   }
@@ -31,10 +28,7 @@ const error = (namespace: string, message: string, object?: any) => {
 
 const debug = (namespace: string, message: string, object?: any) => {
   if (object) {
-    console.log(
-      `[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`,
-      object
-    );
+    console.log(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`, object);
   } else {
     console.log(`[${getTimeStamp()}] [DEBUG] [${namespace}] ${message}`);
   }
