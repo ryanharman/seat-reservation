@@ -1,10 +1,10 @@
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-import { HelloResolver } from "./graphql/resolvers/hello";
-import { ReservationResolver } from "./graphql/resolvers/reservation";
+import { HelloResolver } from "./resolvers/hello";
+import { ReservationResolver } from "./resolvers/Reservation";
 import { createConnection } from "typeorm";
-import { RegisterResolver } from "./graphql/resolvers/user/Register";
+import { RegisterResolver } from "./resolvers/user/Register";
 
 const main = async () => {
   // postgres connection

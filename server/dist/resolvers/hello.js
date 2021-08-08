@@ -13,15 +13,15 @@ exports.HelloResolver = void 0;
 require("reflect-metadata");
 const type_graphql_1 = require("type-graphql");
 let HelloResolver = class HelloResolver {
-    hello() {
-        return "hello world";
+    async hello() {
+        return "hello there nosey 😇";
     }
 };
 __decorate([
     type_graphql_1.Query(() => String),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], HelloResolver.prototype, "hello", null);
 HelloResolver = __decorate([
     type_graphql_1.Resolver()
