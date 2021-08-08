@@ -1,5 +1,6 @@
 import "reflect-metadata";
-import { Field, ID, ObjectType, Query, Resolver } from "type-graphql";
+import { Field, ID, ObjectType, Query, Resolver, UseMiddleware } from "type-graphql";
+import { isAuth } from "../middleware/isAuth";
 
 @ObjectType()
 class Reservation {
@@ -30,6 +31,7 @@ class Reservation {
 
 @Resolver()
 export class ReservationResolver {
+  @UseMiddleware(isAuth)
   @Query(() => [Reservation])
   async reservations() {
     // perform action here with id

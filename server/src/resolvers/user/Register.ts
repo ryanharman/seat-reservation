@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { User } from "../../entity/User";
 import { RegisterInput } from "./register/RegisterInput";

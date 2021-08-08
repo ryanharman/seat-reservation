@@ -15,41 +15,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegisterResolver = void 0;
+exports.LoginResolver = void 0;
 const type_graphql_1 = require("type-graphql");
 const User_1 = require("../../entity/User");
-const RegisterInput_1 = require("./register/RegisterInput");
 const argon2_1 = __importDefault(require("argon2"));
-let RegisterResolver = class RegisterResolver {
-    async hello() {
-        return "hello there nosey 😇";
-    }
-    async register({ email, firstName, lastName, password }) {
-        const hashedPassword = await argon2_1.default.hash(password);
-        const user = await User_1.User.create({
-            firstName,
-            lastName,
-            email,
-            password: hashedPassword,
-        }).save();
+let LoginResolver = class LoginResolver {
+    async login(email, password, ctx) {
+        const user = await User_1.User.findOne({ where: { email } });
+        if (!user) {
+            return null;
+        }
+        const valid = await argon2_1.default.verify(user.password, password);
+        if (!valid) {
+            return null;
+        }
+        ctx.req.session.userId = user.id;
         return user;
     }
 };
 __decorate([
-    type_graphql_1.Query(() => String),
+    type_graphql_1.Mutation(() => User_1.User, { nullable: true }),
+    __param(0, type_graphql_1.Arg("email")),
+    __param(1, type_graphql_1.Arg("password")),
+    __param(2, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String, String, Object]),
     __metadata("design:returntype", Promise)
-], RegisterResolver.prototype, "hello", null);
-__decorate([
-    type_graphql_1.Mutation(() => User_1.User),
-    __param(0, type_graphql_1.Arg("data")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [RegisterInput_1.RegisterInput]),
-    __metadata("design:returntype", Promise)
-], RegisterResolver.prototype, "register", null);
-RegisterResolver = __decorate([
+], LoginResolver.prototype, "login", null);
+LoginResolver = __decorate([
     type_graphql_1.Resolver()
-], RegisterResolver);
-exports.RegisterResolver = RegisterResolver;
-//# sourceMappingURL=Register.js.map
+], LoginResolver);
+exports.LoginResolver = LoginResolver;
+//# sourceMappingURL=Login.js.map

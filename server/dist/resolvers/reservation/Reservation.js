@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReservationResolver = void 0;
 require("reflect-metadata");
 const type_graphql_1 = require("type-graphql");
-const isAuth_1 = require("./middleware/isAuth");
+const isAuth_1 = require("../middleware/isAuth");
 let Reservation = class Reservation {
 };
 __decorate([
