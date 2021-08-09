@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { Reservation } from "src/entity/Reservation";
 import { BookingType } from "src/types/BookingTypeEnum";
 import { Arg, Query, Resolver, UseMiddleware } from "type-graphql";
-import { isAuth } from "../middleware/isAuth";
+import { isAuth } from "./middleware/isAuth";
 
 @Resolver()
 export class ReservationResolver {

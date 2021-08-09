@@ -1,8 +1,9 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { BaseEntity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { BookableItemEnum } from "src/types/BookableItemEnum";
 
 @ObjectType()
+@Entity()
 export class BookableItem extends BaseEntity {
   @Field(() => ID)
   @Column()
@@ -17,7 +18,7 @@ export class BookableItem extends BaseEntity {
   @Column()
   itemType: BookableItemEnum;
 
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: true })
   @Column()
   available: boolean;
 

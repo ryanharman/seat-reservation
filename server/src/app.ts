@@ -3,7 +3,7 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { HelloResolver } from "./modules/hello";
-import { ReservationResolver } from "./modules/reservation/Reservation";
+import { ReservationResolver } from "./modules/reservation";
 import { createConnection } from "typeorm";
 import { RegisterResolver } from "./modules/user/Register";
 import { LoginResolver } from "./modules/user/Login";
