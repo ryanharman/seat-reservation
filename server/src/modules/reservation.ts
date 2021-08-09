@@ -8,11 +8,11 @@ import { isAuth } from "./middleware/isAuth";
 export class ReservationResolver {
   @UseMiddleware(isAuth)
   @Query(() => Reservation)
-  async reservationById(@Arg("id") id: string) {
-    const reservation = Reservation.findOne({ id: id });
+  async reservationById(@Arg("id") id: string): Promise<Reservation | undefined> {
+    const reservation = await Reservation.findOne(id);
 
     if (!reservation) {
-      return null;
+      return undefined;
     }
 
     return reservation;
@@ -20,8 +20,8 @@ export class ReservationResolver {
 
   @UseMiddleware(isAuth)
   @Query(() => [Reservation])
-  async reservations() {
-    const reservations = Reservation.find();
+  async reservations(): Promise<Reservation[] | null> {
+    const reservations = await Reservation.find();
 
     if (!reservations) {
       return null;
@@ -32,8 +32,8 @@ export class ReservationResolver {
 
   @UseMiddleware(isAuth)
   @Query(() => [Reservation])
-  async reservationByType(@Arg("type") type: BookingType) {
-    const reservations = Reservation.find({ bookingType: type });
+  async reservationByType(@Arg("type") type: BookingType): Promise<Reservation[] | null> {
+    const reservations = await Reservation.find({ bookingType: type });
 
     if (!reservations) {
       return null;
@@ -44,8 +44,11 @@ export class ReservationResolver {
 
   @UseMiddleware(isAuth)
   @Query(() => [Reservation])
-  async reservationByTypeAndItem(@Arg("type") type: BookingType, @Arg("item") item: string) {
-    const reservations = Reservation.find({ bookingType: type, bookedItemId: item });
+  async reservationByTypeAndItem(
+    @Arg("type") type: BookingType,
+    @Arg("item") item: string
+  ): Promise<Reservation[] | null> {
+    const reservations = await Reservation.find({ bookingType: type, bookedItemId: item });
 
     if (!reservations) {
       return null;
@@ -60,8 +63,8 @@ export class ReservationResolver {
     @Arg("type") type: BookingType,
     @Arg("dateFrom") dateFrom: Date,
     @Arg("dateTo", { defaultValue: new Date() }) dateTo: Date
-  ) {
-    const reservations = Reservation.find({
+  ): Promise<Reservation[] | null> {
+    const reservations = await Reservation.find({
       bookingType: type,
       dateBookedFrom: dateFrom,
       dateBookedTo: dateTo,
