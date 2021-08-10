@@ -10,15 +10,15 @@ export class Reservation extends BaseEntity {
   @Field(() => ID)
   @Column()
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Field()
   @Column(() => User)
-  userId: string;
+  userId: number;
 
   @Field({ description: "The item (seat or workspace) that is booked" })
   @Column(() => BookableItem)
-  bookedItemId: string;
+  bookedItemId: number;
 
   // this field needs some thinking on. Is it really necessary?
   @Field({ description: "The type of booking that is being made. Eg an office booking or workspace booking." })

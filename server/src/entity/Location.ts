@@ -3,11 +3,11 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @ObjectType()
 @Entity()
-export class BookableItem extends BaseEntity {
+export class Location extends BaseEntity {
   @Field(() => ID)
   @Column()
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Field()
   @Column({ unique: true })

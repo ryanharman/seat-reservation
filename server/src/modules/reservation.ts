@@ -1,8 +1,13 @@
 import "reflect-metadata";
-import { Reservation } from "src/entity/Reservation";
-import { BookingType } from "src/types/BookingTypeEnum";
-import { Arg, Query, Resolver, UseMiddleware } from "type-graphql";
+import { Reservation } from "../entity/Reservation";
+import { BookingType } from "../types/BookingTypeEnum";
+import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { isAuth } from "./middleware/isAuth";
+// import { ReservationArgs } from "./reservation/ReservationArgs";
+import { MyContext } from "../types/MyContext";
+import { User } from "../entity/User";
+import { ReservationArgs } from "./reservation/ReservationArgs";
+// import { ObjectLiteral } from "typeorm";
 
 @Resolver()
 export class ReservationResolver {
@@ -46,7 +51,7 @@ export class ReservationResolver {
   @Query(() => [Reservation])
   async reservationByTypeAndItem(
     @Arg("type") type: BookingType,
-    @Arg("item") item: string
+    @Arg("item") item: number
   ): Promise<Reservation[] | null> {
     const reservations = await Reservation.find({ bookingType: type, bookedItemId: item });
 
@@ -76,4 +81,50 @@ export class ReservationResolver {
 
     return reservations;
   }
+
+  @Mutation(() => Reservation)
+  async createReservation(
+    @Arg("data") { userId, bookedItemId, bookingType, dateBookedFrom, dateBookedTo }: ReservationArgs,
+    @Ctx() ctx: MyContext
+  ): Promise<Reservation> {
+    // if the user is booking for someone else then they will be passing the UID through.
+    // if theyre booking for themselves then no UID needs to be passed.
+    if (userId == null) {
+      const currUser = await User.findOne(ctx.req.session!.userId);
+      userId = currUser!.id;
+    }
+
+    const reservation = await Reservation.create({
+      userId,
+      bookedItemId,
+      bookingType,
+      dateBookedFrom,
+      dateBookedTo,
+    }).save();
+
+    return reservation;
+  }
+
+  //   @Mutation()
+  //   async createReservations(@Arg("data") data: ReservationArgs[]): Promise<ObjectLiteral[]> {
+  //     /* Need to test if this actually works and whether it actually returns the ID's! */
+  //     const reservations = (
+  //       await Reservation.createQueryBuilder()
+  //         .insert()
+  //         .values(
+  //           data.map((r) => {
+  //             return {
+  //               userId: r.userId,
+  //               bookedItemId: r.bookedItemId,
+  //               bookingType: r.bookingType,
+  //               dateBookedFrom: r.dateBookedFrom,
+  //               dateBookedTo: r.dateBookedTo,
+  //             };
+  //           })
+  //         )
+  //         .execute()
+  //     ).identifiers;
+
+  //     return reservations;
+  //   }
 }

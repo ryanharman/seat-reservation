@@ -3,7 +3,7 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { HelloResolver } from "./modules/hello";
-import { ReservationResolver } from "./modules/reservation";
+import { ReservationResolver } from "./modules/Reservation";
 import { createConnection } from "typeorm";
 import { RegisterResolver } from "./modules/user/Register";
 import { LoginResolver } from "./modules/user/Login";
@@ -12,6 +12,7 @@ import { redis } from "./redis";
 import cors from "cors";
 import connectRedis from "connect-redis";
 import session from "express-session";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 
 const main = async () => {
   // postgres connection
@@ -28,6 +29,7 @@ const main = async () => {
   const apolloServer = new ApolloServer({
     schema,
     context: ({ req }: any) => ({ req }), // allows access to the request data in resolvers
+    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
   });
 
   const app: any = express();
@@ -37,7 +39,7 @@ const main = async () => {
   app.use(
     cors({
       credentials: true,
-      origin: "http://localhost:3000",
+      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
     })
   );
 

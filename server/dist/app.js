@@ -7,16 +7,17 @@ require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const apollo_server_express_1 = require("apollo-server-express");
 const type_graphql_1 = require("type-graphql");
-const hello_1 = require("./resolvers/hello");
-const Reservation_1 = require("./resolvers/reservation/Reservation");
+const hello_1 = require("./modules/hello");
+const Reservation_1 = require("./modules/Reservation");
 const typeorm_1 = require("typeorm");
-const Register_1 = require("./resolvers/user/Register");
-const Login_1 = require("./resolvers/user/Login");
-const Me_1 = require("./resolvers/user/Me");
+const Register_1 = require("./modules/user/Register");
+const Login_1 = require("./modules/user/Login");
+const Me_1 = require("./modules/user/Me");
 const redis_1 = require("./redis");
 const cors_1 = __importDefault(require("cors"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
 const express_session_1 = __importDefault(require("express-session"));
+const apollo_server_core_1 = require("apollo-server-core");
 const main = async () => {
     await typeorm_1.createConnection();
     const schema = await type_graphql_1.buildSchema({
@@ -28,12 +29,13 @@ const main = async () => {
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema,
         context: ({ req }) => ({ req }),
+        plugins: [apollo_server_core_1.ApolloServerPluginLandingPageGraphQLPlayground()],
     });
     const app = express_1.default();
     const RedisStore = connect_redis_1.default(express_session_1.default);
     app.use(cors_1.default({
         credentials: true,
-        origin: "http://localhost:3000",
+        origin: ["http://localhost:3000", "https://studio.apollographql.com"],
     }));
     app.use(express_session_1.default({
         store: new RedisStore({
