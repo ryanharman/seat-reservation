@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
 import { BookableItem } from "./BookableItem";
 
@@ -12,11 +12,13 @@ export class Reservation extends BaseEntity {
   id: number;
 
   @Field()
-  @Column(() => User)
+  @Column()
+  @OneToOne(() => User)
   userId: number;
 
   @Field({ description: "The item (seat or workspace) that is booked" })
-  @Column(() => BookableItem)
+  @Column()
+  @OneToOne(() => BookableItem)
   bookedItemId: number;
 
   // this field needs some thinking on. Is it really necessary?
@@ -26,7 +28,7 @@ export class Reservation extends BaseEntity {
   @Column()
   bookingType: string;
 
-  @Field({ defaultValue: false })
+  @Field({ defaultValue: false, nullable: true })
   @Column()
   cancelled: boolean;
 
@@ -42,7 +44,7 @@ export class Reservation extends BaseEntity {
   @Column()
   createdDate: Date;
 
-  @Field()
+  @Field({ nullable: true })
   @Column()
   updatedDate: Date;
 }

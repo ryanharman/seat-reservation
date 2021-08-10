@@ -6,6 +6,7 @@ import { MyContext } from "../types/MyContext";
 import { User } from "../entity/User";
 import { ReservationInput } from "./reservation/ReservationInput";
 import { ObjectLiteral } from "typeorm";
+import { isSeatBooked } from "./reservation/isSeatBooked";
 // import { ObjectLiteral } from "typeorm";
 
 @Resolver()
@@ -78,7 +79,9 @@ export class ReservationResolver {
     return reservations;
   }
 
-  // look into fixing this
+  // TODO: Implement some middleware to check if the reservation is actually possible.
+  // This will be on top of the frontend validation being done
+  @UseMiddleware(isAuth, isSeatBooked)
   @Mutation(() => Reservation)
   async createReservation(
     @Arg("data", () => ReservationInput)
@@ -96,8 +99,11 @@ export class ReservationResolver {
       userId,
       bookedItemId,
       bookingType,
+      cancelled: false,
       dateBookedFrom,
       dateBookedTo,
+      createdDate: new Date(),
+      updatedDate: new Date(), // fix
     }).save();
 
     return reservation;
