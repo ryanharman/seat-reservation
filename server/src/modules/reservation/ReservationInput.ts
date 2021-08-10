@@ -1,8 +1,8 @@
-import { BookingType } from "../../types/BookingTypeEnum";
-import { ArgsType, Field } from "type-graphql";
+import { Reservation } from "src/entity/Reservation";
+import { Field, InputType } from "type-graphql";
 
-@ArgsType()
-export class ReservationArgs {
+@InputType()
+export class ReservationInput implements Partial<Reservation> {
   @Field()
   userId: number;
 
@@ -11,7 +11,7 @@ export class ReservationArgs {
 
   // this field needs some thinking on. Is it really necessary?
   @Field({ description: "The type of booking that is being made. Eg an office booking or workspace booking." })
-  bookingType: BookingType;
+  bookingType: string;
 
   @Field({ defaultValue: false })
   cancelled: boolean;

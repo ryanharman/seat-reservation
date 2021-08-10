@@ -1,4 +1,3 @@
-import { BookingType } from "../types/BookingTypeEnum";
 import { ObjectType, Field, ID } from "type-graphql";
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
@@ -21,9 +20,11 @@ export class Reservation extends BaseEntity {
   bookedItemId: number;
 
   // this field needs some thinking on. Is it really necessary?
-  @Field({ description: "The type of booking that is being made. Eg an office booking or workspace booking." })
+  @Field({
+    description: "The type of booking that is being made. Eg an office booking or workspace booking.",
+  })
   @Column()
-  bookingType: BookingType;
+  bookingType: string;
 
   @Field({ defaultValue: false })
   @Column()

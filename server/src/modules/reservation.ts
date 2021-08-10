@@ -1,12 +1,11 @@
 import "reflect-metadata";
 import { Reservation } from "../entity/Reservation";
-import { BookingType } from "../types/BookingTypeEnum";
 import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { isAuth } from "./middleware/isAuth";
-// import { ReservationArgs } from "./reservation/ReservationArgs";
 import { MyContext } from "../types/MyContext";
 import { User } from "../entity/User";
-import { ReservationArgs } from "./reservation/ReservationArgs";
+import { ReservationInput } from "./reservation/ReservationInput";
+import { ObjectLiteral } from "typeorm";
 // import { ObjectLiteral } from "typeorm";
 
 @Resolver()
@@ -37,7 +36,7 @@ export class ReservationResolver {
 
   @UseMiddleware(isAuth)
   @Query(() => [Reservation])
-  async reservationByType(@Arg("type") type: BookingType): Promise<Reservation[] | null> {
+  async reservationByType(@Arg("type") type: string): Promise<Reservation[] | null> {
     const reservations = await Reservation.find({ bookingType: type });
 
     if (!reservations) {
@@ -49,10 +48,7 @@ export class ReservationResolver {
 
   @UseMiddleware(isAuth)
   @Query(() => [Reservation])
-  async reservationByTypeAndItem(
-    @Arg("type") type: BookingType,
-    @Arg("item") item: number
-  ): Promise<Reservation[] | null> {
+  async reservationByTypeAndItem(@Arg("type") type: string, @Arg("item") item: number): Promise<Reservation[] | null> {
     const reservations = await Reservation.find({ bookingType: type, bookedItemId: item });
 
     if (!reservations) {
@@ -65,7 +61,7 @@ export class ReservationResolver {
   @UseMiddleware(isAuth)
   @Query(() => [Reservation])
   async reservationsFromDate(
-    @Arg("type") type: BookingType,
+    @Arg("type") type: string,
     @Arg("dateFrom") dateFrom: Date,
     @Arg("dateTo", { defaultValue: new Date() }) dateTo: Date
   ): Promise<Reservation[] | null> {
@@ -82,9 +78,11 @@ export class ReservationResolver {
     return reservations;
   }
 
+  // look into fixing this
   @Mutation(() => Reservation)
   async createReservation(
-    @Arg("data") { userId, bookedItemId, bookingType, dateBookedFrom, dateBookedTo }: ReservationArgs,
+    @Arg("data", () => ReservationInput)
+    { userId, bookedItemId, bookingType, dateBookedFrom, dateBookedTo }: ReservationInput,
     @Ctx() ctx: MyContext
   ): Promise<Reservation> {
     // if the user is booking for someone else then they will be passing the UID through.
@@ -105,26 +103,27 @@ export class ReservationResolver {
     return reservation;
   }
 
-  //   @Mutation()
-  //   async createReservations(@Arg("data") data: ReservationArgs[]): Promise<ObjectLiteral[]> {
-  //     /* Need to test if this actually works and whether it actually returns the ID's! */
-  //     const reservations = (
-  //       await Reservation.createQueryBuilder()
-  //         .insert()
-  //         .values(
-  //           data.map((r) => {
-  //             return {
-  //               userId: r.userId,
-  //               bookedItemId: r.bookedItemId,
-  //               bookingType: r.bookingType,
-  //               dateBookedFrom: r.dateBookedFrom,
-  //               dateBookedTo: r.dateBookedTo,
-  //             };
-  //           })
-  //         )
-  //         .execute()
-  //     ).identifiers;
+  @Mutation(() => [Reservation])
+  async createReservations(@Arg("data", () => [ReservationInput]) data: ReservationInput[]): Promise<ObjectLiteral[]> {
+    /* Need to test if this actually works and whether it actually returns the ID's! */
+    const reservations = (
+      await Reservation.createQueryBuilder()
+        .insert()
+        .values(
+          data.map((r) => {
+            return {
+              userId: r.userId,
+              bookedItemId: r.bookedItemId,
+              bookingType: r.bookingType,
+              dateBookedFrom: r.dateBookedFrom,
+              dateBookedTo: r.dateBookedTo,
+            };
+          })
+        )
+        .execute()
+    ).identifiers;
+    console.log(reservations);
 
-  //     return reservations;
-  //   }
+    return reservations;
+  }
 }
