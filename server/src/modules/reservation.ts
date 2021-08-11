@@ -1,13 +1,10 @@
 import "reflect-metadata";
 import { Reservation } from "../entity/Reservation";
-import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
+import { Arg, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { isAuth } from "./middleware/isAuth";
-import { MyContext } from "../types/MyContext";
-import { User } from "../entity/User";
-import { CreateReservationInput } from "./reservation/ReservationInput";
+import { CreateReservationInput, UpdateReservationInput } from "./reservation/ReservationInput";
 import { ObjectLiteral } from "typeorm";
 import { isSeatBooked } from "./reservation/isSeatBooked";
-// import { ObjectLiteral } from "typeorm";
 
 @Resolver()
 export class ReservationResolver {
@@ -85,16 +82,8 @@ export class ReservationResolver {
   @Mutation(() => Reservation)
   async createReservation(
     @Arg("data", () => CreateReservationInput)
-    { userId, bookedItemId, bookingType, dateBookedFrom, dateBookedTo }: CreateReservationInput,
-    @Ctx() ctx: MyContext
+    { userId, bookedItemId, bookingType, dateBookedFrom, dateBookedTo }: CreateReservationInput
   ): Promise<Reservation> {
-    // if the user is booking for someone else then they will be passing the UID through.
-    // if theyre booking for themselves then no UID needs to be passed.
-    if (userId == null) {
-      const currUser = await User.findOne(ctx.req.session!.userId);
-      userId = currUser!.id;
-    }
-
     const reservation = await Reservation.create({
       userId,
       bookedItemId,
@@ -114,24 +103,38 @@ export class ReservationResolver {
     @Arg("data", () => [CreateReservationInput]) data: CreateReservationInput[]
   ): Promise<ObjectLiteral[]> {
     /* Need to test if this actually works and whether it actually returns the ID's! */
-    const reservations = (
-      await Reservation.createQueryBuilder()
-        .insert()
-        .values(
-          data.map((r) => {
-            return {
-              userId: r.userId,
-              bookedItemId: r.bookedItemId,
-              bookingType: r.bookingType,
-              dateBookedFrom: r.dateBookedFrom,
-              dateBookedTo: r.dateBookedTo,
-            };
-          })
-        )
-        .execute()
-    ).identifiers;
-    console.log(reservations);
+    const reservations = await Reservation.createQueryBuilder()
+      .insert()
+      .values(
+        data.map((r) => {
+          return { ...r };
+        })
+      )
+      .returning("*")
+      .execute()
+      .then((response) => {
+        return response.raw[0];
+      });
 
     return reservations;
+  }
+
+  @UseMiddleware(isAuth, isSeatBooked)
+  @Mutation(() => Reservation)
+  async updateReservation(
+    @Arg("data", () => UpdateReservationInput)
+    data: UpdateReservationInput
+  ): Promise<Reservation> {
+    const reservation = await Reservation.createQueryBuilder()
+      .update()
+      .set({ ...data })
+      .where("id = :id", { id: data.id })
+      .returning("*")
+      .execute()
+      .then((response) => {
+        return response.raw[0];
+      });
+
+    return reservation;
   }
 }

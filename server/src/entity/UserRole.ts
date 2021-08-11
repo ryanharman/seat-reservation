@@ -16,6 +16,7 @@ export class UserAccess extends BaseEntity {
   userId: number;
 
   // look into a good solution for roles
+  // static access levels or user created roles with flexibility?
   @Field()
   @Column()
   role: string;

@@ -9,7 +9,6 @@ export class CreateReservationInput implements Partial<Reservation> {
   @Field({ description: "The item (seat or workspace) that is booked" })
   bookedItemId: number;
 
-  // this field needs some thinking on. Is it really necessary?
   @Field({ description: "The type of booking that is being made. Eg an office booking or workspace booking." })
   bookingType: string;
 
@@ -23,12 +22,14 @@ export class CreateReservationInput implements Partial<Reservation> {
 @InputType()
 export class UpdateReservationInput implements Partial<Reservation> {
   @Field()
+  id: number;
+
+  @Field()
   userId: number;
 
   @Field({ description: "The item (seat or workspace) that is booked" })
   bookedItemId: number;
 
-  // this field needs some thinking on. Is it really necessary?
   @Field({ description: "The type of booking that is being made. Eg an office booking or workspace booking." })
   bookingType: string;
 

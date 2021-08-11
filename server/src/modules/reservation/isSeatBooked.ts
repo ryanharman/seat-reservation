@@ -3,6 +3,6 @@ import { MiddlewareFn } from "type-graphql";
 export const isSeatBooked: MiddlewareFn = async ({ args }, next) => {
   const { userId, bookedItemId, bookingType, dateBookedFrom, dateBookedTo } = args.data;
   console.log(userId, bookedItemId, bookingType, dateBookedFrom, dateBookedTo);
-  // logic go brrr
+  // TODO: logic go brrr
   return next();
 };
