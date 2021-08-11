@@ -16,20 +16,19 @@ export class Reservation extends BaseEntity {
   @OneToOne(() => User)
   userId: number;
 
-  @Field({ description: "The item (seat or workspace) that is booked" })
+  @Field({ description: "The item (seat, meeting room or workspace) that is booked" })
   @Column()
   @OneToOne(() => BookableItem)
   bookedItemId: number;
 
-  // this field needs some thinking on. Is it really necessary?
   @Field({
-    description: "The type of booking that is being made. Eg an office booking or workspace booking.",
+    description: "The type of booking that is being made (seat, meeting room or workspace)",
   })
   @Column()
   bookingType: string;
 
   @Field({ defaultValue: false, nullable: true })
-  @Column()
+  @Column({ default: false })
   cancelled: boolean;
 
   @Field()
@@ -40,11 +39,11 @@ export class Reservation extends BaseEntity {
   @Column()
   dateBookedTo: Date;
 
-  @Field()
+  @Field({ nullable: true })
   @Column()
   createdDate: Date;
 
   @Field({ nullable: true })
-  @Column()
+  @Column({ nullable: true })
   updatedDate: Date;
 }

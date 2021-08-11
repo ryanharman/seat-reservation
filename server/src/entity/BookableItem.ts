@@ -1,6 +1,7 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Location } from "./Location";
+import { BaseEntity, Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Building } from "./Building";
+import { Office } from "./Office";
 
 @ObjectType()
 @Entity()
@@ -10,23 +11,38 @@ export class BookableItem extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Field()
+  @Column()
+  @OneToOne(() => Building)
+  buildingId: number;
+
   @Field({ nullable: true })
-  @Column(() => Location)
-  parentId: number;
+  @Column({ nullable: true })
+  @OneToOne(() => Office)
+  officeId: number;
 
   @Field()
   @Column()
   itemType: string;
 
   @Field({ nullable: true, defaultValue: true })
-  @Column()
-  available: boolean;
+  @Column({ default: true })
+  isAvailable: boolean;
 
-  @Field()
+  @Field({
+    nullable: true,
+    defaultValue: true,
+    description:
+      "Determines whether the item can be booked by users who do not have access to the office the item is linked to. If the officeId is null then this value will be ignored",
+  })
+  @Column({ default: false })
+  isExclusive: boolean;
+
+  @Field({ nullable: true })
   @Column()
   createdDate: Date;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   updatedDate: Date;
 }

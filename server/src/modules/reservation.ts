@@ -4,7 +4,7 @@ import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql
 import { isAuth } from "./middleware/isAuth";
 import { MyContext } from "../types/MyContext";
 import { User } from "../entity/User";
-import { ReservationInput } from "./reservation/ReservationInput";
+import { CreateReservationInput } from "./reservation/ReservationInput";
 import { ObjectLiteral } from "typeorm";
 import { isSeatBooked } from "./reservation/isSeatBooked";
 // import { ObjectLiteral } from "typeorm";
@@ -79,13 +79,13 @@ export class ReservationResolver {
     return reservations;
   }
 
-  // TODO: Implement some middleware to check if the reservation is actually possible.
-  // This will be on top of the frontend validation being done
+  // TODO: Finish middleware to check if the reservation is actually possible.
+  // This will be on top of the frontend validation/restrictions
   @UseMiddleware(isAuth, isSeatBooked)
   @Mutation(() => Reservation)
   async createReservation(
-    @Arg("data", () => ReservationInput)
-    { userId, bookedItemId, bookingType, dateBookedFrom, dateBookedTo }: ReservationInput,
+    @Arg("data", () => CreateReservationInput)
+    { userId, bookedItemId, bookingType, dateBookedFrom, dateBookedTo }: CreateReservationInput,
     @Ctx() ctx: MyContext
   ): Promise<Reservation> {
     // if the user is booking for someone else then they will be passing the UID through.
@@ -110,7 +110,9 @@ export class ReservationResolver {
   }
 
   @Mutation(() => [Reservation])
-  async createReservations(@Arg("data", () => [ReservationInput]) data: ReservationInput[]): Promise<ObjectLiteral[]> {
+  async createReservations(
+    @Arg("data", () => [CreateReservationInput]) data: CreateReservationInput[]
+  ): Promise<ObjectLiteral[]> {
     /* Need to test if this actually works and whether it actually returns the ID's! */
     const reservations = (
       await Reservation.createQueryBuilder()
