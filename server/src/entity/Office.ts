@@ -1,5 +1,13 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { BaseEntity, Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Building } from "./Building";
 import { User } from "./User";
 
@@ -26,10 +34,10 @@ export class Office extends BaseEntity {
   name: string;
 
   @Field({ nullable: true })
-  @Column()
+  @CreateDateColumn()
   createdDate: Date;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @UpdateDateColumn({ nullable: true })
   updatedDate: Date;
 }

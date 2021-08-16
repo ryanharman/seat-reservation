@@ -1,5 +1,13 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { BaseEntity, Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { User } from "./User";
 
 @ObjectType()
@@ -20,10 +28,10 @@ export class Building extends BaseEntity {
   name: string;
 
   @Field({ nullable: true })
-  @Column()
+  @CreateDateColumn()
   createdDate: Date;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @UpdateDateColumn({ nullable: true })
   updatedDate: Date;
 }
