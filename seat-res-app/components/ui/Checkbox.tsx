@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 
-/*
-Height and width have to follow the Tailwinds values
+/* Height and width have to follow the Tailwind values
 https://tailwindcss.com/docs/width
-https://tailwindcss.com/docs/height
-*/
+https://tailwindcss.com/docs/height */
 
 interface ICheckboxProps {
   height?: string | number;

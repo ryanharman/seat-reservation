@@ -3,14 +3,14 @@ import { Header } from ".";
 import NavBar from "./NavBar";
 
 interface ILayoutProps {
-  children: React.ReactChild[];
+  children: React.ReactChild[] | React.ReactChild;
 }
 
 const Layout = ({ children }: ILayoutProps) => {
   return (
     <div className="flex relative">
       <NavBar />
-      <div className="flex flex-col relative">
+      <div className="flex flex-col relative w-full">
         <Header />
         {children}
       </div>

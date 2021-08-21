@@ -10,11 +10,11 @@ import { isSeatBooked } from "./reservation/isSeatBooked";
 export class ReservationResolver {
   @UseMiddleware(isAuth)
   @Query(() => Reservation)
-  async reservationById(@Arg("id") id: string): Promise<Reservation | undefined> {
+  async reservationById(@Arg("id") id: number): Promise<Reservation | null> {
     const reservation = await Reservation.findOne(id);
 
     if (!reservation) {
-      return undefined;
+      return null;
     }
 
     return reservation;
@@ -37,6 +37,9 @@ export class ReservationResolver {
   async reservationByType(@Arg("type") type: string): Promise<Reservation[] | null> {
     const reservations = await Reservation.find({ bookingType: type });
 
+    const alternate = await Reservation.createQueryBuilder().innerJoinAndSelect("reservation.bookedItemId", "");
+    console.log(alternate, " log of alternate solution?");
+
     if (!reservations) {
       return null;
     }
@@ -44,13 +47,10 @@ export class ReservationResolver {
     return reservations;
   }
 
-  // TODO: This needs rethinking to work for offices and buildings.
-  // possibly two functions required to manage office specific items
-  // and then the building items
   @UseMiddleware(isAuth)
   @Query(() => [Reservation])
-  async reservationByTypeAndItem(@Arg("type") type: string, @Arg("item") item: number): Promise<Reservation[] | null> {
-    const reservations = await Reservation.find({ bookingType: type, bookedItemId: item });
+  async reservationByItem(@Arg("id") id: number): Promise<Reservation[] | null> {
+    const reservations = await Reservation.find({ bookedItemId: id });
 
     if (!reservations) {
       return null;
@@ -87,16 +87,6 @@ export class ReservationResolver {
     @Arg("data", () => CreateReservationInput)
     { userId, bookedItemId, bookingType, dateBookedFrom, dateBookedTo }: CreateReservationInput
   ): Promise<Reservation> {
-    // const reservation = await Reservation.create({
-    //   userId,
-    //   bookedItemId,
-    //   bookingType,
-    //   cancelled: false,
-    //   dateBookedFrom,
-    //   dateBookedTo,
-    //   createdDate: new Date(),
-    // }).save();
-
     const reservation = await Reservation.createQueryBuilder()
       .insert()
       .values({
@@ -120,6 +110,9 @@ export class ReservationResolver {
   async createReservations(
     @Arg("data", () => [CreateReservationInput]) data: CreateReservationInput[]
   ): Promise<ObjectLiteral[]> {
+    console.log(data);
+    console.log("#####################");
+    console.log(data.map((r) => console.log(r, " logging map data")));
     /* Need to test if this actually works and whether it actually returns the ID's! */
     const reservations = await Reservation.createQueryBuilder()
       .insert()
@@ -143,13 +136,6 @@ export class ReservationResolver {
     @Arg("data", () => UpdateReservationInput)
     data: UpdateReservationInput
   ): Promise<Reservation> {
-    // const reservation = await Reservation.findOne(data.id);
-    // if (!reservation) {
-    //   // TODO: Error response?
-    //   return null;
-    // }
-    // await Reservation.update({ id: data.id }, { ...data });
-
     const reservation = await Reservation.createQueryBuilder()
       .update()
       .set({ ...data })
