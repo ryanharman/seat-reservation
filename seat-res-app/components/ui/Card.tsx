@@ -11,7 +11,7 @@ export const Card = ({ onClick, children, className = "" }: ICardProps) => {
   const cursorClass = onClick ? "cursor-pointer" : "";
   return (
     <div
-      className={`${className} ${cursorClass} min-w-72 flex flex-col bg-card-bg border border-card-border p-6 rounded-md`}
+      className={`${className} ${cursorClass} min-w-72 flex flex-col bg-white border border-gray-300 p-6 rounded-md`}
       onClick={onClick}
     >
       {children}
