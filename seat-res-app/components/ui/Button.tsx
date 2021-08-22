@@ -1,4 +1,5 @@
 import React from "react";
+import { Icon } from ".";
 
 interface IButtonProps {
   primary: boolean;
@@ -6,7 +7,7 @@ interface IButtonProps {
   submission: boolean;
   nextState: boolean;
   onClick: Function;
-  icon: Function;
+  icon: string;
   children: React.ReactNode;
   className: string;
 }
@@ -40,7 +41,7 @@ const Button = ({
           disabled={disabled}
           className={`${buttonIconStyling} ${className}`}
         >
-          {icon({ colour: "text-white" })}
+          <Icon icon={icon} width={14} height={14} />
           {children}
         </button>
       ) : (
