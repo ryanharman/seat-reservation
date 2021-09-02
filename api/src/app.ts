@@ -1,13 +1,6 @@
 import "reflect-metadata";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
-import { HelloResolver } from "./modules/hello";
-import { ReservationResolver } from "./modules/Reservation";
-import { createConnection } from "typeorm";
-import { RegisterResolver } from "./modules/user/Register";
-import { LoginResolver } from "./modules/user/Login";
-import { MeResolver } from "./modules/user/Me";
 import { redis } from "./redis";
 import cors from "cors";
 import connectRedis from "connect-redis";
@@ -17,18 +10,18 @@ require("dotenv").config();
 
 const main = async () => {
     // postgres connection
-    await createConnection();
+    // await createConnection();
 
-    const schema = await buildSchema({
-        resolvers: [HelloResolver, ReservationResolver, RegisterResolver, LoginResolver, MeResolver],
-        authChecker: ({ context: { req } }) => {
-            // TODO: implement roles
-            return !!req.session.userId;
-        },
-    });
+    // const schema = await buildSchema({
+    //     resolvers: [],
+    //     authChecker: ({ context: { req } }) => {
+    //         // TODO: implement roles
+    //         return !!req.session.userId;
+    //     },
+    // });
 
     const apolloServer = new ApolloServer({
-        schema,
+        // schema,
         context: ({ req }: any) => ({ req }), // allows access to the request data in resolvers
         plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
     });
