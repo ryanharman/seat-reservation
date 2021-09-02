@@ -6,7 +6,9 @@ import cors from "cors";
 import connectRedis from "connect-redis";
 import session from "express-session";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-require("dotenv").config();
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 const main = async () => {
     // postgres connection
@@ -22,7 +24,7 @@ const main = async () => {
 
     const apolloServer = new ApolloServer({
         // schema,
-        context: ({ req }: any) => ({ req }), // allows access to the request data in resolvers
+        context: ({ req }: any) => ({ req, prisma }), // allows access to the request data in resolvers
         plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
     });
 
