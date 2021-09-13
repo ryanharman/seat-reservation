@@ -13,16 +13,93 @@ generator typegraphql {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  email     String   @unique
-  firstName String?
-  lastName  String?
-  password  String
-  role      Role     @default(USER)
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  firstName    String?
+  lastName     String?
+  password     String
+  role         Role          @default(USER)
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
 }
 
 enum Role {
   USER
   ADMIN
+}
+
+model Reservation {
+  id             Int          @id @default(autoincrement())
+  user           User         @relation(fields: [userId], references: [id])
+  userId         Int
+  office         Office       @relation(fields: [officeId], references: [id])
+  officeId       Int
+  bookedItem     BookableItem @relation(fields: [bookedItemId], references: [id])
+  bookedItemId   Int
+  dateBookedFrom DateTime
+  dateBookedTo   DateTime
+  cancelled      Boolean
+  password       String
+  role           Role         @default(USER)
+  createdAt      DateTime     @default(now())
+  lastUpdatedAt  DateTime     @default(now())
+}
+
+model Office {
+  id             Int             @id @default(autoincrement())
+  building       Building        @relation(fields: [buildingId], references: [id])
+  buildingId     Int
+  createdAt      DateTime        @default(now())
+  lastUpdatedAt  DateTime        @default(now())
+  reservations   Reservation[]
+  bookableItems  BookableItem[]
+  officeManagers OfficeManager[]
+}
+
+model BookableItem {
+  id            Int               @id @default(autoincrement())
+  office        Office            @relation(fields: [officeId], references: [id])
+  officeId      Int
+  type          BookableItemTypes @relation(fields: [typeId], references: [id])
+  typeId        Int
+  name          String
+  available     Boolean           @default(true)
+  createdAt     DateTime          @default(now())
+  lastUpdatedAt DateTime          @default(now())
+  reservations  Reservation[]
+}
+
+model BookableItemTypes {
+  id            Int            @id @default(autoincrement())
+  name          String
+  bookableItems BookableItem[]
+  createdAt     DateTime       @default(now())
+  lastUpdatedAt DateTime       @default(now())
+}
+
+model OfficeManager {
+  id            Int      @id @default(autoincrement())
+  office        Office   @relation(fields: [officeId], references: [id])
+  officeId      Int
+  name          String
+  createdAt     DateTime @default(now())
+  lastUpdatedAt DateTime @default(now())
+}
+
+model Building {
+  id               Int               @id @default(autoincrement())
+  name             String
+  createdAt        DateTime          @default(now())
+  lastUpdatedAt    DateTime          @default(now())
+  offices          Office[]
+  buildingManagers BuildingManager[]
+}
+
+model BuildingManager {
+  id            Int      @id @default(autoincrement())
+  building      Building @relation(fields: [buildingId], references: [id])
+  buildingId    Int
+  name          String
+  createdAt     DateTime @default(now())
+  lastUpdatedAt DateTime @default(now())
 }
