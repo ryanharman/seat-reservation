@@ -1,0 +1,12 @@
+export { AggregateBookableItemTypesArgs } from "./AggregateBookableItemTypesArgs";
+export { CreateBookableItemTypesArgs } from "./CreateBookableItemTypesArgs";
+export { CreateManyBookableItemTypesArgs } from "./CreateManyBookableItemTypesArgs";
+export { DeleteBookableItemTypesArgs } from "./DeleteBookableItemTypesArgs";
+export { DeleteManyBookableItemTypesArgs } from "./DeleteManyBookableItemTypesArgs";
+export { FindFirstBookableItemTypesArgs } from "./FindFirstBookableItemTypesArgs";
+export { FindManyBookableItemTypesArgs } from "./FindManyBookableItemTypesArgs";
+export { FindUniqueBookableItemTypesArgs } from "./FindUniqueBookableItemTypesArgs";
+export { GroupByBookableItemTypesArgs } from "./GroupByBookableItemTypesArgs";
+export { UpdateBookableItemTypesArgs } from "./UpdateBookableItemTypesArgs";
+export { UpdateManyBookableItemTypesArgs } from "./UpdateManyBookableItemTypesArgs";
+export { UpsertBookableItemTypesArgs } from "./UpsertBookableItemTypesArgs";

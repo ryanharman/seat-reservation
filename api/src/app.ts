@@ -7,23 +7,18 @@ import connectRedis from "connect-redis";
 import session from "express-session";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { PrismaClient } from "@prisma/client";
+import { buildSchema } from "type-graphql";
+import { resolvers } from "../prisma/generated/type-graphql";
 
 const prisma = new PrismaClient();
 
 const main = async () => {
-  // postgres connection
-  // await createConnection();
-
-  // const schema = await buildSchema({
-  //     resolvers: [],
-  //     authChecker: ({ context: { req } }) => {
-  //         // TODO: implement roles
-  //         return !!req.session.userId;
-  //     },
-  // });
+  const schema = await buildSchema({
+    resolvers,
+  });
 
   const apolloServer = new ApolloServer({
-    // schema,
+    schema,
     context: ({ req }: any) => ({ req, prisma }), // allows access to the request data and prisma in resolvers
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
   });

@@ -13,11 +13,6 @@ export class UserMaxAggregate {
   })
   id!: number | null;
 
-  @TypeGraphQL.Field(_type => Date, {
-    nullable: true
-  })
-  createdAt!: Date | null;
-
   @TypeGraphQL.Field(_type => String, {
     nullable: true
   })
@@ -42,4 +37,14 @@ export class UserMaxAggregate {
     nullable: true
   })
   role!: "USER" | "ADMIN" | null;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  createdAt!: Date | null;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  updatedAt!: Date | null;
 }

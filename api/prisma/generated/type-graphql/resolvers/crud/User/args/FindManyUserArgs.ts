@@ -35,5 +35,5 @@ export class FindManyUserArgs {
   @TypeGraphQL.Field(_type => [UserScalarFieldEnum], {
     nullable: true
   })
-  distinct?: Array<"id" | "createdAt" | "email" | "firstName" | "lastName" | "password" | "role"> | undefined;
+  distinct?: Array<"id" | "email" | "firstName" | "lastName" | "password" | "role" | "createdAt" | "updatedAt"> | undefined;
 }

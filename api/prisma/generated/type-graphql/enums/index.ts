@@ -1,4 +1,11 @@
+export { BookableItemScalarFieldEnum } from "./BookableItemScalarFieldEnum";
+export { BookableItemTypesScalarFieldEnum } from "./BookableItemTypesScalarFieldEnum";
+export { BuildingManagerScalarFieldEnum } from "./BuildingManagerScalarFieldEnum";
+export { BuildingScalarFieldEnum } from "./BuildingScalarFieldEnum";
+export { OfficeManagerScalarFieldEnum } from "./OfficeManagerScalarFieldEnum";
+export { OfficeScalarFieldEnum } from "./OfficeScalarFieldEnum";
 export { QueryMode } from "./QueryMode";
+export { ReservationScalarFieldEnum } from "./ReservationScalarFieldEnum";
 export { Role } from "./Role";
 export { SortOrder } from "./SortOrder";
 export { UserScalarFieldEnum } from "./UserScalarFieldEnum";

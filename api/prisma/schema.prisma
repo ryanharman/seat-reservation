@@ -21,6 +21,7 @@ model User {
   role         Role          @default(USER)
   reservations Reservation[]
   createdAt    DateTime      @default(now())
+    updatedAt  DateTime     @updatedAt
 }
 
 enum Role {
@@ -42,7 +43,7 @@ model Reservation {
   password       String
   role           Role         @default(USER)
   createdAt      DateTime     @default(now())
-  lastUpdatedAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
 }
 
 model Office {
@@ -50,10 +51,19 @@ model Office {
   building       Building        @relation(fields: [buildingId], references: [id])
   buildingId     Int
   createdAt      DateTime        @default(now())
-  lastUpdatedAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
   reservations   Reservation[]
   bookableItems  BookableItem[]
   officeManagers OfficeManager[]
+}
+
+model OfficeManager {
+  id            Int      @id @default(autoincrement())
+  office        Office   @relation(fields: [officeId], references: [id])
+  officeId      Int
+  name          String
+  createdAt     DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model BookableItem {
@@ -65,7 +75,7 @@ model BookableItem {
   name          String
   available     Boolean           @default(true)
   createdAt     DateTime          @default(now())
-  lastUpdatedAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
   reservations  Reservation[]
 }
 
@@ -74,23 +84,15 @@ model BookableItemTypes {
   name          String
   bookableItems BookableItem[]
   createdAt     DateTime       @default(now())
-  lastUpdatedAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 }
 
-model OfficeManager {
-  id            Int      @id @default(autoincrement())
-  office        Office   @relation(fields: [officeId], references: [id])
-  officeId      Int
-  name          String
-  createdAt     DateTime @default(now())
-  lastUpdatedAt DateTime @default(now())
-}
 
 model Building {
   id               Int               @id @default(autoincrement())
   name             String
   createdAt        DateTime          @default(now())
-  lastUpdatedAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
   offices          Office[]
   buildingManagers BuildingManager[]
 }
@@ -101,5 +103,5 @@ model BuildingManager {
   buildingId    Int
   name          String
   createdAt     DateTime @default(now())
-  lastUpdatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

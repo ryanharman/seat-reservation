@@ -2,17 +2,13 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
+import { ReservationCreateNestedManyWithoutUserInput } from "../inputs/ReservationCreateNestedManyWithoutUserInput";
 import { Role } from "../../enums/Role";
 
 @TypeGraphQL.InputType({
   isAbstract: true
 })
 export class UserCreateInput {
-  @TypeGraphQL.Field(_type => Date, {
-    nullable: true
-  })
-  createdAt?: Date | undefined;
-
   @TypeGraphQL.Field(_type => String, {
     nullable: false
   })
@@ -37,4 +33,19 @@ export class UserCreateInput {
     nullable: true
   })
   role?: "USER" | "ADMIN" | undefined;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  createdAt?: Date | undefined;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  updatedAt?: Date | undefined;
+
+  @TypeGraphQL.Field(_type => ReservationCreateNestedManyWithoutUserInput, {
+    nullable: true
+  })
+  reservations?: ReservationCreateNestedManyWithoutUserInput | undefined;
 }
