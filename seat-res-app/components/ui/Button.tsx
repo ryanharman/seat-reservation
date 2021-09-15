@@ -3,24 +3,24 @@ import { Icon } from ".";
 
 interface IButtonProps {
   primary: boolean;
-  disabled: boolean;
-  submission: boolean;
-  nextState: boolean;
+  disabled?: boolean;
+  submission?: boolean;
+  nextState?: boolean;
   onClick: Function;
-  icon: string;
+  icon?: string;
   children: React.ReactNode;
-  className: string;
+  className?: string;
 }
 
 // Classes for styling taken from ../styles/globals.css
 // TODO: disabled styling
 const Button = ({
   primary,
-  disabled,
+  disabled = false,
   onClick,
   icon,
-  submission,
-  nextState,
+  submission = false,
+  nextState = false,
   children,
   className = "",
 }: IButtonProps) => {

@@ -8,9 +8,9 @@ interface ILayoutProps {
 
 const Layout = ({ children }: ILayoutProps) => {
   return (
-    <div className="flex relative">
+    <div className="flex">
       <NavBar />
-      <div className="flex flex-col relative w-full">
+      <div className="flex flex-col w-full">
         <Header />
         {children}
       </div>

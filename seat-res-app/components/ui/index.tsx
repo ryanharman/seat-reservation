@@ -4,4 +4,5 @@ export { default as Header } from "./Header";
 export { default as Select } from "./SelectChoice";
 export { default as NavBar } from "./NavBar";
 export { default as Icon } from "./Icon";
-export { Card, CardBody, CardBodyItem, CardDate, CardFooter, CardHeader, CardTooltip } from "./Card";
+export * from "./Card";
+export { default as PageTitle } from "./PageTitle";
