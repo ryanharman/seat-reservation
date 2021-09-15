@@ -20,7 +20,7 @@ export class GroupByBookableItemArgs {
   @TypeGraphQL.Field(_type => [BookableItemScalarFieldEnum], {
     nullable: false
   })
-  by!: Array<"id" | "officeId" | "typeId" | "name" | "available" | "createdAt" | "updatedAt">;
+  by!: Array<"id" | "officeId" | "typeId" | "name" | "officeExclusive" | "available" | "createdAt" | "updatedAt">;
 
   @TypeGraphQL.Field(_type => BookableItemScalarWhereWithAggregatesInput, {
     nullable: true

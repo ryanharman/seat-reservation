@@ -31,7 +31,7 @@ export class UserCreateWithoutReservationsInput {
   @TypeGraphQL.Field(_type => Role, {
     nullable: true
   })
-  role?: "USER" | "ADMIN" | undefined;
+  role?: "USER" | "OFFICE_MANAGER" | "BUILDING_MANAGER" | "ADMIN" | undefined;
 
   @TypeGraphQL.Field(_type => Date, {
     nullable: true

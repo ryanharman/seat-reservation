@@ -5,10 +5,8 @@ import { DecimalJSScalar } from "../../scalars";
 import { BookableItemRelationFilter } from "../inputs/BookableItemRelationFilter";
 import { BoolFilter } from "../inputs/BoolFilter";
 import { DateTimeFilter } from "../inputs/DateTimeFilter";
-import { EnumRoleFilter } from "../inputs/EnumRoleFilter";
+import { DateTimeNullableFilter } from "../inputs/DateTimeNullableFilter";
 import { IntFilter } from "../inputs/IntFilter";
-import { OfficeRelationFilter } from "../inputs/OfficeRelationFilter";
-import { StringFilter } from "../inputs/StringFilter";
 import { UserRelationFilter } from "../inputs/UserRelationFilter";
 
 @TypeGraphQL.InputType({
@@ -45,16 +43,6 @@ export class ReservationWhereInput {
   })
   userId?: IntFilter | undefined;
 
-  @TypeGraphQL.Field(_type => OfficeRelationFilter, {
-    nullable: true
-  })
-  office?: OfficeRelationFilter | undefined;
-
-  @TypeGraphQL.Field(_type => IntFilter, {
-    nullable: true
-  })
-  officeId?: IntFilter | undefined;
-
   @TypeGraphQL.Field(_type => BookableItemRelationFilter, {
     nullable: true
   })
@@ -80,23 +68,13 @@ export class ReservationWhereInput {
   })
   cancelled?: BoolFilter | undefined;
 
-  @TypeGraphQL.Field(_type => StringFilter, {
+  @TypeGraphQL.Field(_type => DateTimeNullableFilter, {
     nullable: true
   })
-  password?: StringFilter | undefined;
+  createdAt?: DateTimeNullableFilter | undefined;
 
-  @TypeGraphQL.Field(_type => EnumRoleFilter, {
+  @TypeGraphQL.Field(_type => DateTimeNullableFilter, {
     nullable: true
   })
-  role?: EnumRoleFilter | undefined;
-
-  @TypeGraphQL.Field(_type => DateTimeFilter, {
-    nullable: true
-  })
-  createdAt?: DateTimeFilter | undefined;
-
-  @TypeGraphQL.Field(_type => DateTimeFilter, {
-    nullable: true
-  })
-  updatedAt?: DateTimeFilter | undefined;
+  updatedAt?: DateTimeNullableFilter | undefined;
 }

@@ -37,17 +37,17 @@ export class User {
   @TypeGraphQL.Field(_type => Role, {
     nullable: false
   })
-  role!: "USER" | "ADMIN";
+  role!: "USER" | "OFFICE_MANAGER" | "BUILDING_MANAGER" | "ADMIN";
 
   reservations?: Reservation[];
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  createdAt!: Date;
+  createdAt?: Date | null;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  updatedAt!: Date;
+  updatedAt?: Date | null;
 }

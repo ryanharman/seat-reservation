@@ -13,17 +13,17 @@ export class NestedEnumRoleWithAggregatesFilter {
   @TypeGraphQL.Field(_type => Role, {
     nullable: true
   })
-  equals?: "USER" | "ADMIN" | undefined;
+  equals?: "USER" | "OFFICE_MANAGER" | "BUILDING_MANAGER" | "ADMIN" | undefined;
 
   @TypeGraphQL.Field(_type => [Role], {
     nullable: true
   })
-  in?: Array<"USER" | "ADMIN"> | undefined;
+  in?: Array<"USER" | "OFFICE_MANAGER" | "BUILDING_MANAGER" | "ADMIN"> | undefined;
 
   @TypeGraphQL.Field(_type => [Role], {
     nullable: true
   })
-  notIn?: Array<"USER" | "ADMIN"> | undefined;
+  notIn?: Array<"USER" | "OFFICE_MANAGER" | "BUILDING_MANAGER" | "ADMIN"> | undefined;
 
   @TypeGraphQL.Field(_type => NestedEnumRoleWithAggregatesFilter, {
     nullable: true

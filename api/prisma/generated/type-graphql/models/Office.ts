@@ -5,7 +5,6 @@ import { DecimalJSScalar } from "../scalars";
 import { BookableItem } from "../models/BookableItem";
 import { Building } from "../models/Building";
 import { OfficeManager } from "../models/OfficeManager";
-import { Reservation } from "../models/Reservation";
 
 @TypeGraphQL.ObjectType({
   isAbstract: true
@@ -24,16 +23,14 @@ export class Office {
   buildingId!: number;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  createdAt!: Date;
+  createdAt?: Date | null;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  updatedAt!: Date;
-
-  reservations?: Reservation[];
+  updatedAt?: Date | null;
 
   bookableItems?: BookableItem[];
 

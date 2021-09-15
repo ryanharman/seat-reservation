@@ -5,6 +5,7 @@ export enum BookableItemScalarFieldEnum {
   officeId = "officeId",
   typeId = "typeId",
   name = "name",
+  officeExclusive = "officeExclusive",
   available = "available",
   createdAt = "createdAt",
   updatedAt = "updatedAt"

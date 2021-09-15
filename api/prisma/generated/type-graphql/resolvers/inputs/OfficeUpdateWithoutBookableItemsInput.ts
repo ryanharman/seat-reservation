@@ -3,33 +3,27 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { BuildingUpdateOneRequiredWithoutOfficesInput } from "../inputs/BuildingUpdateOneRequiredWithoutOfficesInput";
-import { DateTimeFieldUpdateOperationsInput } from "../inputs/DateTimeFieldUpdateOperationsInput";
+import { NullableDateTimeFieldUpdateOperationsInput } from "../inputs/NullableDateTimeFieldUpdateOperationsInput";
 import { OfficeManagerUpdateManyWithoutOfficeInput } from "../inputs/OfficeManagerUpdateManyWithoutOfficeInput";
-import { ReservationUpdateManyWithoutOfficeInput } from "../inputs/ReservationUpdateManyWithoutOfficeInput";
 
 @TypeGraphQL.InputType({
   isAbstract: true
 })
 export class OfficeUpdateWithoutBookableItemsInput {
-  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
+  @TypeGraphQL.Field(_type => NullableDateTimeFieldUpdateOperationsInput, {
     nullable: true
   })
-  createdAt?: DateTimeFieldUpdateOperationsInput | undefined;
+  createdAt?: NullableDateTimeFieldUpdateOperationsInput | undefined;
 
-  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
+  @TypeGraphQL.Field(_type => NullableDateTimeFieldUpdateOperationsInput, {
     nullable: true
   })
-  updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
+  updatedAt?: NullableDateTimeFieldUpdateOperationsInput | undefined;
 
   @TypeGraphQL.Field(_type => BuildingUpdateOneRequiredWithoutOfficesInput, {
     nullable: true
   })
   building?: BuildingUpdateOneRequiredWithoutOfficesInput | undefined;
-
-  @TypeGraphQL.Field(_type => ReservationUpdateManyWithoutOfficeInput, {
-    nullable: true
-  })
-  reservations?: ReservationUpdateManyWithoutOfficeInput | undefined;
 
   @TypeGraphQL.Field(_type => OfficeManagerUpdateManyWithoutOfficeInput, {
     nullable: true

@@ -20,14 +20,14 @@ export class Building {
   name!: string;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  createdAt!: Date;
+  createdAt?: Date | null;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  updatedAt!: Date;
+  updatedAt?: Date | null;
 
   offices?: Office[];
 

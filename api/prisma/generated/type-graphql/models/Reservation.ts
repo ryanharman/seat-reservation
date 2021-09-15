@@ -3,9 +3,7 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../scalars";
 import { BookableItem } from "../models/BookableItem";
-import { Office } from "../models/Office";
 import { User } from "../models/User";
-import { Role } from "../enums/Role";
 
 @TypeGraphQL.ObjectType({
   isAbstract: true
@@ -22,13 +20,6 @@ export class Reservation {
     nullable: false
   })
   userId!: number;
-
-  office?: Office;
-
-  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
-    nullable: false
-  })
-  officeId!: number;
 
   bookedItem?: BookableItem;
 
@@ -52,23 +43,13 @@ export class Reservation {
   })
   cancelled!: boolean;
 
-  @TypeGraphQL.Field(_type => String, {
-    nullable: false
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
   })
-  password!: string;
-
-  @TypeGraphQL.Field(_type => Role, {
-    nullable: false
-  })
-  role!: "USER" | "ADMIN";
+  createdAt?: Date | null;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  createdAt!: Date;
-
-  @TypeGraphQL.Field(_type => Date, {
-    nullable: false
-  })
-  updatedAt!: Date;
+  updatedAt?: Date | null;
 }

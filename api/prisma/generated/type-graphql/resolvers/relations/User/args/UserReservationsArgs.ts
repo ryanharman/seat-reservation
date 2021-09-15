@@ -35,5 +35,5 @@ export class UserReservationsArgs {
   @TypeGraphQL.Field(_type => [ReservationScalarFieldEnum], {
     nullable: true
   })
-  distinct?: Array<"id" | "userId" | "officeId" | "bookedItemId" | "dateBookedFrom" | "dateBookedTo" | "cancelled" | "password" | "role" | "createdAt" | "updatedAt"> | undefined;
+  distinct?: Array<"id" | "userId" | "bookedItemId" | "dateBookedFrom" | "dateBookedTo" | "cancelled" | "createdAt" | "updatedAt"> | undefined;
 }

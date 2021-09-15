@@ -28,14 +28,14 @@ export class BuildingManagerGroupBy {
   name!: string;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  createdAt!: Date;
+  createdAt!: Date | null;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  updatedAt!: Date;
+  updatedAt!: Date | null;
 
   @TypeGraphQL.Field(_type => BuildingManagerCountAggregate, {
     nullable: true

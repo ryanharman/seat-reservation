@@ -4,9 +4,7 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { BoolFieldUpdateOperationsInput } from "../inputs/BoolFieldUpdateOperationsInput";
 import { DateTimeFieldUpdateOperationsInput } from "../inputs/DateTimeFieldUpdateOperationsInput";
-import { EnumRoleFieldUpdateOperationsInput } from "../inputs/EnumRoleFieldUpdateOperationsInput";
-import { OfficeUpdateOneRequiredWithoutReservationsInput } from "../inputs/OfficeUpdateOneRequiredWithoutReservationsInput";
-import { StringFieldUpdateOperationsInput } from "../inputs/StringFieldUpdateOperationsInput";
+import { NullableDateTimeFieldUpdateOperationsInput } from "../inputs/NullableDateTimeFieldUpdateOperationsInput";
 import { UserUpdateOneRequiredWithoutReservationsInput } from "../inputs/UserUpdateOneRequiredWithoutReservationsInput";
 
 @TypeGraphQL.InputType({
@@ -28,33 +26,18 @@ export class ReservationUpdateWithoutBookedItemInput {
   })
   cancelled?: BoolFieldUpdateOperationsInput | undefined;
 
-  @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
+  @TypeGraphQL.Field(_type => NullableDateTimeFieldUpdateOperationsInput, {
     nullable: true
   })
-  password?: StringFieldUpdateOperationsInput | undefined;
+  createdAt?: NullableDateTimeFieldUpdateOperationsInput | undefined;
 
-  @TypeGraphQL.Field(_type => EnumRoleFieldUpdateOperationsInput, {
+  @TypeGraphQL.Field(_type => NullableDateTimeFieldUpdateOperationsInput, {
     nullable: true
   })
-  role?: EnumRoleFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
-    nullable: true
-  })
-  createdAt?: DateTimeFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
-    nullable: true
-  })
-  updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
+  updatedAt?: NullableDateTimeFieldUpdateOperationsInput | undefined;
 
   @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutReservationsInput, {
     nullable: true
   })
   user?: UserUpdateOneRequiredWithoutReservationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => OfficeUpdateOneRequiredWithoutReservationsInput, {
-    nullable: true
-  })
-  office?: OfficeUpdateOneRequiredWithoutReservationsInput | undefined;
 }

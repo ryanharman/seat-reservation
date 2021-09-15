@@ -31,6 +31,11 @@ export class BookableItemOrderByInput {
   @TypeGraphQL.Field(_type => SortOrder, {
     nullable: true
   })
+  officeExclusive?: "asc" | "desc" | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true
+  })
   available?: "asc" | "desc" | undefined;
 
   @TypeGraphQL.Field(_type => SortOrder, {

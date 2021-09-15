@@ -30,6 +30,11 @@ export class BookableItemCountAggregate {
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false
   })
+  officeExclusive!: number;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: false
+  })
   available!: number;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {

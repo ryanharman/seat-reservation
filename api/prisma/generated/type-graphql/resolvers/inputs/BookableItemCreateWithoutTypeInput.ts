@@ -17,6 +17,11 @@ export class BookableItemCreateWithoutTypeInput {
   @TypeGraphQL.Field(_type => Boolean, {
     nullable: true
   })
+  officeExclusive?: boolean | undefined;
+
+  @TypeGraphQL.Field(_type => Boolean, {
+    nullable: true
+  })
   available?: boolean | undefined;
 
   @TypeGraphQL.Field(_type => Date, {

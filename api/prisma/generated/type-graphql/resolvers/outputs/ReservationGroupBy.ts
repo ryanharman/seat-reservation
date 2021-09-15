@@ -7,7 +7,6 @@ import { ReservationCountAggregate } from "../outputs/ReservationCountAggregate"
 import { ReservationMaxAggregate } from "../outputs/ReservationMaxAggregate";
 import { ReservationMinAggregate } from "../outputs/ReservationMinAggregate";
 import { ReservationSumAggregate } from "../outputs/ReservationSumAggregate";
-import { Role } from "../../enums/Role";
 
 @TypeGraphQL.ObjectType({
   isAbstract: true
@@ -22,11 +21,6 @@ export class ReservationGroupBy {
     nullable: false
   })
   userId!: number;
-
-  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
-    nullable: false
-  })
-  officeId!: number;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false
@@ -48,25 +42,15 @@ export class ReservationGroupBy {
   })
   cancelled!: boolean;
 
-  @TypeGraphQL.Field(_type => String, {
-    nullable: false
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
   })
-  password!: string;
-
-  @TypeGraphQL.Field(_type => Role, {
-    nullable: false
-  })
-  role!: "USER" | "ADMIN";
+  createdAt!: Date | null;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  createdAt!: Date;
-
-  @TypeGraphQL.Field(_type => Date, {
-    nullable: false
-  })
-  updatedAt!: Date;
+  updatedAt!: Date | null;
 
   @TypeGraphQL.Field(_type => ReservationCountAggregate, {
     nullable: true

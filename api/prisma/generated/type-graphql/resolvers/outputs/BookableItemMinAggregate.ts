@@ -30,6 +30,11 @@ export class BookableItemMinAggregate {
   @TypeGraphQL.Field(_type => Boolean, {
     nullable: true
   })
+  officeExclusive!: boolean | null;
+
+  @TypeGraphQL.Field(_type => Boolean, {
+    nullable: true
+  })
   available!: boolean | null;
 
   @TypeGraphQL.Field(_type => Date, {

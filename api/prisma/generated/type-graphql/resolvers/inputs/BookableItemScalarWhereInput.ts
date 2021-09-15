@@ -3,7 +3,8 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { BoolFilter } from "../inputs/BoolFilter";
-import { DateTimeFilter } from "../inputs/DateTimeFilter";
+import { BoolNullableFilter } from "../inputs/BoolNullableFilter";
+import { DateTimeNullableFilter } from "../inputs/DateTimeNullableFilter";
 import { IntFilter } from "../inputs/IntFilter";
 import { StringFilter } from "../inputs/StringFilter";
 
@@ -49,15 +50,20 @@ export class BookableItemScalarWhereInput {
   @TypeGraphQL.Field(_type => BoolFilter, {
     nullable: true
   })
-  available?: BoolFilter | undefined;
+  officeExclusive?: BoolFilter | undefined;
 
-  @TypeGraphQL.Field(_type => DateTimeFilter, {
+  @TypeGraphQL.Field(_type => BoolNullableFilter, {
     nullable: true
   })
-  createdAt?: DateTimeFilter | undefined;
+  available?: BoolNullableFilter | undefined;
 
-  @TypeGraphQL.Field(_type => DateTimeFilter, {
+  @TypeGraphQL.Field(_type => DateTimeNullableFilter, {
     nullable: true
   })
-  updatedAt?: DateTimeFilter | undefined;
+  createdAt?: DateTimeNullableFilter | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeNullableFilter, {
+    nullable: true
+  })
+  updatedAt?: DateTimeNullableFilter | undefined;
 }

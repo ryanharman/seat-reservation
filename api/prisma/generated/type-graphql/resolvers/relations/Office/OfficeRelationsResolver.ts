@@ -3,10 +3,8 @@ import { BookableItem } from "../../../models/BookableItem";
 import { Building } from "../../../models/Building";
 import { Office } from "../../../models/Office";
 import { OfficeManager } from "../../../models/OfficeManager";
-import { Reservation } from "../../../models/Reservation";
 import { OfficeBookableItemsArgs } from "./args/OfficeBookableItemsArgs";
 import { OfficeOfficeManagersArgs } from "./args/OfficeOfficeManagersArgs";
-import { OfficeReservationsArgs } from "./args/OfficeReservationsArgs";
 import { transformFields, getPrismaFromContext, transformCountFieldIntoSelectRelationsCount } from "../../../helpers";
 
 @TypeGraphQL.Resolver(_of => Office)
@@ -20,17 +18,6 @@ export class OfficeRelationsResolver {
         id: office.id,
       },
     }).building({});
-  }
-
-  @TypeGraphQL.FieldResolver(_type => [Reservation], {
-    nullable: false
-  })
-  async reservations(@TypeGraphQL.Root() office: Office, @TypeGraphQL.Ctx() ctx: any, @TypeGraphQL.Args() args: OfficeReservationsArgs): Promise<Reservation[]> {
-    return getPrismaFromContext(ctx).office.findUnique({
-      where: {
-        id: office.id,
-      },
-    }).reservations(args);
   }
 
   @TypeGraphQL.FieldResolver(_type => [BookableItem], {

@@ -36,7 +36,7 @@ export class UserMaxAggregate {
   @TypeGraphQL.Field(_type => Role, {
     nullable: true
   })
-  role!: "USER" | "ADMIN" | null;
+  role!: "USER" | "OFFICE_MANAGER" | "BUILDING_MANAGER" | "ADMIN" | null;
 
   @TypeGraphQL.Field(_type => Date, {
     nullable: true

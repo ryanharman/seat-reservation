@@ -2,8 +2,9 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
+import { BoolNullableWithAggregatesFilter } from "../inputs/BoolNullableWithAggregatesFilter";
 import { BoolWithAggregatesFilter } from "../inputs/BoolWithAggregatesFilter";
-import { DateTimeWithAggregatesFilter } from "../inputs/DateTimeWithAggregatesFilter";
+import { DateTimeNullableWithAggregatesFilter } from "../inputs/DateTimeNullableWithAggregatesFilter";
 import { IntWithAggregatesFilter } from "../inputs/IntWithAggregatesFilter";
 import { StringWithAggregatesFilter } from "../inputs/StringWithAggregatesFilter";
 
@@ -49,15 +50,20 @@ export class BookableItemScalarWhereWithAggregatesInput {
   @TypeGraphQL.Field(_type => BoolWithAggregatesFilter, {
     nullable: true
   })
-  available?: BoolWithAggregatesFilter | undefined;
+  officeExclusive?: BoolWithAggregatesFilter | undefined;
 
-  @TypeGraphQL.Field(_type => DateTimeWithAggregatesFilter, {
+  @TypeGraphQL.Field(_type => BoolNullableWithAggregatesFilter, {
     nullable: true
   })
-  createdAt?: DateTimeWithAggregatesFilter | undefined;
+  available?: BoolNullableWithAggregatesFilter | undefined;
 
-  @TypeGraphQL.Field(_type => DateTimeWithAggregatesFilter, {
+  @TypeGraphQL.Field(_type => DateTimeNullableWithAggregatesFilter, {
     nullable: true
   })
-  updatedAt?: DateTimeWithAggregatesFilter | undefined;
+  createdAt?: DateTimeNullableWithAggregatesFilter | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeNullableWithAggregatesFilter, {
+    nullable: true
+  })
+  updatedAt?: DateTimeNullableWithAggregatesFilter | undefined;
 }

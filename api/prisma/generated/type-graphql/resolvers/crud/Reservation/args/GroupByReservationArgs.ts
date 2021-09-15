@@ -20,7 +20,7 @@ export class GroupByReservationArgs {
   @TypeGraphQL.Field(_type => [ReservationScalarFieldEnum], {
     nullable: false
   })
-  by!: Array<"id" | "userId" | "officeId" | "bookedItemId" | "dateBookedFrom" | "dateBookedTo" | "cancelled" | "password" | "role" | "createdAt" | "updatedAt">;
+  by!: Array<"id" | "userId" | "bookedItemId" | "dateBookedFrom" | "dateBookedTo" | "cancelled" | "createdAt" | "updatedAt">;
 
   @TypeGraphQL.Field(_type => ReservationScalarWhereWithAggregatesInput, {
     nullable: true

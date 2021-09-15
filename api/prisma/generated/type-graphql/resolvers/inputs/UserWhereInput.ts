@@ -2,7 +2,7 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
-import { DateTimeFilter } from "../inputs/DateTimeFilter";
+import { DateTimeNullableFilter } from "../inputs/DateTimeNullableFilter";
 import { EnumRoleFilter } from "../inputs/EnumRoleFilter";
 import { IntFilter } from "../inputs/IntFilter";
 import { ReservationListRelationFilter } from "../inputs/ReservationListRelationFilter";
@@ -63,13 +63,13 @@ export class UserWhereInput {
   })
   reservations?: ReservationListRelationFilter | undefined;
 
-  @TypeGraphQL.Field(_type => DateTimeFilter, {
+  @TypeGraphQL.Field(_type => DateTimeNullableFilter, {
     nullable: true
   })
-  createdAt?: DateTimeFilter | undefined;
+  createdAt?: DateTimeNullableFilter | undefined;
 
-  @TypeGraphQL.Field(_type => DateTimeFilter, {
+  @TypeGraphQL.Field(_type => DateTimeNullableFilter, {
     nullable: true
   })
-  updatedAt?: DateTimeFilter | undefined;
+  updatedAt?: DateTimeNullableFilter | undefined;
 }

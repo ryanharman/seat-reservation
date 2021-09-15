@@ -20,11 +20,6 @@ export class ReservationCountAggregate {
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false
   })
-  officeId!: number;
-
-  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
-    nullable: false
-  })
   bookedItemId!: number;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
@@ -41,16 +36,6 @@ export class ReservationCountAggregate {
     nullable: false
   })
   cancelled!: number;
-
-  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
-    nullable: false
-  })
-  password!: number;
-
-  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
-    nullable: false
-  })
-  role!: number;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false

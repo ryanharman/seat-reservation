@@ -37,17 +37,22 @@ export class BookableItem {
   @TypeGraphQL.Field(_type => Boolean, {
     nullable: false
   })
-  available!: boolean;
+  officeExclusive!: boolean;
+
+  @TypeGraphQL.Field(_type => Boolean, {
+    nullable: true
+  })
+  available?: boolean | null;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  createdAt!: Date;
+  createdAt?: Date | null;
 
   @TypeGraphQL.Field(_type => Date, {
-    nullable: false
+    nullable: true
   })
-  updatedAt!: Date;
+  updatedAt?: Date | null;
 
   reservations?: Reservation[];
 }

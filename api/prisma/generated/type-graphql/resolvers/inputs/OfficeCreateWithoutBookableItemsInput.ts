@@ -4,7 +4,6 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { BuildingCreateNestedOneWithoutOfficesInput } from "../inputs/BuildingCreateNestedOneWithoutOfficesInput";
 import { OfficeManagerCreateNestedManyWithoutOfficeInput } from "../inputs/OfficeManagerCreateNestedManyWithoutOfficeInput";
-import { ReservationCreateNestedManyWithoutOfficeInput } from "../inputs/ReservationCreateNestedManyWithoutOfficeInput";
 
 @TypeGraphQL.InputType({
   isAbstract: true
@@ -24,11 +23,6 @@ export class OfficeCreateWithoutBookableItemsInput {
     nullable: false
   })
   building!: BuildingCreateNestedOneWithoutOfficesInput;
-
-  @TypeGraphQL.Field(_type => ReservationCreateNestedManyWithoutOfficeInput, {
-    nullable: true
-  })
-  reservations?: ReservationCreateNestedManyWithoutOfficeInput | undefined;
 
   @TypeGraphQL.Field(_type => OfficeManagerCreateNestedManyWithoutOfficeInput, {
     nullable: true

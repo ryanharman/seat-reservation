@@ -3,9 +3,7 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { BookableItemCreateNestedOneWithoutReservationsInput } from "../inputs/BookableItemCreateNestedOneWithoutReservationsInput";
-import { OfficeCreateNestedOneWithoutReservationsInput } from "../inputs/OfficeCreateNestedOneWithoutReservationsInput";
 import { UserCreateNestedOneWithoutReservationsInput } from "../inputs/UserCreateNestedOneWithoutReservationsInput";
-import { Role } from "../../enums/Role";
 
 @TypeGraphQL.InputType({
   isAbstract: true
@@ -26,16 +24,6 @@ export class ReservationCreateInput {
   })
   cancelled!: boolean;
 
-  @TypeGraphQL.Field(_type => String, {
-    nullable: false
-  })
-  password!: string;
-
-  @TypeGraphQL.Field(_type => Role, {
-    nullable: true
-  })
-  role?: "USER" | "ADMIN" | undefined;
-
   @TypeGraphQL.Field(_type => Date, {
     nullable: true
   })
@@ -50,11 +38,6 @@ export class ReservationCreateInput {
     nullable: false
   })
   user!: UserCreateNestedOneWithoutReservationsInput;
-
-  @TypeGraphQL.Field(_type => OfficeCreateNestedOneWithoutReservationsInput, {
-    nullable: false
-  })
-  office!: OfficeCreateNestedOneWithoutReservationsInput;
 
   @TypeGraphQL.Field(_type => BookableItemCreateNestedOneWithoutReservationsInput, {
     nullable: false

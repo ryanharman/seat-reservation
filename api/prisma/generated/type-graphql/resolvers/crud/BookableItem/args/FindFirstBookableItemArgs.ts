@@ -35,5 +35,5 @@ export class FindFirstBookableItemArgs {
   @TypeGraphQL.Field(_type => [BookableItemScalarFieldEnum], {
     nullable: true
   })
-  distinct?: Array<"id" | "officeId" | "typeId" | "name" | "available" | "createdAt" | "updatedAt"> | undefined;
+  distinct?: Array<"id" | "officeId" | "typeId" | "name" | "officeExclusive" | "available" | "createdAt" | "updatedAt"> | undefined;
 }

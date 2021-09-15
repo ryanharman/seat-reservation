@@ -4,10 +4,9 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { BookableItemListRelationFilter } from "../inputs/BookableItemListRelationFilter";
 import { BuildingRelationFilter } from "../inputs/BuildingRelationFilter";
-import { DateTimeFilter } from "../inputs/DateTimeFilter";
+import { DateTimeNullableFilter } from "../inputs/DateTimeNullableFilter";
 import { IntFilter } from "../inputs/IntFilter";
 import { OfficeManagerListRelationFilter } from "../inputs/OfficeManagerListRelationFilter";
-import { ReservationListRelationFilter } from "../inputs/ReservationListRelationFilter";
 
 @TypeGraphQL.InputType({
   isAbstract: true
@@ -43,20 +42,15 @@ export class OfficeWhereInput {
   })
   buildingId?: IntFilter | undefined;
 
-  @TypeGraphQL.Field(_type => DateTimeFilter, {
+  @TypeGraphQL.Field(_type => DateTimeNullableFilter, {
     nullable: true
   })
-  createdAt?: DateTimeFilter | undefined;
+  createdAt?: DateTimeNullableFilter | undefined;
 
-  @TypeGraphQL.Field(_type => DateTimeFilter, {
+  @TypeGraphQL.Field(_type => DateTimeNullableFilter, {
     nullable: true
   })
-  updatedAt?: DateTimeFilter | undefined;
-
-  @TypeGraphQL.Field(_type => ReservationListRelationFilter, {
-    nullable: true
-  })
-  reservations?: ReservationListRelationFilter | undefined;
+  updatedAt?: DateTimeNullableFilter | undefined;
 
   @TypeGraphQL.Field(_type => BookableItemListRelationFilter, {
     nullable: true

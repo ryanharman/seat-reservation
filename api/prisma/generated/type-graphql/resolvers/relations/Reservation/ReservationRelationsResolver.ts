@@ -1,6 +1,5 @@
 import * as TypeGraphQL from "type-graphql";
 import { BookableItem } from "../../../models/BookableItem";
-import { Office } from "../../../models/Office";
 import { Reservation } from "../../../models/Reservation";
 import { User } from "../../../models/User";
 import { transformFields, getPrismaFromContext, transformCountFieldIntoSelectRelationsCount } from "../../../helpers";
@@ -16,17 +15,6 @@ export class ReservationRelationsResolver {
         id: reservation.id,
       },
     }).user({});
-  }
-
-  @TypeGraphQL.FieldResolver(_type => Office, {
-    nullable: false
-  })
-  async office(@TypeGraphQL.Root() reservation: Reservation, @TypeGraphQL.Ctx() ctx: any): Promise<Office> {
-    return getPrismaFromContext(ctx).reservation.findUnique({
-      where: {
-        id: reservation.id,
-      },
-    }).office({});
   }
 
   @TypeGraphQL.FieldResolver(_type => BookableItem, {

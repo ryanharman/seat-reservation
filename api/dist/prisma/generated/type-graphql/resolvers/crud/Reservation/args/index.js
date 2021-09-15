@@ -1,0 +1,28 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UpsertReservationArgs = exports.UpdateReservationArgs = exports.UpdateManyReservationArgs = exports.GroupByReservationArgs = exports.FindUniqueReservationArgs = exports.FindManyReservationArgs = exports.FindFirstReservationArgs = exports.DeleteReservationArgs = exports.DeleteManyReservationArgs = exports.CreateReservationArgs = exports.CreateManyReservationArgs = exports.AggregateReservationArgs = void 0;
+var AggregateReservationArgs_1 = require("./AggregateReservationArgs");
+Object.defineProperty(exports, "AggregateReservationArgs", { enumerable: true, get: function () { return AggregateReservationArgs_1.AggregateReservationArgs; } });
+var CreateManyReservationArgs_1 = require("./CreateManyReservationArgs");
+Object.defineProperty(exports, "CreateManyReservationArgs", { enumerable: true, get: function () { return CreateManyReservationArgs_1.CreateManyReservationArgs; } });
+var CreateReservationArgs_1 = require("./CreateReservationArgs");
+Object.defineProperty(exports, "CreateReservationArgs", { enumerable: true, get: function () { return CreateReservationArgs_1.CreateReservationArgs; } });
+var DeleteManyReservationArgs_1 = require("./DeleteManyReservationArgs");
+Object.defineProperty(exports, "DeleteManyReservationArgs", { enumerable: true, get: function () { return DeleteManyReservationArgs_1.DeleteManyReservationArgs; } });
+var DeleteReservationArgs_1 = require("./DeleteReservationArgs");
+Object.defineProperty(exports, "DeleteReservationArgs", { enumerable: true, get: function () { return DeleteReservationArgs_1.DeleteReservationArgs; } });
+var FindFirstReservationArgs_1 = require("./FindFirstReservationArgs");
+Object.defineProperty(exports, "FindFirstReservationArgs", { enumerable: true, get: function () { return FindFirstReservationArgs_1.FindFirstReservationArgs; } });
+var FindManyReservationArgs_1 = require("./FindManyReservationArgs");
+Object.defineProperty(exports, "FindManyReservationArgs", { enumerable: true, get: function () { return FindManyReservationArgs_1.FindManyReservationArgs; } });
+var FindUniqueReservationArgs_1 = require("./FindUniqueReservationArgs");
+Object.defineProperty(exports, "FindUniqueReservationArgs", { enumerable: true, get: function () { return FindUniqueReservationArgs_1.FindUniqueReservationArgs; } });
+var GroupByReservationArgs_1 = require("./GroupByReservationArgs");
+Object.defineProperty(exports, "GroupByReservationArgs", { enumerable: true, get: function () { return GroupByReservationArgs_1.GroupByReservationArgs; } });
+var UpdateManyReservationArgs_1 = require("./UpdateManyReservationArgs");
+Object.defineProperty(exports, "UpdateManyReservationArgs", { enumerable: true, get: function () { return UpdateManyReservationArgs_1.UpdateManyReservationArgs; } });
+var UpdateReservationArgs_1 = require("./UpdateReservationArgs");
+Object.defineProperty(exports, "UpdateReservationArgs", { enumerable: true, get: function () { return UpdateReservationArgs_1.UpdateReservationArgs; } });
+var UpsertReservationArgs_1 = require("./UpsertReservationArgs");
+Object.defineProperty(exports, "UpsertReservationArgs", { enumerable: true, get: function () { return UpsertReservationArgs_1.UpsertReservationArgs; } });
+//# sourceMappingURL=index.js.map
