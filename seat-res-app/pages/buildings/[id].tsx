@@ -3,7 +3,7 @@ import React, { ReactElement } from "react";
 import { Button, Card, PageTitle } from "../../components/ui";
 import Layout from "../../components/ui/Layout";
 
-export default function Home() {
+export default function Building() {
   return (
     <main className="px-8 py-2">
       <Head>
@@ -12,7 +12,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageTitle margin="mb-8">
-        Building name
+        Building
         <Button primary onClick={() => {}}>
           Edit
         </Button>
@@ -26,6 +26,6 @@ export default function Home() {
   );
 }
 
-Home.setLayout = function getLayout(page: ReactElement) {
+Building.setLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
