@@ -4,6 +4,7 @@ import { useTable } from "react-table";
 interface ITableProps {
   columns: any; // TODO: Create column def type
   data: any;
+  noDataText?: string;
   headerStyles?: string;
   rowStyles?: string;
 }
@@ -11,7 +12,13 @@ interface ITableProps {
 // TODO: Figure out a solution for pagination
 // https://react-table.tanstack.com/docs/api/usePagination
 
-export const Table = ({ columns, data, headerStyles, rowStyles }: ITableProps) => {
+export const Table = ({
+  columns,
+  data,
+  noDataText = "No data to display...",
+  headerStyles,
+  rowStyles,
+}: ITableProps) => {
   const tableInstance = useTable({ columns, data });
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, rows } = tableInstance;
 
@@ -75,6 +82,7 @@ export const Table = ({ columns, data, headerStyles, rowStyles }: ITableProps) =
           }
         </tbody>
       </table>
+      {(data.length === 0 || !data) && <div className="p-4 text-sm text-gray-600">{noDataText}</div>}
     </>
   );
 };
