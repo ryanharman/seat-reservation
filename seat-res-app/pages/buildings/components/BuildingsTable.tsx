@@ -19,10 +19,6 @@ const buildingsColumnDef = [
     accessor: "buildingName",
   },
   {
-    Header: "Building Manager",
-    accessor: "buildingManager",
-  },
-  {
     // EXAMPLE OF A CUSTOM CELL RENDER
     Header: () => null,
     id: "actions",
@@ -45,16 +41,13 @@ const buildingsTestData = [
   {
     id: 1,
     buildingName: "C1 Lower",
-    buildingManager: "Big A",
   },
   {
     id: 2,
     buildingName: "C1 Upper",
-    buildingManager: "Jesus",
   },
   {
     id: 3,
     buildingName: "A1",
-    buildingManager: "Simon Riden",
   },
 ];
