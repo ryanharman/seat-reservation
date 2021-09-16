@@ -1,8 +1,7 @@
-import Head from "next/head";
 import React, { ReactElement } from "react";
-import { PageTitle } from "../../components/ui";
+import Head from "next/head";
 import Layout from "../../components/ui/Layout";
-import ReservationsCard from "./components/reservationsCard";
+import { Card, PageTitle } from "../../components/ui";
 
 export default function Home() {
   return (
@@ -13,7 +12,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageTitle>Your Reservations</PageTitle>
-      <ReservationsCard />
     </main>
   );
 }
