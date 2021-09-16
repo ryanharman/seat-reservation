@@ -1,8 +1,6 @@
 import Head from "next/head";
 import React, { ReactElement } from "react";
-import { Button, Card, PageTitle } from "../../components/ui";
-import Layout from "../../components/ui/Layout";
-import Separator from "../../components/ui/Separator";
+import { Layout, Button, Card, PageTitle } from "../../components/ui";
 import { BuildingsTable } from "./components";
 
 export default function Buildings() {

@@ -12,13 +12,7 @@ interface ITableProps {
 // TODO: Figure out a solution for pagination
 // https://react-table.tanstack.com/docs/api/usePagination
 
-export const Table = ({
-  columns,
-  data,
-  noDataText = "No data to display...",
-  headerStyles,
-  rowStyles,
-}: ITableProps) => {
+const Table = ({ columns, data, noDataText = "No data to display...", headerStyles, rowStyles }: ITableProps) => {
   const tableInstance = useTable({ columns, data });
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, rows } = tableInstance;
 
@@ -86,3 +80,5 @@ export const Table = ({
     </>
   );
 };
+
+export default Table;

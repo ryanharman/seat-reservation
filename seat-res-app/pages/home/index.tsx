@@ -1,7 +1,6 @@
 import React, { ReactElement } from "react";
 import Head from "next/head";
-import Layout from "../../components/ui/Layout";
-import { Card, PageTitle } from "../../components/ui";
+import { Layout, PageTitle } from "../../components/ui";
 
 export default function Home() {
   return (

@@ -1,7 +1,6 @@
 import Head from "next/head";
 import React, { ReactElement } from "react";
-import { Button, Card, PageTitle } from "../../components/ui";
-import Layout from "../../components/ui/Layout";
+import { Layout, Button, Card, PageTitle } from "../../components/ui";
 
 export default function Offices() {
   return (
