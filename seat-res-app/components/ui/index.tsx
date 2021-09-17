@@ -9,4 +9,5 @@ export { default as PageTitle } from "./PageTitle";
 export { default as Select } from "./SelectChoice";
 export { default as Separator } from "./Separator";
 export { default as Table } from "./Table";
+export { default as ReportCard } from "./ReportContainer";
 export * from "./Card";

@@ -1,6 +1,6 @@
 import React from "react";
-import Link from "next/link";
 import { Table, Button } from "../../../components/ui";
+import Link from "next/link";
 
 export default function BuildingsTable() {
   const columnDef = React.useMemo(() => buildingsColumnDef, []);
