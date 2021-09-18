@@ -35,5 +35,5 @@ export class OfficeOfficeManagersArgs {
   @TypeGraphQL.Field(_type => [OfficeManagerScalarFieldEnum], {
     nullable: true
   })
-  distinct?: Array<"id" | "officeId" | "name" | "createdAt" | "updatedAt"> | undefined;
+  distinct?: Array<"id" | "officeId" | "userId" | "createdAt" | "updatedAt"> | undefined;
 }

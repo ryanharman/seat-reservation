@@ -16,4 +16,9 @@ export class BuildingManagerAvgAggregate {
     nullable: true
   })
   buildingId!: number | null;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Float, {
+    nullable: true
+  })
+  userId!: number | null;
 }

@@ -13,15 +13,17 @@ generator typegraphql {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique
-  firstName    String?
-  lastName     String?
-  password     String
-  role         Role          @default(USER)
-  reservations Reservation[]
-  createdAt    DateTime?     @default(now())
-  updatedAt    DateTime?     @updatedAt
+  id              Int               @id @default(autoincrement())
+  email           String            @unique
+  firstName       String?
+  lastName        String?
+  password        String
+  role            Role              @default(USER)
+  createdAt       DateTime?         @default(now())
+  updatedAt       DateTime?         @updatedAt
+  reservations    Reservation[]
+  OfficeManager   OfficeManager[]
+  BuildingManager BuildingManager[]
 }
 
 enum Role {
@@ -48,7 +50,7 @@ model Office {
   id             Int             @id @default(autoincrement())
   building       Building        @relation(fields: [buildingId], references: [id])
   buildingId     Int
-  name String
+  name           String
   createdAt      DateTime?       @default(now())
   updatedAt      DateTime?       @updatedAt
   bookableItems  BookableItem[]
@@ -59,7 +61,8 @@ model OfficeManager {
   id        Int       @id @default(autoincrement())
   office    Office    @relation(fields: [officeId], references: [id])
   officeId  Int
-  name      String
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 }
@@ -99,7 +102,8 @@ model BuildingManager {
   id         Int       @id @default(autoincrement())
   building   Building  @relation(fields: [buildingId], references: [id])
   buildingId Int
-  name       String
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int
   createdAt  DateTime? @default(now())
   updatedAt  DateTime? @updatedAt
 }

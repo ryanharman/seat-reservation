@@ -23,7 +23,7 @@ const Button = ({
   nextState = false,
   children,
   className = "",
-}: IButtonProps) => {
+}: ButtonProps) => {
   const buttonIconStyling = primary
     ? "btn-icon btn-primary"
     : submission

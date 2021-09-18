@@ -1,4 +1,4 @@
-import { Office } from "./Office";
+import { Office } from ".";
 
 export type Building = {
   id: number;

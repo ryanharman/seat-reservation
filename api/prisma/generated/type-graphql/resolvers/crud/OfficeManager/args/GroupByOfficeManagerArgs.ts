@@ -20,7 +20,7 @@ export class GroupByOfficeManagerArgs {
   @TypeGraphQL.Field(_type => [OfficeManagerScalarFieldEnum], {
     nullable: false
   })
-  by!: Array<"id" | "officeId" | "name" | "createdAt" | "updatedAt">;
+  by!: Array<"id" | "officeId" | "userId" | "createdAt" | "updatedAt">;
 
   @TypeGraphQL.Field(_type => OfficeManagerScalarWhereWithAggregatesInput, {
     nullable: true

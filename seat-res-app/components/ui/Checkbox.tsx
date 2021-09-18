@@ -11,7 +11,7 @@ interface CheckboxProps {
   initialValue?: boolean;
 }
 
-const Checkbox = ({ height = "5", width = "5", onChange, initialValue = false }: ICheckboxProps) => {
+const Checkbox = ({ height = "5", width = "5", onChange, initialValue = false }: CheckboxProps) => {
   const [value, setValue] = useState(initialValue);
 
   const onChangeHandler = (event: React.ChangeEvent) => {

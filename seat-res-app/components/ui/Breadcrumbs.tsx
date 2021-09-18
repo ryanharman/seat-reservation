@@ -1,24 +1,22 @@
-import { useRouter } from "next/router";
 import React from "react";
-import Link from "next/link";
+import { useRouter } from "next/router";
+import StyledLink from "./StyledLink";
 
 const Breadcrumbs = () => {
   const router = useRouter();
 
   return (
     <div className="text-sm transition-all">
-      <Link href="/home">
-        <a className="text-gray-900 hover:text-blue-500 hover:underline cursor-pointer">Home</a>
-      </Link>
+      <StyledLink href="/home" className="text-gray-900">
+        Home
+      </StyledLink>
       {/* Map over the pathname split idiot */}
       {router.pathname !== "/home" && (
         <>
           <span> / </span>
-          <Link href={router.pathname}>
-            <a className="text-gray-500 capitalize hover:text-blue-500 hover:underline cursor-pointer">
-              {router.pathname.split("/")[1]}
-            </a>
-          </Link>
+          <StyledLink href={router.pathname} className="text-gray-500 capitalize">
+            {router.pathname.split("/")[1]}
+          </StyledLink>
         </>
       )}
     </div>

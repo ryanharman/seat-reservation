@@ -60,14 +60,14 @@ interface Icon {
   width: string | number;
   height: string | number;
   className?: string;
-  onClick?: MouseEventHandler<HTMLDivElement>;
+  onClick?: () => void;
 }
 
 const Icon = ({ icon, className, width, height, onClick }: Icon) => {
   const Icon = icons[icon];
 
   return (
-    <div className={className} onClick={onClick}>
+    <div className={className} onClick={() => onClick && onClick()}>
       <Icon height={height} width={width} />
     </div>
   );

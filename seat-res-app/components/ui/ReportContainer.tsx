@@ -7,7 +7,7 @@ interface ReportCard {
   reportQty: string | number;
 }
 
-const ReportCard = ({ bgColor, reportTitle, reportSummary, reportQty }: IReportCard) => {
+const ReportCard = ({ bgColor, reportTitle, reportSummary, reportQty }: ReportCard) => {
   return (
     <div className={`${bgColor ? bgColor : "bg-red-300"} bg-opacity-50 rounded-3xl p-8 text-black max-w-sm shadow-md`}>
       <div className="flex justify-between gap-4">
@@ -28,7 +28,7 @@ interface ReportTitle {
   summary: string;
 }
 
-export const ReportTitle = ({ title, summary }: IReportTitle) => {
+export const ReportTitle = ({ title, summary }: ReportTitle) => {
   return (
     <>
       <div className="text-2xl font-bold">{title}</div>

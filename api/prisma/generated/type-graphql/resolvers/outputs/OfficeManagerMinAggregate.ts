@@ -17,10 +17,10 @@ export class OfficeManagerMinAggregate {
   })
   officeId!: number | null;
 
-  @TypeGraphQL.Field(_type => String, {
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: true
   })
-  name!: string | null;
+  userId!: number | null;
 
   @TypeGraphQL.Field(_type => Date, {
     nullable: true

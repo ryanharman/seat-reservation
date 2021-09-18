@@ -2,6 +2,7 @@ import React from "react";
 import { Icon } from ".";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import StyledLink from "./StyledLink";
 
 const menu = [
   {
@@ -97,19 +98,17 @@ interface ListItemProps {
   link: string;
 }
 
-const ListItem = ({ icon, text, current, link }: IListItemProps) => {
+const ListItem = ({ icon, text, current, link }: ListItemProps) => {
   return (
     <div
       className={`${
         current ? "text-blue-500 bg-blue-50 hover:bg-blue-100" : "hover:bg-gray-100"
       } p-2 rounded-md cursor-pointer transition-all`}
     >
-      <Link href={link}>
-        <a className="flex items-center gap-2">
-          <Icon icon={icon} height={12} width={12} />
-          {text}
-        </a>
-      </Link>
+      <StyledLink href={link} className="flex items-center gap-2" hideUnderline={true}>
+        <Icon icon={icon} height={12} width={12} />
+        {text}
+      </StyledLink>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { DecimalJSScalar } from "../../scalars";
 import { DateTimeNullableFilter } from "../inputs/DateTimeNullableFilter";
 import { IntFilter } from "../inputs/IntFilter";
 import { OfficeRelationFilter } from "../inputs/OfficeRelationFilter";
-import { StringFilter } from "../inputs/StringFilter";
+import { UserRelationFilter } from "../inputs/UserRelationFilter";
 
 @TypeGraphQL.InputType({
   isAbstract: true
@@ -41,10 +41,15 @@ export class OfficeManagerWhereInput {
   })
   officeId?: IntFilter | undefined;
 
-  @TypeGraphQL.Field(_type => StringFilter, {
+  @TypeGraphQL.Field(_type => UserRelationFilter, {
     nullable: true
   })
-  name?: StringFilter | undefined;
+  user?: UserRelationFilter | undefined;
+
+  @TypeGraphQL.Field(_type => IntFilter, {
+    nullable: true
+  })
+  userId?: IntFilter | undefined;
 
   @TypeGraphQL.Field(_type => DateTimeNullableFilter, {
     nullable: true

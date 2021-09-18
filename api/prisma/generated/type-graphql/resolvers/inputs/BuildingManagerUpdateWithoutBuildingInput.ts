@@ -3,17 +3,12 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { NullableDateTimeFieldUpdateOperationsInput } from "../inputs/NullableDateTimeFieldUpdateOperationsInput";
-import { StringFieldUpdateOperationsInput } from "../inputs/StringFieldUpdateOperationsInput";
+import { UserUpdateOneRequiredWithoutBuildingManagerInput } from "../inputs/UserUpdateOneRequiredWithoutBuildingManagerInput";
 
 @TypeGraphQL.InputType({
   isAbstract: true
 })
 export class BuildingManagerUpdateWithoutBuildingInput {
-  @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
-    nullable: true
-  })
-  name?: StringFieldUpdateOperationsInput | undefined;
-
   @TypeGraphQL.Field(_type => NullableDateTimeFieldUpdateOperationsInput, {
     nullable: true
   })
@@ -23,4 +18,9 @@ export class BuildingManagerUpdateWithoutBuildingInput {
     nullable: true
   })
   updatedAt?: NullableDateTimeFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutBuildingManagerInput, {
+    nullable: true
+  })
+  user?: UserUpdateOneRequiredWithoutBuildingManagerInput | undefined;
 }

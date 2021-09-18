@@ -2,6 +2,8 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../scalars";
+import { BuildingManager } from "../models/BuildingManager";
+import { OfficeManager } from "../models/OfficeManager";
 import { Reservation } from "../models/Reservation";
 import { Role } from "../enums/Role";
 
@@ -39,8 +41,6 @@ export class User {
   })
   role!: "USER" | "OFFICE_MANAGER" | "BUILDING_MANAGER" | "ADMIN";
 
-  reservations?: Reservation[];
-
   @TypeGraphQL.Field(_type => Date, {
     nullable: true
   })
@@ -50,4 +50,10 @@ export class User {
     nullable: true
   })
   updatedAt?: Date | null;
+
+  reservations?: Reservation[];
+
+  OfficeManager?: OfficeManager[];
+
+  BuildingManager?: BuildingManager[];
 }

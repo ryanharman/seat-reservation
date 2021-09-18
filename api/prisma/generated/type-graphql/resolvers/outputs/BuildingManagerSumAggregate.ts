@@ -16,4 +16,9 @@ export class BuildingManagerSumAggregate {
     nullable: true
   })
   buildingId!: number | null;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: true
+  })
+  userId!: number | null;
 }

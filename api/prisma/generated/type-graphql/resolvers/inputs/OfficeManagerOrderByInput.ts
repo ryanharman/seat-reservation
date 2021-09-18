@@ -21,7 +21,7 @@ export class OfficeManagerOrderByInput {
   @TypeGraphQL.Field(_type => SortOrder, {
     nullable: true
   })
-  name?: "asc" | "desc" | undefined;
+  userId?: "asc" | "desc" | undefined;
 
   @TypeGraphQL.Field(_type => SortOrder, {
     nullable: true

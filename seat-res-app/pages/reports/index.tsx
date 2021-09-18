@@ -1,5 +1,5 @@
-import Head from "next/head";
 import React, { ReactElement } from "react";
+import Head from "next/head";
 import { Layout, PageTitle, ReportCard } from "../../components/ui";
 
 export default function ReportsPage() {

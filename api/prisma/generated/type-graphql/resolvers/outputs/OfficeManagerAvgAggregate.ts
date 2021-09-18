@@ -16,4 +16,9 @@ export class OfficeManagerAvgAggregate {
     nullable: true
   })
   officeId!: number | null;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Float, {
+    nullable: true
+  })
+  userId!: number | null;
 }

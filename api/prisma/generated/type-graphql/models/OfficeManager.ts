@@ -3,6 +3,7 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../scalars";
 import { Office } from "../models/Office";
+import { User } from "../models/User";
 
 @TypeGraphQL.ObjectType({
   isAbstract: true
@@ -20,10 +21,12 @@ export class OfficeManager {
   })
   officeId!: number;
 
-  @TypeGraphQL.Field(_type => String, {
+  user?: User;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false
   })
-  name!: string;
+  userId!: number;
 
   @TypeGraphQL.Field(_type => Date, {
     nullable: true

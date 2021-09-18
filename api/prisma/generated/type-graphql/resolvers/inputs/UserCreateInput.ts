@@ -2,6 +2,8 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
+import { BuildingManagerCreateNestedManyWithoutUserInput } from "../inputs/BuildingManagerCreateNestedManyWithoutUserInput";
+import { OfficeManagerCreateNestedManyWithoutUserInput } from "../inputs/OfficeManagerCreateNestedManyWithoutUserInput";
 import { ReservationCreateNestedManyWithoutUserInput } from "../inputs/ReservationCreateNestedManyWithoutUserInput";
 import { Role } from "../../enums/Role";
 
@@ -48,4 +50,14 @@ export class UserCreateInput {
     nullable: true
   })
   reservations?: ReservationCreateNestedManyWithoutUserInput | undefined;
+
+  @TypeGraphQL.Field(_type => OfficeManagerCreateNestedManyWithoutUserInput, {
+    nullable: true
+  })
+  OfficeManager?: OfficeManagerCreateNestedManyWithoutUserInput | undefined;
+
+  @TypeGraphQL.Field(_type => BuildingManagerCreateNestedManyWithoutUserInput, {
+    nullable: true
+  })
+  BuildingManager?: BuildingManagerCreateNestedManyWithoutUserInput | undefined;
 }

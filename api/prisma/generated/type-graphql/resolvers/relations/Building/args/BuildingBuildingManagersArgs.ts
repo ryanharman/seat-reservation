@@ -35,5 +35,5 @@ export class BuildingBuildingManagersArgs {
   @TypeGraphQL.Field(_type => [BuildingManagerScalarFieldEnum], {
     nullable: true
   })
-  distinct?: Array<"id" | "buildingId" | "name" | "createdAt" | "updatedAt"> | undefined;
+  distinct?: Array<"id" | "buildingId" | "userId" | "createdAt" | "updatedAt"> | undefined;
 }

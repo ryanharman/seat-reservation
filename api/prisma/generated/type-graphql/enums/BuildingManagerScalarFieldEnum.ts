@@ -3,7 +3,7 @@ import * as TypeGraphQL from "type-graphql";
 export enum BuildingManagerScalarFieldEnum {
   id = "id",
   buildingId = "buildingId",
-  name = "name",
+  userId = "userId",
   createdAt = "createdAt",
   updatedAt = "updatedAt"
 }

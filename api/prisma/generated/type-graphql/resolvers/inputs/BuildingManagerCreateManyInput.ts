@@ -17,10 +17,10 @@ export class BuildingManagerCreateManyInput {
   })
   buildingId!: number;
 
-  @TypeGraphQL.Field(_type => String, {
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false
   })
-  name!: string;
+  userId!: number;
 
   @TypeGraphQL.Field(_type => Date, {
     nullable: true

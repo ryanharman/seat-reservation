@@ -4,17 +4,12 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { NullableDateTimeFieldUpdateOperationsInput } from "../inputs/NullableDateTimeFieldUpdateOperationsInput";
 import { OfficeUpdateOneRequiredWithoutOfficeManagersInput } from "../inputs/OfficeUpdateOneRequiredWithoutOfficeManagersInput";
-import { StringFieldUpdateOperationsInput } from "../inputs/StringFieldUpdateOperationsInput";
+import { UserUpdateOneRequiredWithoutOfficeManagerInput } from "../inputs/UserUpdateOneRequiredWithoutOfficeManagerInput";
 
 @TypeGraphQL.InputType({
   isAbstract: true
 })
 export class OfficeManagerUpdateInput {
-  @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
-    nullable: true
-  })
-  name?: StringFieldUpdateOperationsInput | undefined;
-
   @TypeGraphQL.Field(_type => NullableDateTimeFieldUpdateOperationsInput, {
     nullable: true
   })
@@ -29,4 +24,9 @@ export class OfficeManagerUpdateInput {
     nullable: true
   })
   office?: OfficeUpdateOneRequiredWithoutOfficeManagersInput | undefined;
+
+  @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutOfficeManagerInput, {
+    nullable: true
+  })
+  user?: UserUpdateOneRequiredWithoutOfficeManagerInput | undefined;
 }

@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 import Head from "next/head";
-import { Layout, PageTitle } from "../../components/ui";
+import { Layout, PageTitle, Subheading } from "../../components/ui";
 
 export default function HomePage() {
   return (
@@ -11,7 +11,7 @@ export default function HomePage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageTitle margin="mb-2">Hello, Ryan</PageTitle>
-      <div className="text-gray-400 text-sm">Welcome back to your dashboard!</div>
+      <Subheading>Welcome back to your dashboard!</Subheading>
     </main>
   );
 }

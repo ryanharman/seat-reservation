@@ -4,7 +4,6 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { DateTimeNullableWithAggregatesFilter } from "../inputs/DateTimeNullableWithAggregatesFilter";
 import { IntWithAggregatesFilter } from "../inputs/IntWithAggregatesFilter";
-import { StringWithAggregatesFilter } from "../inputs/StringWithAggregatesFilter";
 
 @TypeGraphQL.InputType({
   isAbstract: true
@@ -35,10 +34,10 @@ export class OfficeManagerScalarWhereWithAggregatesInput {
   })
   officeId?: IntWithAggregatesFilter | undefined;
 
-  @TypeGraphQL.Field(_type => StringWithAggregatesFilter, {
+  @TypeGraphQL.Field(_type => IntWithAggregatesFilter, {
     nullable: true
   })
-  name?: StringWithAggregatesFilter | undefined;
+  userId?: IntWithAggregatesFilter | undefined;
 
   @TypeGraphQL.Field(_type => DateTimeNullableWithAggregatesFilter, {
     nullable: true

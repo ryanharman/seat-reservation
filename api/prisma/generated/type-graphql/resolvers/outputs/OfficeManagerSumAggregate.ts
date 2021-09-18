@@ -16,4 +16,9 @@ export class OfficeManagerSumAggregate {
     nullable: true
   })
   officeId!: number | null;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: true
+  })
+  userId!: number | null;
 }

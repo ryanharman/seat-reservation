@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
-import { gql } from "@apollo/client";
-import client from "../../apollo-client";
 import Head from "next/head";
+import client from "../../apollo-client";
+import { gql } from "@apollo/client";
 import { Layout, Button, Card, PageTitle } from "../../components/ui";
 import { BuildingsTable } from "./components";
 import { Building } from "../../types";

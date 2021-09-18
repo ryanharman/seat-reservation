@@ -1,7 +1,7 @@
 import React from "react";
-import Link from "next/link";
 import { format } from "date-fns";
 import { Button } from "../../../components/ui";
+import StyledLink from "../../../components/ui/StyledLink";
 
 export const buildingsColumnDef = [
   {
@@ -17,7 +17,7 @@ export const buildingsColumnDef = [
     accessor: "createdAt",
     Cell: ({ row }: any) => {
       const { original } = row;
-      return <div>{format(new Date(original.createdAt), "dd-MM-yyyy HH:mm")}</div>;
+      return <div>{format(new Date(original.createdAt), "dd/MM/yyyy HH:mm")}</div>;
     },
   },
   {
@@ -27,11 +27,9 @@ export const buildingsColumnDef = [
       const { original } = row;
       return (
         <div className="justify-self-end">
-          <Link href={`buildings/${original.id}`}>
-            <a>
-              <Button onClick={() => {}}>Go to {original.id}</Button>
-            </a>
-          </Link>
+          <StyledLink href={`buildings/${original.id}`}>
+            <Button onClick={() => {}}>Go to {original.id}</Button>
+          </StyledLink>
         </div>
       );
     },

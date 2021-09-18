@@ -2,9 +2,11 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
+import { BuildingManagerUpdateManyWithoutUserInput } from "../inputs/BuildingManagerUpdateManyWithoutUserInput";
 import { EnumRoleFieldUpdateOperationsInput } from "../inputs/EnumRoleFieldUpdateOperationsInput";
 import { NullableDateTimeFieldUpdateOperationsInput } from "../inputs/NullableDateTimeFieldUpdateOperationsInput";
 import { NullableStringFieldUpdateOperationsInput } from "../inputs/NullableStringFieldUpdateOperationsInput";
+import { OfficeManagerUpdateManyWithoutUserInput } from "../inputs/OfficeManagerUpdateManyWithoutUserInput";
 import { StringFieldUpdateOperationsInput } from "../inputs/StringFieldUpdateOperationsInput";
 
 @TypeGraphQL.InputType({
@@ -45,4 +47,14 @@ export class UserUpdateWithoutReservationsInput {
     nullable: true
   })
   updatedAt?: NullableDateTimeFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => OfficeManagerUpdateManyWithoutUserInput, {
+    nullable: true
+  })
+  OfficeManager?: OfficeManagerUpdateManyWithoutUserInput | undefined;
+
+  @TypeGraphQL.Field(_type => BuildingManagerUpdateManyWithoutUserInput, {
+    nullable: true
+  })
+  BuildingManager?: BuildingManagerUpdateManyWithoutUserInput | undefined;
 }

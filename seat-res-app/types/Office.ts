@@ -1,9 +1,10 @@
-import { Building } from "./Building";
+import { OfficeManager, Building } from ".";
 
 export type Office = {
   id: number;
   building?: Building;
   name: string;
-  createdAt?: Date;
+  officeManagers: OfficeManager[];
+  createdAt: Date;
   updatedAt?: Date;
 };

@@ -3,7 +3,7 @@ import * as TypeGraphQL from "type-graphql";
 export enum OfficeManagerScalarFieldEnum {
   id = "id",
   officeId = "officeId",
-  name = "name",
+  userId = "userId",
   createdAt = "createdAt",
   updatedAt = "updatedAt"
 }

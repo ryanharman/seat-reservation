@@ -20,7 +20,7 @@ export class GroupByBuildingManagerArgs {
   @TypeGraphQL.Field(_type => [BuildingManagerScalarFieldEnum], {
     nullable: false
   })
-  by!: Array<"id" | "buildingId" | "name" | "createdAt" | "updatedAt">;
+  by!: Array<"id" | "buildingId" | "userId" | "createdAt" | "updatedAt">;
 
   @TypeGraphQL.Field(_type => BuildingManagerScalarWhereWithAggregatesInput, {
     nullable: true

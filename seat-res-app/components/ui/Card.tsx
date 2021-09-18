@@ -1,9 +1,9 @@
-import React, { MouseEventHandler } from "react";
+import React from "react";
 import IconComponent from "./Icon";
 
 interface CardProps {
   className?: string;
-  onClick?: MouseEventHandler;
+  onClick?: () => void;
   children: React.ReactChild[] | React.ReactChild;
 }
 
@@ -12,7 +12,7 @@ export const Card = ({ onClick, children, className = "" }: CardProps) => {
   return (
     <div
       className={`${className} ${cursorClass} min-w-72 flex flex-col bg-white border border-gray-300 p-6 rounded-md`}
-      onClick={onClick}
+      onClick={() => onClick && onClick()}
     >
       {children}
     </div>
