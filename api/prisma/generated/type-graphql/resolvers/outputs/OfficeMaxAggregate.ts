@@ -17,6 +17,11 @@ export class OfficeMaxAggregate {
   })
   buildingId!: number | null;
 
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  name!: string | null;
+
   @TypeGraphQL.Field(_type => Date, {
     nullable: true
   })

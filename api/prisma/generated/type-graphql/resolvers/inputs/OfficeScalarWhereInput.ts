@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { DateTimeNullableFilter } from "../inputs/DateTimeNullableFilter";
 import { IntFilter } from "../inputs/IntFilter";
+import { StringFilter } from "../inputs/StringFilter";
 
 @TypeGraphQL.InputType({
   isAbstract: true
@@ -33,6 +34,11 @@ export class OfficeScalarWhereInput {
     nullable: true
   })
   buildingId?: IntFilter | undefined;
+
+  @TypeGraphQL.Field(_type => StringFilter, {
+    nullable: true
+  })
+  name?: StringFilter | undefined;
 
   @TypeGraphQL.Field(_type => DateTimeNullableFilter, {
     nullable: true

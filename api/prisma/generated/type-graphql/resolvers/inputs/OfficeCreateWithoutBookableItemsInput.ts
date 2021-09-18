@@ -9,6 +9,11 @@ import { OfficeManagerCreateNestedManyWithoutOfficeInput } from "../inputs/Offic
   isAbstract: true
 })
 export class OfficeCreateWithoutBookableItemsInput {
+  @TypeGraphQL.Field(_type => String, {
+    nullable: false
+  })
+  name!: string;
+
   @TypeGraphQL.Field(_type => Date, {
     nullable: true
   })

@@ -7,6 +7,7 @@ import { BuildingRelationFilter } from "../inputs/BuildingRelationFilter";
 import { DateTimeNullableFilter } from "../inputs/DateTimeNullableFilter";
 import { IntFilter } from "../inputs/IntFilter";
 import { OfficeManagerListRelationFilter } from "../inputs/OfficeManagerListRelationFilter";
+import { StringFilter } from "../inputs/StringFilter";
 
 @TypeGraphQL.InputType({
   isAbstract: true
@@ -41,6 +42,11 @@ export class OfficeWhereInput {
     nullable: true
   })
   buildingId?: IntFilter | undefined;
+
+  @TypeGraphQL.Field(_type => StringFilter, {
+    nullable: true
+  })
+  name?: StringFilter | undefined;
 
   @TypeGraphQL.Field(_type => DateTimeNullableFilter, {
     nullable: true

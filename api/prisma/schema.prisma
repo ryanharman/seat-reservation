@@ -48,6 +48,7 @@ model Office {
   id             Int             @id @default(autoincrement())
   building       Building        @relation(fields: [buildingId], references: [id])
   buildingId     Int
+  name String
   createdAt      DateTime?       @default(now())
   updatedAt      DateTime?       @updatedAt
   bookableItems  BookableItem[]

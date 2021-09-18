@@ -22,6 +22,11 @@ export class OfficeGroupBy {
   })
   buildingId!: number;
 
+  @TypeGraphQL.Field(_type => String, {
+    nullable: false
+  })
+  name!: string;
+
   @TypeGraphQL.Field(_type => Date, {
     nullable: true
   })

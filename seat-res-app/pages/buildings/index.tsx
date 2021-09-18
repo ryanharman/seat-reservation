@@ -1,9 +1,41 @@
-import Head from "next/head";
 import React, { ReactElement } from "react";
+import { gql } from "@apollo/client";
+import client from "../../apollo-client";
+import Head from "next/head";
 import { Layout, Button, Card, PageTitle } from "../../components/ui";
 import { BuildingsTable } from "./components";
+import { Building } from "../../types";
 
-export default function Buildings() {
+export async function getStaticProps() {
+  const { data } = await client.query({
+    query: gql`
+      query Buildings {
+        buildings {
+          id
+          name
+          offices {
+            id
+            name
+          }
+        }
+      }
+    `,
+  });
+
+  return {
+    props: {
+      buildings: data.buildings,
+    },
+  };
+}
+
+interface IBuildingsProps {
+  buildings: Building[];
+}
+
+export default function Buildings({ buildings }: IBuildingsProps) {
+  console.log(buildings);
+
   return (
     <main className="px-8 py-2">
       <Head>

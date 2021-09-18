@@ -1455,6 +1455,7 @@ type Office {
   buildingId: Int!
   createdAt: DateTime
   id: Int!
+  name: String!
   officeManagers(cursor: OfficeManagerWhereUniqueInput, distinct: [OfficeManagerScalarFieldEnum!], orderBy: [OfficeManagerOrderByInput!], skip: Int, take: Int, where: OfficeManagerWhereInput): [OfficeManager!]!
   updatedAt: DateTime
 }
@@ -1469,6 +1470,7 @@ type OfficeCountAggregate {
   buildingId: Int!
   createdAt: Int!
   id: Int!
+  name: Int!
   updatedAt: Int!
 }
 
@@ -1476,6 +1478,7 @@ input OfficeCreateInput {
   bookableItems: BookableItemCreateNestedManyWithoutOfficeInput
   building: BuildingCreateNestedOneWithoutOfficesInput!
   createdAt: DateTime
+  name: String!
   officeManagers: OfficeManagerCreateNestedManyWithoutOfficeInput
   updatedAt: DateTime
 }
@@ -1483,6 +1486,7 @@ input OfficeCreateInput {
 input OfficeCreateManyBuildingInput {
   createdAt: DateTime
   id: Int
+  name: String!
   updatedAt: DateTime
 }
 
@@ -1495,6 +1499,7 @@ input OfficeCreateManyInput {
   buildingId: Int!
   createdAt: DateTime
   id: Int
+  name: String!
   updatedAt: DateTime
 }
 
@@ -1535,6 +1540,7 @@ input OfficeCreateOrConnectWithoutOfficeManagersInput {
 input OfficeCreateWithoutBookableItemsInput {
   building: BuildingCreateNestedOneWithoutOfficesInput!
   createdAt: DateTime
+  name: String!
   officeManagers: OfficeManagerCreateNestedManyWithoutOfficeInput
   updatedAt: DateTime
 }
@@ -1542,6 +1548,7 @@ input OfficeCreateWithoutBookableItemsInput {
 input OfficeCreateWithoutBuildingInput {
   bookableItems: BookableItemCreateNestedManyWithoutOfficeInput
   createdAt: DateTime
+  name: String!
   officeManagers: OfficeManagerCreateNestedManyWithoutOfficeInput
   updatedAt: DateTime
 }
@@ -1550,6 +1557,7 @@ input OfficeCreateWithoutOfficeManagersInput {
   bookableItems: BookableItemCreateNestedManyWithoutOfficeInput
   building: BuildingCreateNestedOneWithoutOfficesInput!
   createdAt: DateTime
+  name: String!
   updatedAt: DateTime
 }
 
@@ -1562,6 +1570,7 @@ type OfficeGroupBy {
   buildingId: Int!
   createdAt: DateTime
   id: Int!
+  name: String!
   updatedAt: DateTime
 }
 
@@ -1786,6 +1795,7 @@ type OfficeMaxAggregate {
   buildingId: Int
   createdAt: DateTime
   id: Int
+  name: String
   updatedAt: DateTime
 }
 
@@ -1793,6 +1803,7 @@ type OfficeMinAggregate {
   buildingId: Int
   createdAt: DateTime
   id: Int
+  name: String
   updatedAt: DateTime
 }
 
@@ -1800,6 +1811,7 @@ input OfficeOrderByInput {
   buildingId: SortOrder
   createdAt: SortOrder
   id: SortOrder
+  name: SortOrder
   updatedAt: SortOrder
 }
 
@@ -1812,6 +1824,7 @@ enum OfficeScalarFieldEnum {
   buildingId
   createdAt
   id
+  name
   updatedAt
 }
 
@@ -1822,6 +1835,7 @@ input OfficeScalarWhereInput {
   buildingId: IntFilter
   createdAt: DateTimeNullableFilter
   id: IntFilter
+  name: StringFilter
   updatedAt: DateTimeNullableFilter
 }
 
@@ -1832,6 +1846,7 @@ input OfficeScalarWhereWithAggregatesInput {
   buildingId: IntWithAggregatesFilter
   createdAt: DateTimeNullableWithAggregatesFilter
   id: IntWithAggregatesFilter
+  name: StringWithAggregatesFilter
   updatedAt: DateTimeNullableWithAggregatesFilter
 }
 
@@ -1844,12 +1859,14 @@ input OfficeUpdateInput {
   bookableItems: BookableItemUpdateManyWithoutOfficeInput
   building: BuildingUpdateOneRequiredWithoutOfficesInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
   officeManagers: OfficeManagerUpdateManyWithoutOfficeInput
   updatedAt: NullableDateTimeFieldUpdateOperationsInput
 }
 
 input OfficeUpdateManyMutationInput {
   createdAt: NullableDateTimeFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
   updatedAt: NullableDateTimeFieldUpdateOperationsInput
 }
 
@@ -1896,6 +1913,7 @@ input OfficeUpdateWithWhereUniqueWithoutBuildingInput {
 input OfficeUpdateWithoutBookableItemsInput {
   building: BuildingUpdateOneRequiredWithoutOfficesInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
   officeManagers: OfficeManagerUpdateManyWithoutOfficeInput
   updatedAt: NullableDateTimeFieldUpdateOperationsInput
 }
@@ -1903,6 +1921,7 @@ input OfficeUpdateWithoutBookableItemsInput {
 input OfficeUpdateWithoutBuildingInput {
   bookableItems: BookableItemUpdateManyWithoutOfficeInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
   officeManagers: OfficeManagerUpdateManyWithoutOfficeInput
   updatedAt: NullableDateTimeFieldUpdateOperationsInput
 }
@@ -1911,6 +1930,7 @@ input OfficeUpdateWithoutOfficeManagersInput {
   bookableItems: BookableItemUpdateManyWithoutOfficeInput
   building: BuildingUpdateOneRequiredWithoutOfficesInput
   createdAt: NullableDateTimeFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
   updatedAt: NullableDateTimeFieldUpdateOperationsInput
 }
 
@@ -1939,6 +1959,7 @@ input OfficeWhereInput {
   buildingId: IntFilter
   createdAt: DateTimeNullableFilter
   id: IntFilter
+  name: StringFilter
   officeManagers: OfficeManagerListRelationFilter
   updatedAt: DateTimeNullableFilter
 }

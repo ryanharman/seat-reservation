@@ -35,5 +35,5 @@ export class FindManyOfficeArgs {
   @TypeGraphQL.Field(_type => [OfficeScalarFieldEnum], {
     nullable: true
   })
-  distinct?: Array<"id" | "buildingId" | "createdAt" | "updatedAt"> | undefined;
+  distinct?: Array<"id" | "buildingId" | "name" | "createdAt" | "updatedAt"> | undefined;
 }
