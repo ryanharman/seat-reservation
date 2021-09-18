@@ -4,7 +4,7 @@ import React, { useState } from "react";
 https://tailwindcss.com/docs/width
 https://tailwindcss.com/docs/height */
 
-interface ICheckboxProps {
+interface CheckboxProps {
   height?: string | number;
   width?: string | number;
   onChange: Function;

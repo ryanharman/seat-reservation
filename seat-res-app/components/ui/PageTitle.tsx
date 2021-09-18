@@ -1,6 +1,6 @@
 import React from "react";
 
-interface IPageTitleProps {
+interface PageTitleProps {
   children: React.ReactChild[] | React.ReactChild;
   margin?: string;
 }

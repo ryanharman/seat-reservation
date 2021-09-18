@@ -1,8 +1,16 @@
-import Head from "next/head";
 import React, { ReactElement } from "react";
+import Head from "next/head";
+import client from "../../apollo-client";
+import { gql } from "@apollo/client";
+import { Building } from "../../types";
 import { Layout, Button, Card, PageTitle } from "../../components/ui";
+import { buildingsQuery } from ".";
 
-export default function Building() {
+interface BuildingProps {
+  buildingData: Building;
+}
+
+export default function BuildingPage({ buildingData }: BuildingProps) {
   return (
     <main className="px-8 py-2">
       <Head>
@@ -25,6 +33,45 @@ export default function Building() {
   );
 }
 
-Building.setLayout = function getLayout(page: ReactElement) {
+BuildingPage.setLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
+};
+
+// We prerender the pages using the static paths function due to the estimated lack of
+// buildings within the database. This might not be scalable? Need to read more of the docs
+
+export async function getStaticPaths() {
+  const data = await buildingsQuery();
+  const paths = data.buildings.map((building: Building) => ({
+    params: { id: building.id.toString() },
+  }));
+  return { paths, fallback: "blocking" };
+}
+
+export async function getStaticProps() {
+  const data = await buildingQuery();
+  return {
+    props: {
+      buildingData: data.building,
+    },
+  };
+}
+
+export const buildingQuery = async () => {
+  const { data } = await client.query({
+    query: gql`
+      query BuildingData {
+        building(where: { id: 1 }) {
+          id
+          name
+          createdAt
+          offices {
+            id
+            name
+          }
+        }
+      }
+    `,
+  });
+  return data;
 };

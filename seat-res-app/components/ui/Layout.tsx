@@ -1,14 +1,15 @@
 import React from "react";
-import { Header } from ".";
+import { Header, Modal } from ".";
 import NavBar from "./NavBar";
 
-interface ILayoutProps {
+interface LayoutProps {
   children: React.ReactChild[] | React.ReactChild;
 }
 
-const Layout = ({ children }: ILayoutProps) => {
+const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex">
+      <Modal />
       <NavBar />
       <div className="flex flex-col w-full">
         <Header />

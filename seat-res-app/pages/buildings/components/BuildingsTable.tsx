@@ -1,53 +1,19 @@
 import React from "react";
-import { Table, Button } from "../../../components/ui";
-import Link from "next/link";
+import { Table } from "../../../components/ui";
+import { Building } from "../../../types";
+import { buildingsColumnDef } from "./BuildingsColumnDef";
 
-export default function BuildingsTable() {
+interface BuildingsTable {
+  data: Building[];
+}
+
+export default function BuildingsTable({ data }: IBuildingsTable) {
   const columnDef = React.useMemo(() => buildingsColumnDef, []);
-  const testData = React.useMemo(() => buildingsTestData, []);
+  const buildingsData = React.useMemo(() => data, []);
 
   return (
     <div>
-      <Table columns={columnDef} data={testData} />
+      <Table columns={columnDef} data={buildingsData} />
     </div>
   );
 }
-
-const buildingsColumnDef = [
-  {
-    Header: "Building",
-    accessor: "buildingName",
-  },
-  {
-    // EXAMPLE OF A CUSTOM CELL RENDER
-    Header: () => null,
-    id: "actions",
-    Cell: ({ row }: any) => {
-      const { original } = row;
-      return (
-        <div className="justify-self-end">
-          <Link href={`buildings/${original.id}`}>
-            <a>
-              <Button onClick={() => {}}>Go to {original.id}</Button>
-            </a>
-          </Link>
-        </div>
-      );
-    },
-  },
-];
-
-const buildingsTestData = [
-  {
-    id: 1,
-    buildingName: "C1 Lower",
-  },
-  {
-    id: 2,
-    buildingName: "C1 Upper",
-  },
-  {
-    id: 3,
-    buildingName: "A1",
-  },
-];

@@ -1,7 +1,7 @@
 import React from "react";
 import { useTable } from "react-table";
 
-interface ITableProps {
+interface TableProps {
   columns: any; // TODO: Create column def type
   data: any;
   noDataText?: string;

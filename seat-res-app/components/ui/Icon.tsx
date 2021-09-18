@@ -1,3 +1,4 @@
+import { MouseEventHandler } from "react";
 import {
   AddSVG,
   ArrowSVG,
@@ -54,18 +55,19 @@ const icons: Record<string, any> = {
   user: UserSVG,
 };
 
-interface IICon {
+interface Icon {
   icon: string;
   width: string | number;
   height: string | number;
   className?: string;
+  onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
-const Icon = ({ icon, className, width, height }: IICon) => {
+const Icon = ({ icon, className, width, height, onClick }: Icon) => {
   const Icon = icons[icon];
 
   return (
-    <div className={className}>
+    <div className={className} onClick={onClick}>
       <Icon height={height} width={width} />
     </div>
   );

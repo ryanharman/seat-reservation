@@ -6,36 +6,11 @@ import { Layout, Button, Card, PageTitle } from "../../components/ui";
 import { BuildingsTable } from "./components";
 import { Building } from "../../types";
 
-export async function getStaticProps() {
-  const { data } = await client.query({
-    query: gql`
-      query Buildings {
-        buildings {
-          id
-          name
-          offices {
-            id
-            name
-          }
-        }
-      }
-    `,
-  });
-
-  return {
-    props: {
-      buildings: data.buildings,
-    },
-  };
-}
-
-interface IBuildingsProps {
+interface BuildingsProps {
   buildings: Building[];
 }
 
-export default function Buildings({ buildings }: IBuildingsProps) {
-  console.log(buildings);
-
+export default function BuildingsPage({ buildings }: BuildingsProps) {
   return (
     <main className="px-8 py-2">
       <Head>
@@ -54,11 +29,39 @@ export default function Buildings({ buildings }: IBuildingsProps) {
           <div>📈</div>|<div>📊</div>|<div>💹</div>
         </div>
       </Card>
-      <BuildingsTable />
+      <BuildingsTable data={buildings} />
     </main>
   );
 }
 
-Buildings.setLayout = function getLayout(page: ReactElement) {
+BuildingsPage.setLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
+};
+
+export async function getStaticProps() {
+  const data = await buildingsQuery();
+  return {
+    props: {
+      buildings: data.buildings,
+    },
+  };
+}
+
+export const buildingsQuery = async () => {
+  const { data } = await client.query({
+    query: gql`
+      query Buildings {
+        buildings {
+          id
+          name
+          createdAt
+          offices {
+            id
+            name
+          }
+        }
+      }
+    `,
+  });
+  return data;
 };

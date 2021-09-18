@@ -1,12 +1,12 @@
 import React from "react";
 
-interface IProps {
+interface Props {
   width?: number | string;
   height?: number | string;
   colour?: string;
 }
 
-const Exclamation = ({ width = 19, height = 19, colour = "" }: IProps) => {
+const Exclamation = ({ width = 19, height = 19, colour = "" }: Props) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 19 19">
       <g transform="translate(-377.361 -171)">

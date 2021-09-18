@@ -1,6 +1,6 @@
 import React from "react";
 
-interface IReportCard {
+interface ReportCard {
   bgColor?: string;
   reportTitle: string;
   reportSummary: string;
@@ -23,7 +23,7 @@ const ReportCard = ({ bgColor, reportTitle, reportSummary, reportQty }: IReportC
   );
 };
 
-interface IReportTitle {
+interface ReportTitle {
   title: string;
   summary: string;
 }

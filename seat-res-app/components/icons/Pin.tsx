@@ -1,12 +1,12 @@
 import React from "react";
 
-interface IProps {
+interface Props {
   width?: number | string;
   height?: number | string;
   colour?: string;
 }
 
-const Pin = ({ width = 19, height = 19, colour = "" }: IProps) => {
+const Pin = ({ width = 19, height = 19, colour = "" }: Props) => {
   return (
     <svg className={"stroke-current " + colour} width={width} height={height} viewBox="0 0 12.2 17.55">
       <g transform="translate(-117.438 -1285.372)">

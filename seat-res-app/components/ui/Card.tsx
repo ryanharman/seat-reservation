@@ -1,13 +1,13 @@
 import React, { MouseEventHandler } from "react";
 import IconComponent from "./Icon";
 
-interface ICardProps {
+interface CardProps {
   className?: string;
-  onClick?: MouseEventHandler<HTMLDivElement>;
+  onClick?: MouseEventHandler;
   children: React.ReactChild[] | React.ReactChild;
 }
 
-export const Card = ({ onClick, children, className = "" }: ICardProps) => {
+export const Card = ({ onClick, children, className = "" }: CardProps) => {
   const cursorClass = onClick ? "cursor-pointer" : "";
   return (
     <div
@@ -19,25 +19,27 @@ export const Card = ({ onClick, children, className = "" }: ICardProps) => {
   );
 };
 
-interface ICardHeaderProps {
+interface CardHeaderProps {
   className?: string;
   children: React.ReactChild[] | React.ReactChild;
 }
 
-export const CardHeader = ({ children, className = "" }: ICardHeaderProps) => {
-  return <div className={`${className} flex flex-row justify-between items-center mb-4`}>{children}</div>;
+export const CardHeader = ({ children, className = "" }: CardHeaderProps) => {
+  return (
+    <div className={`${className} font-bold text-lg flex flex-row justify-between items-center mb-4`}>{children}</div>
+  );
 };
 
-interface ICardBodyProps {
+interface CardBodyProps {
   className?: string;
   children: React.ReactChild[] | React.ReactChild;
 }
 
-export const CardBody = ({ children, className = "" }: ICardBodyProps) => {
+export const CardBody = ({ children, className = "" }: CardBodyProps) => {
   return <div className={`${className} flex flex-col gap-2`}>{children}</div>;
 };
 
-interface ICardBodyItemProps {
+interface CardBodyItemProps {
   className?: string;
   icon: string;
   text: string;
@@ -46,7 +48,7 @@ interface ICardBodyItemProps {
   children: React.ReactChild[] | React.ReactChild;
 }
 
-export const CardBodyItem = ({ icon, text, toolTipText, arrow, className = "" }: ICardBodyItemProps) => {
+export const CardBodyItem = ({ icon, text, toolTipText, arrow, className = "" }: CardBodyItemProps) => {
   return (
     <div className={`${className} flex items-center gap-4 group relative`}>
       {icon && (
@@ -65,11 +67,11 @@ export const CardBodyItem = ({ icon, text, toolTipText, arrow, className = "" }:
   );
 };
 
-interface ICardTooltipProps {
+interface CardTooltipProps {
   text: string;
 }
 
-export const CardTooltip = ({ text }: ICardTooltipProps) => {
+export const CardTooltip = ({ text }: CardTooltipProps) => {
   return (
     <div className="z-50 transition-all hidden w-64 absolute inset-x-1/3 bottom-8 group-hover:block">
       <span className="inline-block p-3 rounded-md bg-card-tooltip text-sm text-card-tooltip-text min-h-8 max-h-32 min-w-min max-w-64">
@@ -80,12 +82,12 @@ export const CardTooltip = ({ text }: ICardTooltipProps) => {
   );
 };
 
-interface ICardDateProps {
+interface CardDateProps {
   time: string;
   date: Date;
 }
 
-export const CardDate = ({ time, date }: ICardDateProps) => {
+export const CardDate = ({ time, date }: CardDateProps) => {
   return (
     <div className="flex flex-row gap-2 justify-between items-center">
       <div className="text-bold text-3xl">{time}</div>
@@ -99,11 +101,11 @@ export const CardDate = ({ time, date }: ICardDateProps) => {
   );
 };
 
-interface ICardFooterProps {
+interface CardFooterProps {
   className?: string;
   children: React.ReactChild[] | React.ReactChild;
 }
 
-export const CardFooter = ({ children, className = "" }: ICardFooterProps) => {
+export const CardFooter = ({ children, className = "" }: CardFooterProps) => {
   return <div className={`${className} flex flex-col`}>{children}</div>;
 };

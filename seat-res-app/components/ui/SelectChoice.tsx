@@ -3,7 +3,7 @@ import Select, { ActionMeta, GroupTypeBase, OptionsType, OptionTypeBase } from "
 
 // https://react-select.com/
 
-interface ISelectProps {
+interface SelectProps {
   value: OptionTypeBase;
   placeholder?: string;
   isMulti?: boolean;
@@ -28,7 +28,7 @@ const SelectChoice = ({
   placeholder,
   options,
   alternateStyle,
-}: ISelectProps) => {
+}: SelectProps) => {
   return (
     <Select
       styles={alternateStyle ? alternateStyles : selectStyles}

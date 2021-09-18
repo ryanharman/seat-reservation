@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from ".";
 
-interface IButtonProps {
+interface ButtonProps {
   primary?: boolean;
   disabled?: boolean;
   submission?: boolean;

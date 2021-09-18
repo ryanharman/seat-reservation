@@ -1,12 +1,12 @@
 import React from "react";
 
-interface IProps {
+interface Props {
   width?: number | string;
   height?: number | string;
   colour?: string;
 }
 
-const Edit = ({ width = 19, height = 19, colour = "" }: IProps) => {
+const Edit = ({ width = 19, height = 19, colour = "" }: Props) => {
   return (
     <svg className={"stroke-current " + colour} width={width} height={height} viewBox="0 0 9.528 9.649">
       <g transform="translate(0.5 0.621)">

@@ -1,12 +1,12 @@
 import React from "react";
 
-interface IProps {
+interface Props {
   width?: number | string;
   height?: number | string;
   colour?: string;
 }
 
-const Dashboard = ({ width = 19, height = 19, colour = "" }: IProps) => {
+const Dashboard = ({ width = 19, height = 19, colour = "" }: Props) => {
   return (
     <svg className={"stroke-current " + colour} viewBox="0 0 140 140" height={height} width={width}>
       <g transform="matrix(5.833333333333333,0,0,5.833333333333333,0,0)">

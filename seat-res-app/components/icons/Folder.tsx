@@ -1,12 +1,12 @@
 import React from "react";
 
-interface IProps {
+interface Props {
   width?: number | string;
   height?: number | string;
   colour?: string;
 }
 
-const Folder = ({ width = 19, height = 19, colour = "" }: IProps) => {
+const Folder = ({ width = 19, height = 19, colour = "" }: Props) => {
   return (
     <svg className={"stroke-current " + colour} viewBox="0 0 17.246 17.216" height={height} width={width}>
       <g transform="translate(-2.317 -2.317)">

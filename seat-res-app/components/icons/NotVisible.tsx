@@ -1,12 +1,12 @@
 import React from "react";
 
-interface IProps {
+interface Props {
   width?: number | string;
   height?: number | string;
   colour?: string;
 }
 
-const NotVisible = ({ width = 19, height = 19, colour = "" }: IProps) => {
+const NotVisible = ({ width = 19, height = 19, colour = "" }: Props) => {
   return (
     <svg className={"stroke-current " + colour} viewBox="0 0 16.999 16.572" height={height} width={width}>
       <g transform="translate(-6.153 -9.439)">

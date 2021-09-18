@@ -10,4 +10,5 @@ export { default as Select } from "./SelectChoice";
 export { default as Separator } from "./Separator";
 export { default as Table } from "./Table";
 export { default as ReportCard } from "./ReportContainer";
+export { default as Modal } from "./Modal";
 export * from "./Card";

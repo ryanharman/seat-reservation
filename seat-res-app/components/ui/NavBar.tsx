@@ -90,7 +90,7 @@ const NavBar = () => {
   );
 };
 
-interface IListItemProps {
+interface ListItemProps {
   icon: string;
   text: string;
   current: boolean;

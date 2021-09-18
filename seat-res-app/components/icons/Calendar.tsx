@@ -1,12 +1,12 @@
 import React from "react";
 
-interface IProps {
+interface Props {
   width?: number | string;
   height?: number | string;
   colour?: string;
 }
 
-const Calendar = ({ width = 19, height = 19, colour = "" }: IProps) => {
+const Calendar = ({ width = 19, height = 19, colour = "" }: Props) => {
   return (
     <svg className={"stroke-current " + colour} viewBox="0 0 12.3 12.3" height={height} width={width}>
       <g transform="translate(0.6 0.6)">

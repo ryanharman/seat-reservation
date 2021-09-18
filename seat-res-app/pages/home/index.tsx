@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import Head from "next/head";
 import { Layout, PageTitle } from "../../components/ui";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <main className="px-8 py-2">
       <Head>
@@ -16,6 +16,6 @@ export default function Home() {
   );
 }
 
-Home.setLayout = function getLayout(page: ReactElement) {
+HomePage.setLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };

@@ -2,7 +2,7 @@ import Head from "next/head";
 import React, { ReactElement } from "react";
 import { Layout, Button, Card, PageTitle } from "../../components/ui";
 
-export default function Offices() {
+export default function OfficesPage() {
   return (
     <main className="px-8 py-2">
       <Head>
@@ -25,6 +25,6 @@ export default function Offices() {
   );
 }
 
-Offices.setLayout = function getLayout(page: ReactElement) {
+OfficesPage.setLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
