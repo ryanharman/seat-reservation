@@ -1,6 +1,6 @@
 import React from "react";
-import { Header, Modal } from ".";
-import NavBar from "./NavBar";
+import { Header, Modal, NavBar } from ".";
+import { useModalStore } from "../../stores";
 
 interface LayoutProps {
   children: React.ReactChild[] | React.ReactChild;
@@ -9,7 +9,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex">
-      {/* <Modal /> */}
+      <Modal useModalStore={useModalStore} />
       <NavBar />
       <div className="flex flex-col w-full">
         <Header />

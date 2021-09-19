@@ -1,8 +1,11 @@
 import React, { ReactElement } from "react";
 import Head from "next/head";
-import { Layout, PageTitle, Subheading } from "../../components/ui";
+import { Button, Layout, PageTitle, Subheading } from "../../components/ui";
+import { useModalStore } from "../../stores";
 
 export default function HomePage() {
+  const openModal = useModalStore((state) => state.setIsOpen);
+
   return (
     <main className="px-8 py-2">
       <Head>
@@ -12,6 +15,9 @@ export default function HomePage() {
       </Head>
       <PageTitle margin="mb-2">Hello, Ryan</PageTitle>
       <Subheading>Welcome back to your dashboard!</Subheading>
+      <Button primary onClick={() => openModal(true)}>
+        Press me!
+      </Button>
     </main>
   );
 }

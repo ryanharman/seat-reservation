@@ -6,16 +6,17 @@ import { gql } from "@apollo/client";
 import { format } from "date-fns";
 import { GetStaticProps, Office, Params } from "../../types";
 import { officesQuery } from ".";
-import { Layout, Button, Card, PageTitle, Subheading } from "../../components/ui";
-import { OfficeManagersTable } from "./components";
-import { GetStaticPropsResult } from "next";
+import { Layout, Button, Card, PageTitle, Subheading, Icon } from "../../components/ui";
+import { OfficeManagersTable, OfficeModal } from "./components";
+import { useModalStore } from "../../stores";
 
 interface OfficeProps {
   officeData: Office;
 }
 
 export default function OfficePage({ officeData }: OfficeProps) {
-  console.log(officeData);
+  const openModal = useModalStore((state) => state.setIsOpen);
+
   const formattedCreatedAt = format(new Date(officeData.createdAt), "dd/MM/yyyy");
 
   return (
@@ -41,7 +42,24 @@ export default function OfficePage({ officeData }: OfficeProps) {
         </div>
       </Subheading>
       <Card className="w-96">
-        <div className="font-semibold text-lg px-4 pb-2 mb-4 border-b border-gray-300">Office Managers</div>
+        <div className="flex justify-between items-center font-semibold text-lg px-4 pb-2 mb-4 border-b border-gray-300">
+          Office Managers
+          <Icon
+            icon="add"
+            width={16}
+            height={16}
+            className="cursor-pointer hover:text-blue-500"
+            onClick={() =>
+              openModal(true, {
+                cancelText: "Cancel",
+                confirmText: "Save",
+                content: "user dropdown in here laddy",
+                data: { userId: "" },
+                title: "Add Office Manager",
+              })
+            }
+          />
+        </div>
         <OfficeManagersTable data={officeData.officeManagers} />
       </Card>
     </main>

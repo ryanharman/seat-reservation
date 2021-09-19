@@ -1,39 +1,61 @@
 import { FormEvent, ReactElement } from "react";
 import create from "zustand";
 
-interface ModalState {
+export interface ModalState {
   title: string;
   content: string | ReactElement;
   isOpen: boolean;
-  data: [] | {};
+  data: any;
   cancelText: string;
   confirmText: string;
-  setIsOpen: (isOpen: boolean, options: {} | undefined) => void;
-  toggle: (options: {}) => void;
-  onCancel: () => void;
-  onConfirm: () => void;
-  onClose: () => void;
-  setData: (data: [] | {}) => void;
+  setIsOpen: (isOpen: boolean, options?: ModalOptions) => void;
+  toggle: () => void;
+  onCancel: (data?: any) => void;
+  onConfirm: (data?: any) => void;
+  onClose: (data?: any) => void;
+  setData: (data: any) => void;
   handleChange: (e: FormEvent<HTMLInputElement>) => void;
 }
 
+export type ModalOptions = {
+  title: string;
+  content: string | ReactElement;
+  data: any;
+  cancelText: string;
+  confirmText: string;
+};
+
+const initialOptions = {
+  title: "Confirm Action",
+  content: "",
+  isOpen: false,
+  data: [],
+  cancelText: "Cancel",
+  confirmText: "Confirm",
+};
+
 export const createModalStore = () =>
   create<ModalState>((set, get) => ({
-    title: "Confirm Action",
-    content: "",
-    isOpen: false,
-    data: [],
-    cancelText: "Cancel",
-    confirmText: "Confirm",
-    setIsOpen: (isOpen, options) => set(() => ({ isOpen, ...options })),
-    toggle: (options) => {
-      const { isOpen, setIsOpen } = get();
-      setIsOpen(!isOpen, options);
+    ...initialOptions,
+    setIsOpen: (isOpen, options) => {
+      set((state) => ({ ...state, ...options, isOpen }));
     },
-    // TODO: Finalise
-    onCancel: () => {},
-    onConfirm: () => {},
-    onClose: () => {},
+    toggle: () => {
+      const { isOpen } = get();
+      set(() => ({ isOpen: !isOpen }));
+    },
+    onCancel: () => {
+      const { setIsOpen } = get();
+      setIsOpen(false);
+    },
+    onConfirm: () => {
+      const { setIsOpen } = get();
+      setIsOpen(false);
+    },
+    onClose: () => {
+      const { setIsOpen } = get();
+      setIsOpen(false);
+    },
     setData: (data) => set(() => ({ data })),
     handleChange: (e) => {
       const { name, value } = e.target as HTMLInputElement;

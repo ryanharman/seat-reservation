@@ -28,9 +28,7 @@ export const officesColumnDef = [
       return (
         <div className="justify-self-end py-2">
           <StyledLink href={`offices/${original.id}`}>
-            <a>
-              <Icon icon="expand" width={20} height={20} />
-            </a>
+            <Icon icon="expand" width={20} height={20} />
           </StyledLink>
         </div>
       );

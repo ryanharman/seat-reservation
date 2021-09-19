@@ -3,14 +3,17 @@ import Head from "next/head";
 import client from "../../apollo-client";
 import { gql } from "@apollo/client";
 import { Office } from "../../types";
-import { OfficesTable } from "./components";
+import { OfficeModal, OfficesTable } from "./components";
 import { Layout, Button, PageTitle } from "../../components/ui";
+import { useModalStore } from "../../stores";
 
 interface OfficesProps {
   offices: Office[];
 }
 
 export default function OfficesPage({ offices }: OfficesProps) {
+  const openModal = useModalStore((state) => state.setIsOpen);
+
   return (
     <main className="px-8 py-2">
       <Head>
@@ -20,7 +23,18 @@ export default function OfficesPage({ offices }: OfficesProps) {
       </Head>
       <PageTitle>
         Offices
-        <Button primary onClick={() => {}}>
+        <Button
+          primary
+          onClick={() =>
+            openModal(true, {
+              cancelText: "Cancel",
+              confirmText: "Save",
+              content: <OfficeModal />,
+              data: { officeName: "" },
+              title: "Add Office Manager",
+            })
+          }
+        >
           Add new
         </Button>
       </PageTitle>
