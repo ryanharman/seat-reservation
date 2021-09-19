@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import Head from "next/head";
 import client from "../../apollo-client";
 import { gql } from "@apollo/client";
-import { Building } from "../../types";
+import { Building, GetStaticProps, Params } from "../../types";
 import { Layout, Button, Card, PageTitle } from "../../components/ui";
 import { buildingsQuery } from ".";
 
@@ -48,8 +48,8 @@ export async function getStaticPaths() {
   return { paths, fallback: "blocking" };
 }
 
-export async function getStaticProps() {
-  const data = await buildingQuery();
+export async function getStaticProps({ params }: GetStaticProps) {
+  const data = await buildingQuery(params);
   return {
     props: {
       buildingData: data.building,
@@ -57,21 +57,27 @@ export async function getStaticProps() {
   };
 }
 
-export const buildingQuery = async () => {
-  const { data } = await client.query({
-    query: gql`
-      query BuildingData {
-        building(where: { id: 1 }) {
+export const buildingQuery = async (params: Params) => {
+  const id = parseInt(params.id);
+
+  const getBuilding = gql`
+    query GetBuilding($id: Int!) {
+      building(where: { id: $id }) {
+        id
+        name
+        createdAt
+        offices {
           id
           name
-          createdAt
-          offices {
-            id
-            name
-          }
         }
       }
-    `,
+    }
+  `;
+
+  const { data } = await client.query({
+    query: getBuilding,
+    variables: { id },
   });
+
   return data;
 };

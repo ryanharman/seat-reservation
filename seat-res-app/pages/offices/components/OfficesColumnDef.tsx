@@ -1,7 +1,7 @@
 import React from "react";
 import StyledLink from "../../../components/ui/StyledLink";
 import { format } from "date-fns";
-import { Button } from "../../../components/ui";
+import { Icon } from "../../../components/ui";
 
 export const officesColumnDef = [
   {
@@ -26,10 +26,10 @@ export const officesColumnDef = [
     Cell: ({ row }: any) => {
       const { original } = row;
       return (
-        <div className="justify-self-end">
+        <div className="justify-self-end py-2">
           <StyledLink href={`offices/${original.id}`}>
             <a>
-              <Button onClick={() => {}}>Go to {original.id}</Button>
+              <Icon icon="expand" width={20} height={20} />
             </a>
           </StyledLink>
         </div>

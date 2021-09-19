@@ -1,13 +1,14 @@
 import React from "react";
+import StyledLink from "../../../components/ui/StyledLink";
+import client from "../../../apollo-client";
+import { gql } from "@apollo/client";
 import { format } from "date-fns";
 import { Icon, UserIcon } from "../../../components/ui";
-import StyledLink from "../../../components/ui/StyledLink";
 
 export const officeManagersColumnDef = [
   {
     id: "name",
     Cell: ({ row }: any) => {
-      console.log(row);
       const { user } = row.original;
       const initials = user.firstName.slice(0, 1) + user.lastName.slice(0, 1);
       return (
@@ -26,11 +27,21 @@ export const officeManagersColumnDef = [
   {
     id: "actions",
     Cell: ({ row }: any) => {
-      // TODO: Onclick event
       const { original } = row;
+      const deleteManager = async (id: number) => {
+        await client.query({
+          query: gql`
+              deleteOfficeManager(where: { id: { id } }) {
+                id
+                officeId
+                userId
+              }
+            `,
+        });
+      };
       return (
         <div className="justify-self-end">
-          <Icon icon="bin" width={24} height={24} />
+          <Icon icon="bin" width={24} height={24} onClick={() => deleteManager(original.id)} />
         </div>
       );
     },

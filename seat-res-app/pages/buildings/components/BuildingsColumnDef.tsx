@@ -1,6 +1,6 @@
 import React from "react";
 import { format } from "date-fns";
-import { Button } from "../../../components/ui";
+import { Icon } from "../../../components/ui";
 import StyledLink from "../../../components/ui/StyledLink";
 
 export const buildingsColumnDef = [
@@ -26,9 +26,9 @@ export const buildingsColumnDef = [
     Cell: ({ row }: any) => {
       const { original } = row;
       return (
-        <div className="justify-self-end">
+        <div className="justify-self-end py-2">
           <StyledLink href={`buildings/${original.id}`}>
-            <Button onClick={() => {}}>Go to {original.id}</Button>
+            <Icon icon="expand" width={20} height={20} />
           </StyledLink>
         </div>
       );

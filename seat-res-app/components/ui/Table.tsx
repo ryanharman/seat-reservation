@@ -65,16 +65,13 @@ const Table = ({
               prepareRow(row);
               return (
                 // Apply the row props
-                <tr {...row.getRowProps()} className="transition-all hover:bg-gray-100">
+                <tr {...row.getRowProps()} className={`${rowStyles} transition-all hover:bg-gray-100`}>
                   {
                     // Loop over the rows cells
                     row.cells.map((cell) => {
                       // Apply the cell props
                       return (
-                        <td
-                          {...cell.getCellProps()}
-                          className={`${rowStyles} py-2 px-4 text-base text-gray-600 text-left`}
-                        >
+                        <td {...cell.getCellProps()} className="py-2 px-4 text-base text-gray-600 text-left">
                           <div className="grid">
                             {
                               // Render the cell contents

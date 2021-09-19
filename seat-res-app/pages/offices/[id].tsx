@@ -4,10 +4,11 @@ import Link from "next/link";
 import client from "../../apollo-client";
 import { gql } from "@apollo/client";
 import { format } from "date-fns";
-import { Office } from "../../types";
+import { GetStaticProps, Office, Params } from "../../types";
 import { officesQuery } from ".";
 import { Layout, Button, Card, PageTitle, Subheading } from "../../components/ui";
-import OfficeManagersTable from "./components/OfficeManagersTable";
+import { OfficeManagersTable } from "./components";
+import { GetStaticPropsResult } from "next";
 
 interface OfficeProps {
   officeData: Office;
@@ -40,7 +41,7 @@ export default function OfficePage({ officeData }: OfficeProps) {
         </div>
       </Subheading>
       <Card className="w-96">
-        <div className="font-semibold text-lg px-4 pb-2 mb-2 border-b border-gray-300">Office Managers</div>
+        <div className="font-semibold text-lg px-4 pb-2 mb-4 border-b border-gray-300">Office Managers</div>
         <OfficeManagersTable data={officeData.officeManagers} />
       </Card>
     </main>
@@ -52,7 +53,7 @@ OfficePage.setLayout = function getLayout(page: ReactElement) {
 };
 
 // We prerender the pages using the static paths function due to the estimated lack of
-// buildings within the database. This might not be scalable? Need to read more of the docs
+// offices within the database. This might not be scalable? Need to read more of the docs
 
 export async function getStaticPaths() {
   const data = await officesQuery();
@@ -62,8 +63,8 @@ export async function getStaticPaths() {
   return { paths, fallback: "blocking" };
 }
 
-export async function getStaticProps() {
-  const data = await officeQuery();
+export async function getStaticProps({ params }: GetStaticProps) {
+  const data = await officeQuery(params);
   return {
     props: {
       officeData: data.office,
@@ -71,30 +72,36 @@ export async function getStaticProps() {
   };
 }
 
-export const officeQuery = async () => {
-  const { data } = await client.query({
-    query: gql`
-      query OfficeData {
-        office(where: { id: 1 }) {
+export const officeQuery = async (params: Params) => {
+  const id = parseInt(params.id);
+
+  const getOffice = gql`
+    query GetOffice($id: Int!) {
+      office(where: { id: $id }) {
+        id
+        name
+        createdAt
+        building {
           id
           name
+        }
+        officeManagers {
+          id
           createdAt
-          building {
+          user {
             id
-            name
-          }
-          officeManagers {
-            id
-            createdAt
-            user {
-              id
-              firstName
-              lastName
-            }
+            firstName
+            lastName
           }
         }
       }
-    `,
+    }
+  `;
+
+  const { data } = await client.query({
+    query: getOffice,
+    variables: { id },
   });
+
   return data;
 };

@@ -11,13 +11,17 @@ export default function OfficeManagersTable({ data }: OfficeManagersTableProps) 
   const columnDef = React.useMemo(() => officeManagersColumnDef, []);
   const officesData = React.useMemo(() => data, []);
 
-  console.log(data);
-
   if (!data) return null;
 
   return (
     <div>
-      <Table columns={columnDef} data={officesData} fullWidth={true} />
+      <Table
+        columns={columnDef}
+        data={officesData}
+        fullWidth={true}
+        rowStyles="mb-2"
+        noDataText="No assigned managers..."
+      />
     </div>
   );
 }
