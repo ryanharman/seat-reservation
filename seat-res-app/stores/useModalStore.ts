@@ -1,6 +1,13 @@
 import { FormEvent, ReactElement } from "react";
 import create from "zustand";
 
+/* We control all of the modal data, content and below values
+within the Zustand store so that we only need to render in one
+modal to the DOM. The ModalOptions type is what a dev will
+populate when using the component. The on*Action functions
+can be used for API calls or similar actions when the user
+presses the relevant button. 🤯 */
+
 export interface ModalState {
   title: string;
   content: string | ReactElement;
@@ -13,6 +20,9 @@ export interface ModalState {
   onCancel: (data?: any) => void;
   onConfirm: (data?: any) => void;
   onClose: (data?: any) => void;
+  onCancelAction: (data: any) => void;
+  onConfirmAction: (data: any) => void;
+  onCloseAction: (data: any) => void;
   setData: (data: any) => void;
   handleChange: (e: FormEvent<HTMLInputElement>) => void;
 }
@@ -23,6 +33,9 @@ export type ModalOptions = {
   data: any;
   cancelText: string;
   confirmText: string;
+  onCancelAction?: (data?: any) => void;
+  onConfirmAction?: (data?: any) => void;
+  onCloseAction?: (data?: any) => void;
 };
 
 const initialOptions = {
@@ -32,6 +45,9 @@ const initialOptions = {
   data: [],
   cancelText: "Cancel",
   confirmText: "Confirm",
+  onCancelAction: () => {},
+  onConfirmAction: () => {},
+  onCloseAction: () => {},
 };
 
 export const createModalStore = () =>
@@ -44,16 +60,19 @@ export const createModalStore = () =>
       const { isOpen } = get();
       set(() => ({ isOpen: !isOpen }));
     },
-    onCancel: () => {
-      const { setIsOpen } = get();
+    onCancel: (data) => {
+      const { setIsOpen, onCloseAction } = get();
+      onCloseAction(data);
       setIsOpen(false);
     },
-    onConfirm: () => {
-      const { setIsOpen } = get();
+    onConfirm: (data) => {
+      const { setIsOpen, onConfirmAction } = get();
+      onConfirmAction(data);
       setIsOpen(false);
     },
-    onClose: () => {
-      const { setIsOpen } = get();
+    onClose: (data) => {
+      const { setIsOpen, onCloseAction } = get();
+      onCloseAction(data);
       setIsOpen(false);
     },
     setData: (data) => set(() => ({ data })),
