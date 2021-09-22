@@ -1,11 +1,11 @@
 import React, { ReactElement } from "react";
 import Head from "next/head";
 import client from "../../apollo-client";
-import { gql } from "@apollo/client";
 import { Office } from "../../types";
 import { OfficeModal, OfficesTable } from "./components";
 import { Layout, Button, PageTitle } from "../../components/ui";
 import { useModalStore } from "../../stores";
+import { getOffices } from "../../services/queries";
 
 interface OfficesProps {
   offices: Office[];
@@ -31,7 +31,7 @@ export default function OfficesPage({ offices }: OfficesProps) {
               confirmText: "Save",
               content: <OfficeModal />,
               data: { officeName: "" },
-              title: "Add Office Manager",
+              title: "Add Office",
             })
           }
         >
@@ -48,25 +48,10 @@ OfficesPage.setLayout = function getLayout(page: ReactElement) {
 };
 
 export async function getStaticProps() {
-  const data = await officesQuery();
+  const { data } = await client.query({ query: getOffices });
   return {
     props: {
       offices: data.offices,
     },
   };
 }
-
-export const officesQuery = async () => {
-  const { data } = await client.query({
-    query: gql`
-      query Offices {
-        offices {
-          id
-          name
-          createdAt
-        }
-      }
-    `,
-  });
-  return data;
-};

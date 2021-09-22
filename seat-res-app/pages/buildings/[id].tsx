@@ -1,10 +1,9 @@
 import React, { ReactElement } from "react";
 import Head from "next/head";
 import client from "../../apollo-client";
-import { gql } from "@apollo/client";
 import { Building, GetStaticProps, Params } from "../../types";
 import { Layout, Button, Card, PageTitle } from "../../components/ui";
-import { buildingsQuery } from ".";
+import { getBuilding, getBuildings } from "../../services/queries";
 
 interface BuildingProps {
   buildingData: Building;
@@ -41,7 +40,7 @@ BuildingPage.setLayout = function getLayout(page: ReactElement) {
 // buildings within the database. This might not be scalable? Need to read more of the docs
 
 export async function getStaticPaths() {
-  const data = await buildingsQuery();
+  const { data } = await client.query({ query: getBuildings });
   const paths = data.buildings.map((building: Building) => ({
     params: { id: building.id.toString() },
   }));
@@ -59,21 +58,6 @@ export async function getStaticProps({ params }: GetStaticProps) {
 
 export const buildingQuery = async (params: Params) => {
   const id = parseInt(params.id);
-
-  const getBuilding = gql`
-    query GetBuilding($id: Int!) {
-      building(where: { id: $id }) {
-        id
-        name
-        createdAt
-        offices {
-          id
-          name
-        }
-      }
-    }
-  `;
-
   const { data } = await client.query({
     query: getBuilding,
     variables: { id },

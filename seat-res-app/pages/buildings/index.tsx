@@ -1,10 +1,10 @@
 import React, { ReactElement } from "react";
 import Head from "next/head";
 import client from "../../apollo-client";
-import { gql } from "@apollo/client";
 import { Layout, Button, Card, PageTitle } from "../../components/ui";
 import { BuildingsTable } from "./components";
 import { Building } from "../../types";
+import { getBuildings } from "../../services/queries";
 
 interface BuildingsProps {
   buildings: Building[];
@@ -39,29 +39,10 @@ BuildingsPage.setLayout = function getLayout(page: ReactElement) {
 };
 
 export async function getStaticProps() {
-  const data = await buildingsQuery();
+  const { data } = await client.query({ query: getBuildings });
   return {
     props: {
       buildings: data.buildings,
     },
   };
 }
-
-export const buildingsQuery = async () => {
-  const { data } = await client.query({
-    query: gql`
-      query Buildings {
-        buildings {
-          id
-          name
-          createdAt
-          offices {
-            id
-            name
-          }
-        }
-      }
-    `,
-  });
-  return data;
-};

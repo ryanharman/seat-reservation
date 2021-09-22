@@ -2,13 +2,12 @@ import React, { ReactElement } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import client from "../../apollo-client";
-import { gql } from "@apollo/client";
 import { format } from "date-fns";
 import { GetStaticProps, Office, Params } from "../../types";
-import { officesQuery } from ".";
 import { Layout, Button, Card, PageTitle, Subheading, Icon } from "../../components/ui";
-import { OfficeManagersTable, OfficeModal } from "./components";
+import { OfficeManagersTable } from "./components";
 import { useModalStore } from "../../stores";
+import { getOffice, getOffices } from "../../services/queries";
 
 interface OfficeProps {
   officeData: Office;
@@ -74,7 +73,7 @@ OfficePage.setLayout = function getLayout(page: ReactElement) {
 // offices within the database. This might not be scalable? Need to read more of the docs
 
 export async function getStaticPaths() {
-  const data = await officesQuery();
+  const { data } = await client.query({ query: getOffices });
   const paths = data.offices.map((office: Office) => ({
     params: { id: office.id.toString() },
   }));
@@ -92,30 +91,6 @@ export async function getStaticProps({ params }: GetStaticProps) {
 
 export const officeQuery = async (params: Params) => {
   const id = parseInt(params.id);
-
-  const getOffice = gql`
-    query GetOffice($id: Int!) {
-      office(where: { id: $id }) {
-        id
-        name
-        createdAt
-        building {
-          id
-          name
-        }
-        officeManagers {
-          id
-          createdAt
-          user {
-            id
-            firstName
-            lastName
-          }
-        }
-      }
-    }
-  `;
-
   const { data } = await client.query({
     query: getOffice,
     variables: { id },
