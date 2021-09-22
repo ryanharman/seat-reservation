@@ -12,6 +12,7 @@
     "@apollo/client": "^3.4.12",
     "@types/react-select": "^4.0.17",
     "date-fns": "^2.23.0",
+    "framer-motion": "^4.1.17",
     "graphql": "^15.5.3",
     "next": "11.0.1",
     "react": "17.0.2",
