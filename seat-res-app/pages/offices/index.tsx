@@ -5,8 +5,8 @@ import { Office } from "../../types";
 import { OfficeModal, OfficesTable } from "./components";
 import { Layout, Button, PageTitle } from "../../components/ui";
 import { useModalStore } from "../../stores";
-import { getOffices } from "../../services/queries";
-import { useMutation } from "@apollo/client";
+import { getBuildings, getOffices } from "../../services/queries";
+import { useMutation, useQuery } from "@apollo/client";
 import { createOffice } from "../../services/mutations";
 
 interface OfficesProps {
@@ -15,6 +15,7 @@ interface OfficesProps {
 
 export default function OfficesPage({ offices }: OfficesProps) {
   const openModal = useModalStore((state) => state.setIsOpen);
+  const { data: buildingData } = useQuery(getBuildings);
   const [addOffice, { data, loading, error }] = useMutation(createOffice);
 
   return (
@@ -33,10 +34,15 @@ export default function OfficesPage({ offices }: OfficesProps) {
               cancelText: "Cancel",
               confirmText: "Save",
               content: <OfficeModal />,
-              data: { officeName: "" },
+              data: { officeName: "", buildings: buildingData.buildings },
               title: "Add Office",
               onConfirmAction: (data) =>
-                addOffice({ variables: { name: data.officeName, buildingId: 1 } }),
+                addOffice({
+                  variables: {
+                    name: data.officeName,
+                    buildingId: parseInt(data.selectedBuilding.value),
+                  },
+                }),
             })
           }
         >
