@@ -5,16 +5,26 @@ import client from "../../apollo-client";
 import { format } from "date-fns";
 import { GetStaticProps, Office, Params } from "../../types";
 import { Layout, Button, Card, PageTitle, Subheading, Icon } from "../../components/ui";
-import { OfficeManagersTable } from "./components";
+import { OfficeManagerModal, OfficeManagersTable } from "./components";
 import { useModalStore } from "../../stores";
-import { getOffice, getOffices } from "../../services/queries";
+import { getOffice, getOffices, getUsers } from "../../services/queries";
+import { useMutation, useQuery } from "@apollo/client";
+import { createOfficeManager } from "../../services/mutations";
+import { useRouter } from "next/router";
 
 interface OfficeProps {
   officeData: Office;
 }
 
 export default function OfficePage({ officeData }: OfficeProps) {
+  const router = useRouter();
   const openModal = useModalStore((state) => state.setIsOpen);
+  const { data: users } = useQuery(getUsers);
+  const [addOfficeManager, { data, loading, error }] = useMutation(createOfficeManager);
+
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
 
   const formattedCreatedAt = format(new Date(officeData.createdAt), "dd/MM/yyyy");
 
@@ -52,9 +62,19 @@ export default function OfficePage({ officeData }: OfficeProps) {
               openModal(true, {
                 cancelText: "Cancel",
                 confirmText: "Save",
-                content: "user dropdown in here laddy",
-                data: { userId: "" },
+                content: <OfficeManagerModal />,
+                data: { office: officeData, users: users.users },
                 title: "Add Office Manager",
+                onConfirmAction: (data) => {
+                  console.log(data);
+                  addOfficeManager({
+                    variables: {
+                      userId: parseInt(data.selectedUser.value),
+                      officeId: parseInt(data.office.id),
+                    },
+                  });
+                  refreshData();
+                },
               })
             }
           />

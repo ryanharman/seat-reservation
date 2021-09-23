@@ -8,15 +8,21 @@ import { useModalStore } from "../../stores";
 import { getBuildings, getOffices } from "../../services/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { createOffice } from "../../services/mutations";
+import { useRouter } from "next/router";
 
 interface OfficesProps {
   offices: Office[];
 }
 
 export default function OfficesPage({ offices }: OfficesProps) {
+  const router = useRouter();
   const openModal = useModalStore((state) => state.setIsOpen);
   const { data: buildingData } = useQuery(getBuildings);
   const [addOffice, { data, loading, error }] = useMutation(createOffice);
+
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
 
   return (
     <main className="px-8 py-2">
@@ -36,13 +42,15 @@ export default function OfficesPage({ offices }: OfficesProps) {
               content: <OfficeModal />,
               data: { officeName: "", buildings: buildingData.buildings },
               title: "Add Office",
-              onConfirmAction: (data) =>
+              onConfirmAction: (data) => {
                 addOffice({
                   variables: {
                     name: data.officeName,
                     buildingId: parseInt(data.selectedBuilding.value),
                   },
-                }),
+                });
+                refreshData();
+              },
             })
           }
         >
