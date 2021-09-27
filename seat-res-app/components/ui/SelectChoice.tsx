@@ -45,11 +45,21 @@ const SelectChoice = ({
 };
 
 const selectStyles = {
-  option: (styles: any) => ({
+  option: (styles: any, state: any) => ({
     ...styles,
-    padding: 8,
-    fontSize: 12,
+    padding: "0.5rem",
+    fontSize: "0.875rem",
     color: "#000000",
+  }),
+  placeholder: (styles: any) => ({
+    ...styles,
+    fontSize: "0.875rem",
+    padding: "0.5rem 0.5rem",
+  }),
+  singleValue: (styles: any) => ({
+    ...styles,
+    fontSize: "0.875rem",
+    padding: "0.5rem 0.5rem",
   }),
   menu: (styles: any) => ({
     ...styles,

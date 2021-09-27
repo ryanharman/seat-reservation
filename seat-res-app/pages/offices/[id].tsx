@@ -7,10 +7,9 @@ import { GetStaticProps, Office, Params } from "../../types";
 import { Layout, Button, Card, PageTitle, Subheading, Icon } from "../../components/ui";
 import { OfficeManagerModal, OfficeManagersTable } from "./components";
 import { useModalStore } from "../../stores";
-import { getOffice, getOffices, getUsers } from "../../services/queries";
 import { useMutation, useQuery } from "@apollo/client";
-import { createOfficeManager } from "../../services/mutations";
 import { useRouter } from "next/router";
+import { refreshData, createOfficeManager, getOffice, getOffices, getUsers } from "../../services";
 
 interface OfficeProps {
   officeData: Office;
@@ -22,11 +21,26 @@ export default function OfficePage({ officeData }: OfficeProps) {
   const { data: users } = useQuery(getUsers);
   const [addOfficeManager, { data, loading, error }] = useMutation(createOfficeManager);
 
-  const refreshData = () => {
-    router.replace(router.asPath);
-  };
-
   const formattedCreatedAt = format(new Date(officeData.createdAt), "dd/MM/yyyy");
+
+  const addOfficeManagerModal = () => {
+    openModal(true, {
+      cancelText: "Cancel",
+      confirmText: "Save",
+      content: <OfficeManagerModal />,
+      data: { office: officeData, users: users.users },
+      title: "Add Office Manager",
+      onConfirmAction: (data) => {
+        addOfficeManager({
+          variables: {
+            userId: parseInt(data.selectedUser.value),
+            officeId: parseInt(data.office.id),
+          },
+        });
+        refreshData(router);
+      },
+    });
+  };
 
   return (
     <main className="px-8 py-2">
@@ -50,37 +64,26 @@ export default function OfficePage({ officeData }: OfficeProps) {
           </Link>
         </div>
       </Subheading>
-      <Card className="w-96">
-        <div className="flex justify-between items-center font-semibold text-lg px-4 pb-2 mb-4 border-b border-gray-300">
-          Office Managers
-          <Icon
-            icon="add"
-            width={16}
-            height={16}
-            className="cursor-pointer hover:text-blue-500"
-            onClick={() =>
-              openModal(true, {
-                cancelText: "Cancel",
-                confirmText: "Save",
-                content: <OfficeManagerModal />,
-                data: { office: officeData, users: users.users },
-                title: "Add Office Manager",
-                onConfirmAction: (data) => {
-                  console.log(data);
-                  addOfficeManager({
-                    variables: {
-                      userId: parseInt(data.selectedUser.value),
-                      officeId: parseInt(data.office.id),
-                    },
-                  });
-                  refreshData();
-                },
-              })
-            }
-          />
-        </div>
-        <OfficeManagersTable data={officeData.officeManagers} />
-      </Card>
+      <div className="flex gap-8">
+        <Card className="w-1/2">
+          <div className="flex justify-between items-center font-semibold text-lg px-4 pb-2 mb-4 border-b border-gray-300">
+            Recent Reservations
+          </div>
+        </Card>
+        <Card className="w-1/2">
+          <div className="flex justify-between items-center font-semibold text-lg px-4 pb-2 mb-4 border-b border-gray-300">
+            Managers
+            <Icon
+              icon="add"
+              width={16}
+              height={16}
+              className="cursor-pointer hover:text-blue-500"
+              onClick={() => addOfficeManagerModal()}
+            />
+          </div>
+          <OfficeManagersTable data={officeData.officeManagers} />
+        </Card>
+      </div>
     </main>
   );
 }

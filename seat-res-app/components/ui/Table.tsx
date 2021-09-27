@@ -1,5 +1,5 @@
 import React from "react";
-import { useTable } from "react-table";
+import { Row, useTable } from "react-table";
 
 interface TableProps {
   columns: any; // TODO: Create column def type
@@ -9,6 +9,7 @@ interface TableProps {
   rowStyles?: string;
   displayHeader?: boolean;
   fullWidth?: boolean;
+  rowOnClick?: (row: Row) => void;
 }
 
 // TODO: Figure out a solution for pagination
@@ -22,6 +23,7 @@ const Table = ({
   rowStyles,
   displayHeader,
   fullWidth,
+  rowOnClick,
 }: TableProps) => {
   const tableInstance = useTable({ columns, data });
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, rows } = tableInstance;
@@ -65,13 +67,22 @@ const Table = ({
               prepareRow(row);
               return (
                 // Apply the row props
-                <tr {...row.getRowProps()} className={`${rowStyles} transition-all hover:bg-gray-100`}>
+                <tr
+                  {...row.getRowProps()}
+                  onClick={() => rowOnClick && rowOnClick(row)}
+                  className={`${rowStyles} ${
+                    rowOnClick && "cursor-pointer"
+                  } transition-all hover:bg-gray-100`}
+                >
                   {
                     // Loop over the rows cells
                     row.cells.map((cell) => {
                       // Apply the cell props
                       return (
-                        <td {...cell.getCellProps()} className="py-2 px-4 text-base text-gray-600 text-left">
+                        <td
+                          {...cell.getCellProps()}
+                          className="py-2 px-4 text-base text-gray-600 text-left"
+                        >
                           <div className="grid">
                             {
                               // Render the cell contents
@@ -88,7 +99,9 @@ const Table = ({
           }
         </tbody>
       </table>
-      {(data.length === 0 || !data) && <div className="p-4 text-sm text-gray-600">{noDataText}</div>}
+      {(data.length === 0 || !data) && (
+        <div className="p-4 text-sm text-gray-600">{noDataText}</div>
+      )}
     </>
   );
 };

@@ -17,7 +17,7 @@ const Input = ({
   name,
   value,
   onChange,
-  disabled = false,
+  disabled,
   placeholder,
   ...rest
 }: InputProps) => {
@@ -25,7 +25,9 @@ const Input = ({
     <input
       name={name}
       autoComplete="false"
-      className={`text-sm flex-grow transition-all outline-none border border-gray-500 rounded py-2 px-4 focus:border-blue-400 ${className}`}
+      className={`text-sm flex-grow transition-all outline-none border border-gray-600 rounded py-2 px-4 ${
+        disabled ? "text-gray-500 cursor-default select-none" : "focus:border-blue-400"
+      } ${className}`}
       type={type}
       value={value}
       onChange={(e) => onChange(e)}

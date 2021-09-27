@@ -4,13 +4,39 @@ import client from "../../apollo-client";
 import { Layout, Button, Card, PageTitle } from "../../components/ui";
 import { BuildingsTable } from "./components";
 import { Building } from "../../types";
-import { getBuildings } from "../../services/queries";
+import BuildingModal from "./components/BuildingModal";
+import { refreshData, getBuildings, createBuilding } from "../../services";
+import { useRouter } from "next/router";
+import { useModalStore } from "../../stores";
+import { useMutation } from "@apollo/client";
 
 interface BuildingsProps {
   buildings: Building[];
 }
 
 export default function BuildingsPage({ buildings }: BuildingsProps) {
+  const router = useRouter();
+  const openModal = useModalStore((state) => state.setIsOpen);
+  const [addBuilding, { data, loading, error }] = useMutation(createBuilding);
+
+  const addBuildingModal = () => {
+    openModal(true, {
+      cancelText: "Cancel",
+      confirmText: "Save",
+      content: <BuildingModal />,
+      data: { buildingName: "" },
+      title: "Add Building",
+      onConfirmAction: (data) => {
+        addBuilding({
+          variables: {
+            name: data.buildingName,
+          },
+        });
+        refreshData(router);
+      },
+    });
+  };
+
   return (
     <main className="px-8 py-2">
       <Head>
@@ -20,7 +46,7 @@ export default function BuildingsPage({ buildings }: BuildingsProps) {
       </Head>
       <PageTitle>
         Buildings
-        <Button primary onClick={() => {}}>
+        <Button primary onClick={() => addBuildingModal()}>
           Add new
         </Button>
       </PageTitle>

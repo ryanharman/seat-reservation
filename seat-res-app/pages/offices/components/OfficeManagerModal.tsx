@@ -1,5 +1,5 @@
 import React from "react";
-import { Select } from "../../../components/ui";
+import { Input, Select } from "../../../components/ui";
 import { useModalStore } from "../../../stores";
 import { OfficeManagerModalData } from "../../../types";
 
@@ -18,11 +18,18 @@ const OfficeModal = ({}: OfficeModalProps) => {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <div>Office Name</div>
-        <div>{modalData.office.name}</div>
+        <div className="text-gray-800">Office Name</div>
+        <Input
+          value={modalData.office.name}
+          name="officeName"
+          onChange={() => {}}
+          placeholder="Selected Office"
+          disabled={true}
+          className="w-full"
+        />
       </div>
       <div>
-        <div>User</div>
+        <div className="text-gray-800">User</div>
         <Select
           alternateStyle={false}
           disabled={false}
@@ -30,6 +37,7 @@ const OfficeModal = ({}: OfficeModalProps) => {
           isClearable={false}
           onChange={(value: any) => setModalData({ ...modalData, selectedUser: value })}
           options={userOptions}
+          placeholder="Select user..."
         />
       </div>
     </div>

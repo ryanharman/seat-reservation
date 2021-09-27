@@ -5,10 +5,9 @@ import { Office } from "../../types";
 import { OfficeModal, OfficesTable } from "./components";
 import { Layout, Button, PageTitle } from "../../components/ui";
 import { useModalStore } from "../../stores";
-import { getBuildings, getOffices } from "../../services/queries";
 import { useMutation, useQuery } from "@apollo/client";
-import { createOffice } from "../../services/mutations";
 import { useRouter } from "next/router";
+import { refreshData, createOffice, getBuildings, getOffices } from "../../services";
 
 interface OfficesProps {
   offices: Office[];
@@ -20,8 +19,23 @@ export default function OfficesPage({ offices }: OfficesProps) {
   const { data: buildingData } = useQuery(getBuildings);
   const [addOffice, { data, loading, error }] = useMutation(createOffice);
 
-  const refreshData = () => {
-    router.replace(router.asPath);
+  const addOfficeModal = () => {
+    openModal(true, {
+      cancelText: "Cancel",
+      confirmText: "Save",
+      content: <OfficeModal />,
+      data: { officeName: "", buildings: buildingData.buildings },
+      title: "Add Office",
+      onConfirmAction: (data) => {
+        addOffice({
+          variables: {
+            name: data.officeName,
+            buildingId: parseInt(data.selectedBuilding.value),
+          },
+        });
+        refreshData(router);
+      },
+    });
   };
 
   return (
@@ -33,27 +47,7 @@ export default function OfficesPage({ offices }: OfficesProps) {
       </Head>
       <PageTitle>
         Offices
-        <Button
-          primary
-          onClick={() =>
-            openModal(true, {
-              cancelText: "Cancel",
-              confirmText: "Save",
-              content: <OfficeModal />,
-              data: { officeName: "", buildings: buildingData.buildings },
-              title: "Add Office",
-              onConfirmAction: (data) => {
-                addOffice({
-                  variables: {
-                    name: data.officeName,
-                    buildingId: parseInt(data.selectedBuilding.value),
-                  },
-                });
-                refreshData();
-              },
-            })
-          }
-        >
+        <Button primary onClick={() => addOfficeModal()}>
           Add new
         </Button>
       </PageTitle>

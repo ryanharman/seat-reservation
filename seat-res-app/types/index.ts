@@ -1,5 +1,6 @@
 export * from "./Building";
 export * from "./BuildingManager";
+export * from "./BuildingModalData";
 export * from "./GetStaticProps";
 export * from "./Office";
 export * from "./OfficeManager";

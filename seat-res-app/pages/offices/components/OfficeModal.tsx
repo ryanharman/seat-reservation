@@ -18,7 +18,7 @@ const OfficeModal = ({}: OfficeModalProps) => {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <div>Office Name</div>
+        <div className="text-gray-800">Office Name</div>
         <Input
           name="officeName"
           value={modalData.officeName}
@@ -28,7 +28,7 @@ const OfficeModal = ({}: OfficeModalProps) => {
         />
       </div>
       <div>
-        <div>Building</div>
+        <div className="text-gray-800">Building</div>
         <Select
           alternateStyle={false}
           disabled={false}
@@ -36,6 +36,7 @@ const OfficeModal = ({}: OfficeModalProps) => {
           isClearable={false}
           onChange={(value: any) => setModalData({ ...modalData, selectedBuilding: value })}
           options={buildingOptions}
+          placeholder="Select building..."
         />
       </div>
     </div>

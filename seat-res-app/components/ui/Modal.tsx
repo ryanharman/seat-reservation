@@ -31,7 +31,7 @@ const Modal = ({ useModalStore }: ModalProps) => {
           <Backdrop onClick={onClose}>
             <div onClick={(e) => e.stopPropagation()}>
               <Card className="w-96">
-                <CardHeader className="mb-8">
+                <div className="text-gray-800 mb-8 text-lg flex flex-row justify-between items-center">
                   <div>{title}</div>
                   <Icon
                     icon="expand"
@@ -40,7 +40,7 @@ const Modal = ({ useModalStore }: ModalProps) => {
                     height={20}
                     onClick={() => onClose(data)}
                   />
-                </CardHeader>
+                </div>
                 {content}
                 <div className="flex items-center justify-end gap-4 mt-8">
                   <Button className="text-sm" primary={false} onClick={() => onCancel(data)}>
