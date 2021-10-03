@@ -17,7 +17,7 @@ interface BuildingsProps {
 export default function BuildingsPage({ buildings }: BuildingsProps) {
   const router = useRouter();
   const openModal = useModalStore((state) => state.setIsOpen);
-  const [addBuilding, { data, loading, error }] = useMutation(createBuilding);
+  const [addBuilding, _] = useMutation(createBuilding);
 
   const addBuildingModal = () => {
     openModal(true, {

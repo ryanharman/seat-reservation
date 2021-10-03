@@ -1,7 +1,9 @@
+import { useQuery } from "@apollo/client";
 import React from "react";
 import { Input, Select } from "../../../components/ui";
+import { getBuildings } from "../../../services";
 import { useModalStore } from "../../../stores";
-import { OfficeModalData } from "../../../types";
+import { Building, OfficeModalData } from "../../../types";
 
 interface OfficeModalProps {}
 
@@ -9,8 +11,9 @@ const OfficeModal = ({}: OfficeModalProps) => {
   const handleChange = useModalStore((state) => state.handleChange);
   const modalData: OfficeModalData = useModalStore((state) => state.data);
   const setModalData = useModalStore((state) => state.setData);
+  const { data: buildingData } = useQuery(getBuildings);
 
-  const buildingOptions = modalData.buildings.map((building) => ({
+  const buildingOptions = buildingData?.buildings.map((building: Building) => ({
     value: building.id.toString(),
     label: building.name,
   }));

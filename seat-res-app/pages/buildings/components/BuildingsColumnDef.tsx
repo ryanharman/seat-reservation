@@ -20,18 +20,18 @@ export const buildingsColumnDef = [
       return <div>{format(new Date(original.createdAt), "dd/MM/yyyy HH:mm")}</div>;
     },
   },
-  {
-    Header: () => null,
-    id: "actions",
-    Cell: ({ row }: any) => {
-      const { original } = row;
-      return (
-        <div className="justify-self-end py-2">
-          <StyledLink href={`buildings/${original.id}`}>
-            <Icon icon="expand" width={20} height={20} />
-          </StyledLink>
-        </div>
-      );
-    },
-  },
+  // {
+  //   Header: () => null,
+  //   id: "actions",
+  //   Cell: ({ row }: any) => {
+  //     const { original } = row;
+  //     return (
+  //       <div className="justify-self-end py-2">
+  //         <StyledLink href={`buildings/${original.id}`}>
+  //           <Icon icon="expand" width={20} height={20} />
+  //         </StyledLink>
+  //       </div>
+  //     );
+  //   },
+  // },
 ];

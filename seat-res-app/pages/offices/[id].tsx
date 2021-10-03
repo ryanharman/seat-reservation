@@ -4,12 +4,19 @@ import Link from "next/link";
 import client from "../../apollo-client";
 import { format } from "date-fns";
 import { GetStaticProps, Office, Params } from "../../types";
-import { Layout, Button, Card, PageTitle, Subheading, Icon } from "../../components/ui";
-import { OfficeManagerModal, OfficeManagersTable } from "./components";
+import { Layout, Button, Card, PageTitle, Subheading, Icon, CardHeader } from "../../components/ui";
+import { OfficeManagerModal, OfficeManagersTable, OfficeModal } from "./components";
 import { useModalStore } from "../../stores";
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { refreshData, createOfficeManager, getOffice, getOffices, getUsers } from "../../services";
+import {
+  refreshData,
+  createOfficeManager,
+  getOffice,
+  getOffices,
+  getUsers,
+  updateOffice,
+} from "../../services";
 
 interface OfficeProps {
   officeData: Office;
@@ -19,9 +26,33 @@ export default function OfficePage({ officeData }: OfficeProps) {
   const router = useRouter();
   const openModal = useModalStore((state) => state.setIsOpen);
   const { data: users } = useQuery(getUsers);
-  const [addOfficeManager, { data, loading, error }] = useMutation(createOfficeManager);
+  const [addOfficeManager, __] = useMutation(createOfficeManager);
+  const [editOffice, _] = useMutation(updateOffice);
 
   const formattedCreatedAt = format(new Date(officeData.createdAt), "dd/MM/yyyy");
+
+  const editOfficeModal = () => {
+    openModal(true, {
+      cancelText: "Cancel",
+      confirmText: "Save",
+      content: <OfficeModal />,
+      data: {
+        officeName: officeData.name,
+        selectedBuilding: { value: officeData.building?.id, label: officeData.building?.name },
+      },
+      title: "Edit Office",
+      onConfirmAction: (data) => {
+        editOffice({
+          variables: {
+            id: officeData.id,
+            name: { set: data.officeName },
+            buildingId: parseInt(data.selectedBuilding.value),
+          },
+        });
+        refreshData(router);
+      },
+    });
+  };
 
   const addOfficeManagerModal = () => {
     openModal(true, {
@@ -51,7 +82,7 @@ export default function OfficePage({ officeData }: OfficeProps) {
       </Head>
       <PageTitle margin="mb-0">
         {officeData.name}
-        <Button primary onClick={() => {}}>
+        <Button primary onClick={() => editOfficeModal()}>
           Edit
         </Button>
       </PageTitle>
@@ -66,12 +97,10 @@ export default function OfficePage({ officeData }: OfficeProps) {
       </Subheading>
       <div className="flex gap-8">
         <Card className="w-1/2">
-          <div className="flex justify-between items-center font-semibold text-lg px-4 pb-2 mb-4 border-b border-gray-300">
-            Recent Reservations
-          </div>
+          <CardHeader>Recent Reservations</CardHeader>
         </Card>
         <Card className="w-1/2">
-          <div className="flex justify-between items-center font-semibold text-lg px-4 pb-2 mb-4 border-b border-gray-300">
+          <CardHeader>
             Managers
             <Icon
               icon="add"
@@ -80,7 +109,7 @@ export default function OfficePage({ officeData }: OfficeProps) {
               className="cursor-pointer hover:text-blue-500"
               onClick={() => addOfficeManagerModal()}
             />
-          </div>
+          </CardHeader>
           <OfficeManagersTable data={officeData.officeManagers} />
         </Card>
       </div>

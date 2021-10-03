@@ -16,15 +16,14 @@ interface OfficesProps {
 export default function OfficesPage({ offices }: OfficesProps) {
   const router = useRouter();
   const openModal = useModalStore((state) => state.setIsOpen);
-  const { data: buildingData } = useQuery(getBuildings);
-  const [addOffice, { data, loading, error }] = useMutation(createOffice);
+  const [addOffice, _] = useMutation(createOffice);
 
   const addOfficeModal = () => {
     openModal(true, {
       cancelText: "Cancel",
       confirmText: "Save",
       content: <OfficeModal />,
-      data: { officeName: "", buildings: buildingData.buildings },
+      data: { officeName: "" },
       title: "Add Office",
       onConfirmAction: (data) => {
         addOffice({
