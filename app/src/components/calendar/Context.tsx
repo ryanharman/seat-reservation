@@ -1,7 +1,19 @@
+import {
+  addHours,
+  addMonths,
+  addWeeks,
+  endOfToday,
+  isAfter,
+  isSameMonth,
+  startOfToday,
+  subHours,
+  subMonths,
+  subWeeks
+} from 'date-fns';
 import React, { createContext, Dispatch, SetStateAction, useState } from 'react';
-import { CalendarViewEnum } from '../../types';
+
+import { CalendarViewEnum, OfficeActiveTimes, Reservation } from '../../types';
 import useContextAndErrorIfNull from '../../utils/useContextAndErrorIfNull';
-import { addMonths, addWeeks, isSameMonth, subMonths, subWeeks, isAfter } from 'date-fns';
 
 interface CalendarContextInterface {
   view: string;
@@ -11,6 +23,10 @@ interface CalendarContextInterface {
   activeDate: Date;
   setActiveDate: (date: Date) => void;
   handleDateSelection: (date: Date) => void;
+  currReservations: Reservation[];
+  setCurrReservations: Dispatch<SetStateAction<Reservation[]>>;
+  currActiveTimes: OfficeActiveTimes;
+  setCurrActiveTimes: Dispatch<React.SetStateAction<OfficeActiveTimes>>;
 }
 
 const CalendarContext = createContext<CalendarContextInterface | null>(null);
@@ -18,17 +34,27 @@ const CalendarContext = createContext<CalendarContextInterface | null>(null);
 interface CalendarProviderProps {
   onSelectedDateChange?: Dispatch<SetStateAction<any>>;
   onActiveDateChange?: (date: Date) => void;
+  reservations: Reservation[];
+  activeTimes?: OfficeActiveTimes;
   children: React.ReactNode;
 }
 
 const CalendarProvider = ({
   onSelectedDateChange,
   onActiveDateChange,
+  reservations,
+  activeTimes = {
+    start: addHours(startOfToday(), 6),
+    // start: startOfToday(),
+    end: subHours(endOfToday(), 5),
+  },
   children,
 }: CalendarProviderProps) => {
   const [view, setView] = useState<'month' | 'week' | 'day'>('month');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [activeDate, setActiveDate] = useState(new Date());
+  const [currReservations, setCurrReservations] = useState<Reservation[]>(reservations);
+  const [currActiveTimes, setCurrActiveTimes] = useState<OfficeActiveTimes>(activeTimes);
 
   const selectedDateChange = (date: Date) => {
     if (onSelectedDateChange) onSelectedDateChange(date);
@@ -64,6 +90,10 @@ const CalendarProvider = ({
     activeDate,
     setActiveDate: activeDateChange,
     handleDateSelection,
+    currReservations,
+    setCurrReservations,
+    currActiveTimes,
+    setCurrActiveTimes,
   };
 
   return <CalendarContext.Provider value={values}>{children}</CalendarContext.Provider>;
@@ -79,6 +109,10 @@ const useCalendar = () => {
     activeDate,
     setActiveDate,
     handleDateSelection,
+    currReservations,
+    setCurrReservations,
+    currActiveTimes,
+    setCurrActiveTimes,
   } = useCalendarContext;
 
   return {
@@ -89,6 +123,10 @@ const useCalendar = () => {
     activeDate,
     setActiveDate,
     handleDateSelection,
+    currReservations,
+    setCurrReservations,
+    currActiveTimes,
+    setCurrActiveTimes,
   };
 };
 

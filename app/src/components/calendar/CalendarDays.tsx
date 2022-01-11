@@ -1,31 +1,42 @@
-import React from 'react';
 import {
   addDays,
+  eachMinuteOfInterval,
   endOfMonth,
-  isSameDay,
-  isSameMonth,
-  startOfMonth,
   endOfWeek,
-  startOfWeek,
   format,
-  startOfDay,
-  subHours,
-  addHours,
+  getHours,
+  getMinutes,
+  isSameDay,
+  isSameMinute,
+  isSameMonth,
+  set,
+  startOfMonth,
+  startOfWeek
 } from 'date-fns';
+import React from 'react';
+
+import { Reservation } from '../../types';
+import { StepValue, TimelineHoursWidth, TimelineItemHeight } from './constants';
 import { useCalendar } from './Context';
-import { eachMinuteOfInterval, endOfDay } from 'date-fns/esm';
-import { TimelineHoursWidth, TimelineItemHeight } from './constants';
 
 // Helper function for use within CalendarDays element.
 // Provides the containers for each day to display in the month view
-const generateDatesForCurrentWeek = (date: Date) => {
+const generateDatesForCurrentWeek = (date: Date, reservations: Reservation[]) => {
   let currentDate = date;
   const week = [];
 
-  // TODO: Inclusion of child elements within this
   for (let day = 0; day < 7; day++) {
+    const reservationsForToday = reservations.filter(
+      // eslint-disable-next-line no-loop-func
+      (r) => isSameDay(r.dateBookedFrom, currentDate) && r.allDay
+    );
     week.push(
-      <MonthDayContainer currentDate={currentDate}>{format(currentDate, 'd')}</MonthDayContainer>
+      <MonthDayContainer currentDate={currentDate}>
+        <div>{format(currentDate, 'd')}</div>
+        {reservationsForToday.length > 0 && (
+          <div className="text-left">All day reservation in place.</div>
+        )}
+      </MonthDayContainer>
     );
     currentDate = addDays(currentDate, 1);
   }
@@ -34,7 +45,7 @@ const generateDatesForCurrentWeek = (date: Date) => {
 };
 
 const CalendarDaysMonth = () => {
-  const { activeDate } = useCalendar();
+  const { activeDate, currReservations } = useCalendar();
 
   const startOfDatesToRender = startOfMonth(activeDate);
   const endOfDatesToRender = endOfMonth(activeDate);
@@ -47,7 +58,7 @@ const CalendarDaysMonth = () => {
   const allWeeks = [];
 
   while (currentDate <= endDate) {
-    allWeeks.push(generateDatesForCurrentWeek(currentDate));
+    allWeeks.push(generateDatesForCurrentWeek(currentDate, currReservations));
     currentDate = addDays(currentDate, 7);
   }
 
@@ -59,10 +70,10 @@ const generateTimesForTimeline = (date: Date, timesToDisplay: Date[]) => {
 
   return (
     <div className="flex flex-col">
-      <div className={`${isSameDay(currentDate, new Date()) ? 'bg-blue-600' : ''}`}>
+      <div className={`${isSameDay(currentDate, new Date()) ? '' : ''}`}>
         {timesToDisplay.map((time) => {
           return (
-            <div className={`${TimelineItemHeight} relative`}>
+            <div style={{ height: `${TimelineItemHeight}px` }} className={`relative`}>
               <span className="absolute -top-3 right-2">{format(time, "HH':'mm")}</span>
             </div>
           );
@@ -77,19 +88,21 @@ const generateContentForTimeline = (date: Date, timesToDisplay: Date[]) => {
   let currentDate = date;
   const week = [];
 
-  // TODO: Inclusion of child elements within this
   for (let day = 0; day < 7; day++) {
+    const isToday = isSameDay(currentDate, new Date());
     week.push(
       <div className="flex flex-col">
-        <div
-          className={`${isSameDay(currentDate, new Date()) ? 'bg-blue-100' : ''} 
-           border-l border-gray-200`}
-        >
+        <div className={`border-l border-gray-300`}>
           {timesToDisplay.map((time) => {
+            const accurateDateAndTime = set(addDays(date, day), {
+              hours: getHours(time),
+              minutes: getMinutes(time),
+            });
             return (
-              <div
-                className={`${TimelineItemHeight} cursor-pointer transition-all border-b border-gray-200 p-2 hover:bg-gray-100`}
-              ></div>
+              <TimelineDayContainer
+                currentTime={accurateDateAndTime}
+                isToday={isToday}
+              ></TimelineDayContainer>
             );
           })}
         </div>
@@ -100,22 +113,20 @@ const generateContentForTimeline = (date: Date, timesToDisplay: Date[]) => {
 
   return (
     <div className="flex">
-      <div className={TimelineHoursWidth}>{generateTimesForTimeline(date, timesToDisplay)}</div>
+      <div style={{ width: `${TimelineHoursWidth}px` }}>
+        {generateTimesForTimeline(date, timesToDisplay)}
+      </div>
       <DayGridContainer>{week}</DayGridContainer>
     </div>
   );
 };
 
 const CalendarDaysTimeline = () => {
-  const { activeDate } = useCalendar();
+  const { activeDate, currActiveTimes } = useCalendar();
 
   const startOfDatesToRender = startOfWeek(activeDate);
   const startDate = startOfWeek(startOfDatesToRender);
-  const timesToDisplay = eachMinuteOfInterval(
-    // TODO: These values are to come from the office config
-    { start: addHours(startOfDay(startDate), 8), end: subHours(endOfDay(startDate), 7) },
-    { step: 30 }
-  );
+  const timesToDisplay = eachMinuteOfInterval(currActiveTimes, { step: StepValue });
 
   const allWeeks = generateContentForTimeline(startDate, timesToDisplay);
   return <div>{allWeeks}</div>;
@@ -134,7 +145,7 @@ const CalendarDays = () => {
 
 export default CalendarDays;
 
-// CONTAINERS FOR STYLING
+// CONTAINERS FOR DAYS
 interface DayGridContainerProps {
   children: React.ReactNode;
 }
@@ -147,10 +158,36 @@ const DayGridContainer = ({ children }: DayGridContainerProps) => {
   );
 };
 
-// Day Container
+// Week Day Container
+interface TimelineDayContainerProps {
+  currentTime: Date;
+  isToday: boolean;
+  children?: React.ReactNode;
+}
+
+const TimelineDayContainer = ({ currentTime, isToday, children }: TimelineDayContainerProps) => {
+  const { selectedDate, handleDateSelection } = useCalendar();
+
+  const isSelected =
+    isSameDay(currentTime, selectedDate) && isSameMinute(currentTime, selectedDate);
+
+  return (
+    <div
+      style={{ height: `${TimelineItemHeight}px` }}
+      className={`${isToday ? 'bg-blue-100 hover:bg-blue-200 ' : ''} ${
+        isSelected ? 'bg-blue-200 text-blue-500' : 'hover:bg-gray-100'
+      } cursor-pointer transition-all border-b border-gray-300 p-2`}
+      onClick={() => handleDateSelection(currentTime)}
+    >
+      {children}
+    </div>
+  );
+};
+
+// Month Day Container
 interface MonthDayContainerProps {
   currentDate: Date;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const MonthDayContainer = ({ currentDate, children }: MonthDayContainerProps) => {

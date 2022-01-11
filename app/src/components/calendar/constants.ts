@@ -1,2 +1,3 @@
-export const TimelineItemHeight = 'h-16';
-export const TimelineHoursWidth = 'w-16';
+export const TimelineItemHeight = 64;
+export const TimelineHoursWidth = 64;
+export const StepValue = 30;

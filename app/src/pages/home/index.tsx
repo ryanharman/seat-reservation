@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Avatar, Breadcrumb, Card, Col, Divider, Row, Space, Statistic, Typography } from 'antd';
-import { AntDCalendar, PageLayout } from '../../components';
+import { PageLayout, Calendar } from '../../components';
 import { Reservation } from '../../types';
 import { addDays } from 'date-fns';
-import Calendar from '../../components/calendar';
 import ItemSelection from './components/ItemSelection';
 import UpcomingReservations from './components/UpcomingReservations';
 
@@ -41,13 +40,12 @@ const Home = () => {
       </Card>
       <Row gutter={24}>
         <Col span={16}>
-          <Calendar onSelectedDateChange={setDate} />
+          <Calendar onSelectedDateChange={setDate} reservations={reservations} />
         </Col>
         <Col span={8}>
           <ItemSelection date={date} />
         </Col>
       </Row>
-      {/* <AntDCalendar /> */}
     </PageLayout>
   );
 };
@@ -61,6 +59,7 @@ const reservations: Reservation[] = [
     createdAt: new Date(),
     dateBookedFrom: new Date(),
     dateBookedTo: addDays(new Date(), 1),
+    allDay: true,
   },
   {
     id: 2,
@@ -70,6 +69,7 @@ const reservations: Reservation[] = [
     createdAt: new Date(),
     dateBookedFrom: new Date(),
     dateBookedTo: addDays(new Date(), 1),
+    allDay: true,
   },
   {
     id: 3,
@@ -79,6 +79,7 @@ const reservations: Reservation[] = [
     createdAt: new Date(),
     dateBookedFrom: new Date(),
     dateBookedTo: addDays(new Date(), 1),
+    allDay: true,
   },
   {
     id: 4,
@@ -88,6 +89,7 @@ const reservations: Reservation[] = [
     createdAt: new Date(),
     dateBookedFrom: new Date(),
     dateBookedTo: addDays(new Date(), 1),
+    allDay: false,
   },
   {
     id: 5,
@@ -97,6 +99,7 @@ const reservations: Reservation[] = [
     createdAt: new Date(),
     dateBookedFrom: new Date(),
     dateBookedTo: addDays(new Date(), 1),
+    allDay: true,
   },
   {
     id: 6,
@@ -106,6 +109,7 @@ const reservations: Reservation[] = [
     createdAt: new Date(),
     dateBookedFrom: new Date(),
     dateBookedTo: addDays(new Date(), 1),
+    allDay: false,
   },
 ];
 

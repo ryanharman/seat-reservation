@@ -15,7 +15,7 @@ const CalendarWeekDays = () => {
 
   return (
     <div className="flex">
-      {view === 'week' && <div className={TimelineHoursWidth}></div>}
+      {view === 'week' && <div style={{ width: `${TimelineHoursWidth}px` }}></div>}
       <div className="grow grid grid-cols-7 gap-2">{weekDays}</div>
     </div>
   );
