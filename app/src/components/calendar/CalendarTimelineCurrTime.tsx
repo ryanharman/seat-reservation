@@ -12,11 +12,13 @@ import React, { useEffect, useState } from 'react';
 
 import { useAppSelector } from '../../store';
 import { getCalendar } from '../../store/selectors/calendar';
-import { StepValue, TimelineHoursWidth, TimelineItemHeight } from './constants';
+import { getOffice } from '../../store/selectors/office';
+import { TimelineHoursWidth, TimelineItemHeight } from './constants';
 
 const CalendarTimelineCurrTime = () => {
   const [dateTime, setDateTime] = useState(new Date());
 
+  const { bookingLength } = useAppSelector(getOffice);
   const { activeDate, view, currActiveTimes } = useAppSelector(getCalendar);
 
   useEffect(() => {
@@ -31,16 +33,16 @@ const CalendarTimelineCurrTime = () => {
     ? 0
     : eachMinuteOfInterval(
         { start: startOfToday(), end: currActiveTimes.start },
-        { step: StepValue }
+        { step: bookingLength }
       ).length - 1;
 
   const hoursInMinutes: number = getHours(dateTime) * 60;
   const minutes: number = getMinutes(dateTime);
   const time: number = hoursInMinutes + minutes;
 
-  const containersBeforeStart = numberOfTimeValuesBefore * StepValue;
+  const containersBeforeStart = numberOfTimeValuesBefore * bookingLength;
 
-  const containerHeightScalingValue = TimelineItemHeight / StepValue;
+  const containerHeightScalingValue = TimelineItemHeight / bookingLength;
   const position = (time - containersBeforeStart) * containerHeightScalingValue;
 
   return (

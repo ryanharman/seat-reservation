@@ -3,12 +3,14 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 
 import calendarReducer from './reducers/calendar';
+import officeReducer from './reducers/office';
 import userReducer from './reducers/user';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     calendar: calendarReducer,
+    office: officeReducer,
     // posts: postsReducer,
     // comments: commentsReducer,
     // users: usersReducer,

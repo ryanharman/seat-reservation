@@ -1,21 +1,21 @@
 import { Avatar, Breadcrumb, Card, Col, Divider, Row, Space, Statistic, Typography } from 'antd';
-import { addDays, isSameDay } from 'date-fns';
-import React, { useState } from 'react';
+import { addDays, addHours, endOfToday, isSameDay, startOfToday, subHours } from 'date-fns';
+import React from 'react';
 
 import { Calendar, PageLayout } from '../../components';
 import { useAppSelector } from '../../store';
 import { getCalendar } from '../../store/selectors/calendar';
+import { getOffice } from '../../store/selectors/office';
 import { getUser } from '../../store/selectors/user';
-import { Reservation, Seat } from '../../types';
+import { Office, Reservation, Seat } from '../../types';
 import ItemSelection from './components/ItemSelection';
 import UpcomingReservations from './components/UpcomingReservations';
 
 const { Title, Text } = Typography;
 
 const Home = () => {
-  const [office, setOffice] = useState({ id: 1, name: 'C1 Lower' }); // TODO: To come from user context
-
   const user = useAppSelector(getUser);
+  const office = useAppSelector(getOffice);
   const { selectedDate } = useAppSelector(getCalendar);
 
   // TODO: Info to come from the API
@@ -43,12 +43,15 @@ const Home = () => {
         <Space direction="vertical" className="w-full mb-12">
           <div className="flex justify-between">
             <div className="flex items-center gap-4">
-              <Avatar size={64}>RH</Avatar>
+              <Avatar size={64}>
+                {user.firstName.split('')[0]}
+                {user.lastName.split('')[0]}
+              </Avatar>
               <div className="flex flex-col">
                 <Text strong className="text-2xl">
-                  Hello Ryan,
+                  Welcome back {user.firstName}
                 </Text>
-                <Text>This is your home page</Text>
+                {/* <Text>This is your home page</Text> */}
               </div>
             </div>
             <div className="flex gap-4">
@@ -122,15 +125,19 @@ const reservations: Reservation[] = [
   },
 ];
 
+const office: Office = {
+  id: 1,
+  name: 'C1 Lower',
+  officeManagers: [],
+  activeTimes: { start: addHours(startOfToday(), 6), end: subHours(endOfToday(), 5) },
+  bookingLength: 240,
+  createdAt: new Date(),
+};
+
 const seats: Seat[] = [
   {
     id: 1,
-    office: {
-      id: 2,
-      name: 'C1 Lower',
-      officeManagers: [],
-      createdAt: new Date(),
-    },
+    office,
     type: 'Seat',
     availableForBooking: true,
     createdAt: new Date(),
@@ -138,12 +145,7 @@ const seats: Seat[] = [
   },
   {
     id: 2,
-    office: {
-      id: 1,
-      name: 'C1 Lower',
-      officeManagers: [],
-      createdAt: new Date(),
-    },
+    office,
     type: 'Seat',
     availableForBooking: true,
     createdAt: new Date(),
@@ -151,12 +153,7 @@ const seats: Seat[] = [
   },
   {
     id: 3,
-    office: {
-      id: 1,
-      name: 'C1 Lower',
-      officeManagers: [],
-      createdAt: new Date(),
-    },
+    office,
     type: 'Seat',
     availableForBooking: false,
     createdAt: new Date(),
@@ -164,12 +161,7 @@ const seats: Seat[] = [
   },
   {
     id: 4,
-    office: {
-      id: 1,
-      name: 'C1 Lower',
-      officeManagers: [],
-      createdAt: new Date(),
-    },
+    office,
     type: 'Seat',
     availableForBooking: true,
     createdAt: new Date(),

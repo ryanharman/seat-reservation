@@ -15,6 +15,12 @@ import React, { createContext, Dispatch, SetStateAction, useState } from 'react'
 import { CalendarViewEnum, OfficeActiveTimes, Reservation } from '../../types';
 import useContextAndErrorIfNull from '../../utils/useContextAndErrorIfNull';
 
+/*
+ * Leaving this context here for reference for future contexts
+ * if I ever make any. Redux is pretty good but I like storing
+ * functions and non serialized data in a context it turns out
+ */
+
 interface CalendarContextInterface {
   view: string;
   setView: (viewType: CalendarViewEnum) => void;

@@ -12,7 +12,8 @@ import {
   SearchOutlined
 } from '@ant-design/icons';
 
-import { useAppSelector } from '../../../store';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { handleDateSelection } from '../../../store/reducers/calendar';
 import { getCalendar } from '../../../store/selectors/calendar';
 import { getUser } from '../../../store/selectors/user';
 import { Reservation, Seat } from '../../../types';
@@ -34,6 +35,7 @@ const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
   const [step, setStep] = useState<number>(0);
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
 
+  const dispatch = useAppDispatch();
   const user = useAppSelector(getUser);
   const { selectedDate } = useAppSelector(getCalendar);
 
@@ -172,7 +174,7 @@ const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
                       <Row
                         key={item.id + '_' + idx}
                         className="flex items-center justify-between cursor-pointer transition-all py-2 px-3 hover:bg-slate-100 w-full"
-                        onClick={() => console.log(item.date)}
+                        onClick={() => dispatch(handleDateSelection({ date: item.date }))}
                       >
                         <div>
                           <Badge color="orange" />{' '}

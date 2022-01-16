@@ -18,8 +18,9 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { handleDateSelection } from '../../store/reducers/calendar';
 import { getCalendar } from '../../store/selectors/calendar';
+import { getOffice } from '../../store/selectors/office';
 import { Reservation } from '../../types';
-import { StepValue, TimelineHoursWidth, TimelineItemHeight } from './constants';
+import { TimelineHoursWidth, TimelineItemHeight } from './constants';
 
 // Helper function for use within CalendarDays element.
 // Provides the containers for each day to display in the month view
@@ -128,11 +129,12 @@ const generateContentForTimeline = (date: Date, timesToDisplay: Date[]) => {
 };
 
 const CalendarDaysTimeline = () => {
+  const { bookingLength } = useAppSelector(getOffice);
   const { activeDate, currActiveTimes } = useAppSelector(getCalendar);
 
   const startOfDatesToRender = startOfWeek(activeDate, { weekStartsOn: 1 });
   const startDate = startOfWeek(startOfDatesToRender, { weekStartsOn: 1 });
-  const timesToDisplay = eachMinuteOfInterval(currActiveTimes, { step: StepValue });
+  const timesToDisplay = eachMinuteOfInterval(currActiveTimes, { step: bookingLength });
 
   const allWeeks = generateContentForTimeline(startDate, timesToDisplay);
   return <div>{allWeeks}</div>;
