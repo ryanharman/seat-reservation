@@ -6,6 +6,6 @@ export type User = {
   lastName: string;
   role: string;
   reservations: Reservation[];
-  createdAt: Date;
-  updatedAt?: Date;
+  createdAt: Date | string;
+  updatedAt?: Date | string;
 };

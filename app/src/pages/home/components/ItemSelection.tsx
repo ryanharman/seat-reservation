@@ -12,6 +12,8 @@ import {
   SearchOutlined
 } from '@ant-design/icons';
 
+import { useAppSelector } from '../../../store';
+import { getUser } from '../../../store/selectors/user';
 import { Reservation, Seat } from '../../../types';
 
 const { Title, Text } = Typography;
@@ -31,20 +33,21 @@ interface SelectedItem extends Seat {
 const ItemSelection = ({ date, seats, userBooking }: ItemSelectionProps) => {
   const [step, setStep] = useState<number>(0);
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
-  const userId = 1; // TODO: User context for id
+
+  const user = useAppSelector(getUser);
 
   const selectedItemOnDate = selectedItems.find(
-    (e) => e.userId === userId && isSameDay(e.date, date)
+    (e) => e.userId === user.id && isSameDay(e.date, date)
   );
 
   const addItemToSelected = (item: Seat) => {
     if (selectedItems.find((e) => e.date === date)) {
       // remove the item that matches the current date and then add our new one in
       const selectedItemsFiltered = selectedItems.filter((item) => item.date !== date);
-      const newItem = { ...item, date, userId };
+      const newItem = { ...item, date, userId: user.id };
       setSelectedItems([...selectedItemsFiltered, newItem]);
     } else {
-      const newItem = { ...item, date, userId };
+      const newItem = { ...item, date, userId: user.id };
       setSelectedItems([...selectedItems, newItem]);
     }
   };

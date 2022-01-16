@@ -9,7 +9,7 @@ import {
   subWeeks
 } from 'date-fns';
 
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { CalendarViewEnum, OfficeActiveTimes, Reservation } from '../../types';
 
@@ -36,19 +36,26 @@ export const calendarSlice = createSlice({
     setView: (state, action) => {
       state.view = action.payload;
     },
-    setSelectedDate: (state, action) => {
+    setSelectedDate: (state, action: PayloadAction<Date>) => {
       state.selectedDate = action.payload;
     },
-    setActiveDate: (state, action) => {
+    setActiveDate: (state, action: PayloadAction<Date>) => {
       state.activeDate = action.payload;
     },
-    setCurrReservations: (state, action) => {
+    setCurrReservations: (state, action: PayloadAction<Reservation[]>) => {
       state.currReservations = action.payload;
     },
-    setCurrActiveTimes: (state, action) => {
+    setCurrActiveTimes: (state, action: PayloadAction<OfficeActiveTimes>) => {
       state.currActiveTimes = action.payload;
     },
-    handleDateSelection: (state, action) => {
+    handleDateSelection: (
+      state,
+      action: PayloadAction<{
+        date: Date;
+        onActiveDateChange?: (date: Date) => void;
+        onSelectedDateChange?: (date: Date) => void;
+      }>
+    ) => {
       const { date, onActiveDateChange, onSelectedDateChange } = action.payload;
       const { selectedDate, activeDate, view } = state;
 

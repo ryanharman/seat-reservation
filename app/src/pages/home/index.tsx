@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { Calendar, PageLayout } from '../../components';
 import { useAppSelector } from '../../store';
 import { getCalendar } from '../../store/selectors/calendar';
+import { getUser } from '../../store/selectors/user';
 import { Reservation, Seat } from '../../types';
 import ItemSelection from './components/ItemSelection';
 import UpcomingReservations from './components/UpcomingReservations';
@@ -14,9 +15,13 @@ const Home = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [office, setOffice] = useState({ id: 1, name: 'C1 Lower' }); // TODO: To come from user context
 
+  const user = useAppSelector(getUser);
+  const calendarRedux = useAppSelector(getCalendar);
+  console.log({ calendarRedux });
+
   // TODO: Info to come from the API
   const reservationsForSelectedDate = reservations.filter((r) => isSameDay(r.dateBookedFrom, date));
-  const userBookingForSelectedDate = reservationsForSelectedDate.find((r) => r.userId === 1);
+  const userBookingForSelectedDate = reservationsForSelectedDate.find((r) => r.userId === user.id);
   const seatsAvailable = () => {
     const seatsAvail = seats.filter((s) => {
       const foundSeat = reservationsForSelectedDate.find(
@@ -27,9 +32,6 @@ const Home = () => {
     });
     return seatsAvail;
   };
-
-  const calendarRedux = useAppSelector(getCalendar);
-  console.log({ calendarRedux });
 
   return (
     <PageLayout className="flex flex-col gap-6">
