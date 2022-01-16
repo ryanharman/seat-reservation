@@ -1,14 +1,18 @@
-import { Radio } from 'antd';
-import Title from 'antd/lib/typography/Title';
+import { Radio, Typography } from 'antd';
 import { addMonths, addWeeks, endOfWeek, format, startOfWeek, subMonths, subWeeks } from 'date-fns';
 import React from 'react';
 
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
 
-import { useCalendar } from './Context';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { handleDateSelection, setActiveDate, setView } from '../../store/reducers/calendar';
+import { getCalendar } from '../../store/selectors/calendar';
+
+const { Title } = Typography;
 
 const CalendarHeader = () => {
-  const { activeDate, setActiveDate, handleDateSelection, view, setView } = useCalendar();
+  const dispatch = useAppDispatch();
+  const { activeDate, view } = useAppSelector(getCalendar);
 
   const startOfWeekFormatted = format(startOfWeek(activeDate, { weekStartsOn: 1 }), 'MMM do');
   const endOfWeekFormatted = format(endOfWeek(activeDate, { weekStartsOn: 1 }), 'do');
@@ -20,13 +24,17 @@ const CalendarHeader = () => {
           <LeftCircleOutlined
             className="text-2xl hover:text-blue-500 transition"
             onClick={() =>
-              setActiveDate(view === 'month' ? subMonths(activeDate, 1) : subWeeks(activeDate, 1))
+              dispatch(
+                setActiveDate(view === 'month' ? subMonths(activeDate, 1) : subWeeks(activeDate, 1))
+              )
             }
           />
           <RightCircleOutlined
             className="text-2xl hover:text-blue-500 transition"
             onClick={() =>
-              setActiveDate(view === 'month' ? addMonths(activeDate, 1) : addWeeks(activeDate, 1))
+              dispatch(
+                setActiveDate(view === 'month' ? addMonths(activeDate, 1) : addWeeks(activeDate, 1))
+              )
             }
           />
         </div>
@@ -37,13 +45,13 @@ const CalendarHeader = () => {
         <div
           className="transition cursor-pointer text-gray-500 hover:text-blue-500"
           onClick={() => {
-            handleDateSelection(new Date());
+            dispatch(handleDateSelection({ date: new Date() }));
           }}
         >
           Today
         </div>
       </div>
-      <Radio.Group value={view} onChange={(e) => setView(e.target.value)}>
+      <Radio.Group value={view} onChange={(e) => dispatch(setView(e.target.value))}>
         <Radio.Button value="month">Month</Radio.Button>
         <Radio.Button value="week">Week</Radio.Button>
       </Radio.Group>

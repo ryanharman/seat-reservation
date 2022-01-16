@@ -15,9 +15,11 @@ import {
 } from 'date-fns';
 import React from 'react';
 
+import { useAppDispatch, useAppSelector } from '../../store';
+import { handleDateSelection } from '../../store/reducers/calendar';
+import { getCalendar } from '../../store/selectors/calendar';
 import { Reservation } from '../../types';
 import { StepValue, TimelineHoursWidth, TimelineItemHeight } from './constants';
-import { useCalendar } from './Context';
 
 // Helper function for use within CalendarDays element.
 // Provides the containers for each day to display in the month view
@@ -30,8 +32,10 @@ const generateDatesForCurrentWeek = (date: Date, reservations: Reservation[]) =>
       // eslint-disable-next-line no-loop-func
       (r) => isSameDay(r.dateBookedFrom, currentDate) && r.allDay
     );
+
+    // TODO: This needs a better key
     week.push(
-      <MonthDayContainer currentDate={currentDate}>
+      <MonthDayContainer key={day} currentDate={currentDate}>
         <div>{format(currentDate, 'd')}</div>
         {reservationsForToday.length > 0 && (
           <div className="text-left">All day reservation in place.</div>
@@ -45,7 +49,7 @@ const generateDatesForCurrentWeek = (date: Date, reservations: Reservation[]) =>
 };
 
 const CalendarDaysMonth = () => {
-  const { activeDate, currReservations } = useCalendar();
+  const { activeDate, currReservations } = useAppSelector(getCalendar);
 
   const startOfDatesToRender = startOfMonth(activeDate);
   const endOfDatesToRender = endOfMonth(activeDate);
@@ -71,9 +75,10 @@ const generateTimesForTimeline = (date: Date, timesToDisplay: Date[]) => {
   return (
     <div className="flex flex-col">
       <div className={`${isSameDay(currentDate, new Date()) ? '' : ''}`}>
-        {timesToDisplay.map((time) => {
+        {timesToDisplay.map((time, idx) => {
           return (
-            <div style={{ height: `${TimelineItemHeight}px` }} className={`relative`}>
+            // TODO: This needs a better key
+            <div key={idx} style={{ height: `${TimelineItemHeight}px` }} className={`relative`}>
               <span className="absolute -top-3 right-2">{format(time, "HH':'mm")}</span>
             </div>
           );
@@ -91,7 +96,8 @@ const generateContentForTimeline = (date: Date, timesToDisplay: Date[]) => {
   for (let day = 0; day < 7; day++) {
     const isToday = isSameDay(currentDate, new Date());
     week.push(
-      <div className="flex flex-col">
+      // TODO: This needs a better key
+      <div key={day} className="flex flex-col">
         <div className={`border-l border-gray-300`}>
           {timesToDisplay.map((time) => {
             const accurateDateAndTime = set(addDays(date, day), {
@@ -122,7 +128,7 @@ const generateContentForTimeline = (date: Date, timesToDisplay: Date[]) => {
 };
 
 const CalendarDaysTimeline = () => {
-  const { activeDate, currActiveTimes } = useCalendar();
+  const { activeDate, currActiveTimes } = useAppSelector(getCalendar);
 
   const startOfDatesToRender = startOfWeek(activeDate, { weekStartsOn: 1 });
   const startDate = startOfWeek(startOfDatesToRender, { weekStartsOn: 1 });
@@ -133,7 +139,7 @@ const CalendarDaysTimeline = () => {
 };
 
 const CalendarDays = () => {
-  const { view } = useCalendar();
+  const { view } = useAppSelector(getCalendar);
 
   return (
     <>
@@ -151,7 +157,7 @@ interface DayGridContainerProps {
 }
 
 const DayGridContainer = ({ children }: DayGridContainerProps) => {
-  const { view } = useCalendar();
+  const { view } = useAppSelector(getCalendar);
 
   return (
     <div className={`${view === 'month' ? 'gap-2' : 'grow'} grid grid-cols-7`}>{children}</div>
@@ -166,7 +172,8 @@ interface TimelineDayContainerProps {
 }
 
 const TimelineDayContainer = ({ currentTime, isToday, children }: TimelineDayContainerProps) => {
-  const { selectedDate, handleDateSelection } = useCalendar();
+  const dispatch = useAppDispatch();
+  const { selectedDate } = useAppSelector(getCalendar);
 
   const isSelected =
     isSameDay(currentTime, selectedDate) && isSameMinute(currentTime, selectedDate);
@@ -177,7 +184,7 @@ const TimelineDayContainer = ({ currentTime, isToday, children }: TimelineDayCon
       className={`${isToday ? 'bg-blue-100 hover:bg-blue-200 ' : ''} ${
         isSelected ? 'bg-blue-200 text-blue-500' : 'hover:bg-gray-100'
       } cursor-pointer transition-all border-b border-gray-300 p-2`}
-      onClick={() => handleDateSelection(currentTime)}
+      onClick={() => dispatch(handleDateSelection({ date: currentTime }))}
     >
       {children}
     </div>
@@ -191,7 +198,8 @@ interface MonthDayContainerProps {
 }
 
 const MonthDayContainer = ({ currentDate, children }: MonthDayContainerProps) => {
-  const { activeDate, selectedDate, handleDateSelection } = useCalendar();
+  const dispatch = useAppDispatch();
+  const { activeDate, selectedDate } = useAppSelector(getCalendar);
 
   return (
     <div
@@ -199,7 +207,7 @@ const MonthDayContainer = ({ currentDate, children }: MonthDayContainerProps) =>
         isSameMonth(currentDate, activeDate) ? '' : 'text-gray-300'
       } ${isSameDay(currentDate, selectedDate) ? 'bg-blue-100 text-blue-500' : 'hover:bg-gray-100'}
           ${isSameDay(currentDate, new Date()) ? 'border-blue-600' : ''}`}
-      onClick={() => handleDateSelection(currentDate)}
+      onClick={() => dispatch(handleDateSelection({ date: currentDate }))}
     >
       {children}
     </div>

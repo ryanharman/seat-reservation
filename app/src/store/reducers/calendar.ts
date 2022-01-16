@@ -33,7 +33,7 @@ export const calendarSlice = createSlice({
   name: 'calendar',
   initialState,
   reducers: {
-    setView: (state, action) => {
+    setView: (state, action: PayloadAction<CalendarViewEnum>) => {
       state.view = action.payload;
     },
     setSelectedDate: (state, action: PayloadAction<Date>) => {

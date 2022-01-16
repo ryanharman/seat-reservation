@@ -13,6 +13,7 @@ import {
 } from '@ant-design/icons';
 
 import { useAppSelector } from '../../../store';
+import { getCalendar } from '../../../store/selectors/calendar';
 import { getUser } from '../../../store/selectors/user';
 import { Reservation, Seat } from '../../../types';
 
@@ -20,7 +21,6 @@ const { Title, Text } = Typography;
 const { Step } = Steps;
 
 interface ItemSelectionProps {
-  date: Date;
   seats: Seat[];
   userBooking?: Reservation;
 }
@@ -30,24 +30,25 @@ interface SelectedItem extends Seat {
   userId: number;
 }
 
-const ItemSelection = ({ date, seats, userBooking }: ItemSelectionProps) => {
+const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
   const [step, setStep] = useState<number>(0);
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
 
   const user = useAppSelector(getUser);
+  const { selectedDate } = useAppSelector(getCalendar);
 
   const selectedItemOnDate = selectedItems.find(
-    (e) => e.userId === user.id && isSameDay(e.date, date)
+    (e) => e.userId === user.id && isSameDay(e.date, selectedDate)
   );
 
   const addItemToSelected = (item: Seat) => {
-    if (selectedItems.find((e) => e.date === date)) {
+    if (selectedItems.find((e) => e.date === selectedDate)) {
       // remove the item that matches the current date and then add our new one in
-      const selectedItemsFiltered = selectedItems.filter((item) => item.date !== date);
-      const newItem = { ...item, date, userId: user.id };
+      const selectedItemsFiltered = selectedItems.filter((item) => item.date !== selectedDate);
+      const newItem = { ...item, date: selectedDate, userId: user.id };
       setSelectedItems([...selectedItemsFiltered, newItem]);
     } else {
-      const newItem = { ...item, date, userId: user.id };
+      const newItem = { ...item, date: selectedDate, userId: user.id };
       setSelectedItems([...selectedItems, newItem]);
     }
   };
@@ -100,8 +101,8 @@ const ItemSelection = ({ date, seats, userBooking }: ItemSelectionProps) => {
       </Row>
       <Row justify="space-between">
         <div className="flex items-baseline gap-4">
-          <Title level={4}>{format(date, "do 'of' MMMM yyyy")}</Title>
-          {isSameDay(date, new Date()) && (
+          <Title level={4}>{format(selectedDate, "do 'of' MMMM yyyy")}</Title>
+          {isSameDay(selectedDate, new Date()) && (
             <div style={{ color: 'rgb(107 114 128)', fontSize: '18px' }}>Today</div>
           )}
         </div>

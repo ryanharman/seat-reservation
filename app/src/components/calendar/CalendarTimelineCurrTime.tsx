@@ -10,19 +10,21 @@ import {
 } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 
+import { useAppSelector } from '../../store';
+import { getCalendar } from '../../store/selectors/calendar';
 import { StepValue, TimelineHoursWidth, TimelineItemHeight } from './constants';
-import { useCalendar } from './Context';
 
 const CalendarTimelineCurrTime = () => {
-  const { activeDate, view, currActiveTimes } = useCalendar();
-  const [date, setDate] = useState(new Date());
+  const [dateTime, setDateTime] = useState(new Date());
+
+  const { activeDate, view, currActiveTimes } = useAppSelector(getCalendar);
 
   useEffect(() => {
-    setInterval(() => setDate(new Date()), 60000);
-  }, [date]);
+    setInterval(() => setDateTime(new Date()), 60000);
+  }, [dateTime]);
 
   if (view === 'month') return <></>;
-  if (!isSameWeek(date, activeDate)) return <></>;
+  if (!isSameWeek(dateTime, activeDate)) return <></>;
   if (!isWithinInterval(activeDate, currActiveTimes)) return <></>;
 
   const numberOfTimeValuesBefore = isSameMinute(startOfToday(), currActiveTimes.start)
@@ -32,8 +34,8 @@ const CalendarTimelineCurrTime = () => {
         { step: StepValue }
       ).length - 1;
 
-  const hoursInMinutes: number = getHours(date) * 60;
-  const minutes: number = getMinutes(date);
+  const hoursInMinutes: number = getHours(dateTime) * 60;
+  const minutes: number = getMinutes(dateTime);
   const time: number = hoursInMinutes + minutes;
 
   const containersBeforeStart = numberOfTimeValuesBefore * StepValue;
@@ -47,7 +49,7 @@ const CalendarTimelineCurrTime = () => {
         style={{ width: `${TimelineHoursWidth}px` }}
         className="absolute -top-4 bg-blue-800 border-2 border-white h-8 text-white font-semibold flex justify-center items-center rounded-md"
       >
-        {format(date, 'HH:mm')}
+        {format(dateTime, 'HH:mm')}
       </div>
       <div className="border border-blue-800" />
     </div>

@@ -11,16 +11,17 @@ import ItemSelection from './components/ItemSelection';
 import UpcomingReservations from './components/UpcomingReservations';
 
 const { Title, Text } = Typography;
+
 const Home = () => {
-  const [date, setDate] = useState<Date>(new Date());
   const [office, setOffice] = useState({ id: 1, name: 'C1 Lower' }); // TODO: To come from user context
 
   const user = useAppSelector(getUser);
-  const calendarRedux = useAppSelector(getCalendar);
-  console.log({ calendarRedux });
+  const { selectedDate } = useAppSelector(getCalendar);
 
   // TODO: Info to come from the API
-  const reservationsForSelectedDate = reservations.filter((r) => isSameDay(r.dateBookedFrom, date));
+  const reservationsForSelectedDate = reservations.filter((r) =>
+    isSameDay(r.dateBookedFrom, selectedDate)
+  );
   const userBookingForSelectedDate = reservationsForSelectedDate.find((r) => r.userId === user.id);
   const seatsAvailable = () => {
     const seatsAvail = seats.filter((s) => {
@@ -64,14 +65,10 @@ const Home = () => {
       </Card>
       <Row gutter={24}>
         <Col span={16}>
-          <Calendar onSelectedDateChange={setDate} reservations={reservations} />
+          <Calendar reservations={reservations} />
         </Col>
         <Col span={8}>
-          <ItemSelection
-            date={date}
-            seats={seatsAvailable()}
-            userBooking={userBookingForSelectedDate}
-          />
+          <ItemSelection seats={seatsAvailable()} userBooking={userBookingForSelectedDate} />
         </Col>
       </Row>
     </PageLayout>
