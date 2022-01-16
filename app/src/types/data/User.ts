@@ -1,4 +1,4 @@
-import { Reservation } from ".";
+import { Reservation } from '../';
 
 export type User = {
   id: number;

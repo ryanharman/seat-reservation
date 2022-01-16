@@ -1,12 +1,14 @@
-import React from 'react';
+import { Card, Divider, Row, Space, Typography } from 'antd';
 import { format } from 'date-fns';
-import { Card, Col, Divider, Row, Space, Typography } from 'antd';
+import React from 'react';
+
 import {
   EditOutlined,
   ExclamationCircleOutlined,
   RightCircleOutlined,
-  RightOutlined,
+  RightOutlined
 } from '@ant-design/icons';
+
 import { Reservation } from '../../../types';
 
 const { Title, Text } = Typography;
@@ -22,6 +24,7 @@ const UpcomingReservations = ({ reservations }: ItemSelectionProps) => {
         {reservations.map((res) => {
           return (
             <Card
+              key={res.id}
               type="inner"
               actions={[<EditOutlined key="edit" />, <RightOutlined key="visit" />]}
               className="mb-6 relative"

@@ -1,12 +1,13 @@
-import React from 'react';
 import { addDays, format, startOfWeek } from 'date-fns';
-import { useCalendar } from './Context';
+import React from 'react';
+
 import { TimelineHoursWidth } from './constants';
+import { useCalendar } from './Context';
 
 const CalendarWeekDays = () => {
   const { activeDate, view } = useCalendar();
 
-  const weekStartDate = startOfWeek(activeDate);
+  const weekStartDate = startOfWeek(activeDate, { weekStartsOn: 1 });
   const weekDays = [];
 
   for (let day = 0; day < 7; day++) {

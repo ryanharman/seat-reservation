@@ -50,7 +50,7 @@ const CalendarDaysMonth = () => {
   const startOfDatesToRender = startOfMonth(activeDate);
   const endOfDatesToRender = endOfMonth(activeDate);
   // Dates used to iterate over each week
-  const startDate = startOfWeek(startOfDatesToRender);
+  const startDate = startOfWeek(startOfDatesToRender, { weekStartsOn: 1 });
   const endDate = endOfWeek(endOfDatesToRender);
 
   let currentDate = startDate;
@@ -124,8 +124,8 @@ const generateContentForTimeline = (date: Date, timesToDisplay: Date[]) => {
 const CalendarDaysTimeline = () => {
   const { activeDate, currActiveTimes } = useCalendar();
 
-  const startOfDatesToRender = startOfWeek(activeDate);
-  const startDate = startOfWeek(startOfDatesToRender);
+  const startOfDatesToRender = startOfWeek(activeDate, { weekStartsOn: 1 });
+  const startDate = startOfWeek(startOfDatesToRender, { weekStartsOn: 1 });
   const timesToDisplay = eachMinuteOfInterval(currActiveTimes, { step: StepValue });
 
   const allWeeks = generateContentForTimeline(startDate, timesToDisplay);
