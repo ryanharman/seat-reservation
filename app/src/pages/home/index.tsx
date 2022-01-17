@@ -1,10 +1,10 @@
 import { Avatar, Breadcrumb, Card, Col, Divider, Row, Space, Statistic, Typography } from 'antd';
-import { addDays, addHours, endOfToday, isSameDay, startOfToday, subHours } from 'date-fns';
+import { addDays, isSameDay } from 'date-fns';
 import React from 'react';
 
 import { Calendar, PageLayout } from '../../components';
+import { useCalendar } from '../../hooks/calendar';
 import { useAppSelector } from '../../store';
-import { getCalendar } from '../../store/selectors/calendar';
 import { getOffice } from '../../store/selectors/office';
 import { getUser } from '../../store/selectors/user';
 import { Office, Reservation, Seat } from '../../types';
@@ -16,7 +16,7 @@ const { Title, Text } = Typography;
 const Home = () => {
   const user = useAppSelector(getUser);
   const office = useAppSelector(getOffice);
-  const { selectedDate } = useAppSelector(getCalendar);
+  const { selectedDate } = useCalendar();
 
   // TODO: Info to come from the API
   const reservationsForSelectedDate = reservations.filter((r) =>
@@ -24,7 +24,7 @@ const Home = () => {
   );
   const userBookingForSelectedDate = reservationsForSelectedDate.find((r) => r.userId === user.id);
   const seatsAvailable = () => {
-    const seatsAvail = seats.filter((s) => {
+    const seatsAvail = seats(office).filter((s) => {
       const foundSeat = reservationsForSelectedDate.find(
         (r) => r.bookedItemId === s.id && r.officeId === office.id
       );
@@ -125,48 +125,42 @@ const reservations: Reservation[] = [
   },
 ];
 
-const office: Office = {
-  id: 1,
-  name: 'C1 Lower',
-  officeManagers: [],
-  activeTimes: { start: addHours(startOfToday(), 6), end: subHours(endOfToday(), 5) },
-  bookingLength: 240,
-  createdAt: new Date(),
+const seats = (office: Office) => {
+  const seatsToReturn: Seat[] = [
+    {
+      id: 1,
+      office,
+      type: 'Seat',
+      availableForBooking: true,
+      createdAt: new Date(),
+      updatedAt: null,
+    },
+    {
+      id: 2,
+      office,
+      type: 'Seat',
+      availableForBooking: true,
+      createdAt: new Date(),
+      updatedAt: null,
+    },
+    {
+      id: 3,
+      office,
+      type: 'Seat',
+      availableForBooking: false,
+      createdAt: new Date(),
+      updatedAt: null,
+    },
+    {
+      id: 4,
+      office,
+      type: 'Seat',
+      availableForBooking: true,
+      createdAt: new Date(),
+      updatedAt: null,
+    },
+  ];
+  return seatsToReturn;
 };
-
-const seats: Seat[] = [
-  {
-    id: 1,
-    office,
-    type: 'Seat',
-    availableForBooking: true,
-    createdAt: new Date(),
-    updatedAt: null,
-  },
-  {
-    id: 2,
-    office,
-    type: 'Seat',
-    availableForBooking: true,
-    createdAt: new Date(),
-    updatedAt: null,
-  },
-  {
-    id: 3,
-    office,
-    type: 'Seat',
-    availableForBooking: false,
-    createdAt: new Date(),
-    updatedAt: null,
-  },
-  {
-    id: 4,
-    office,
-    type: 'Seat',
-    availableForBooking: true,
-    createdAt: new Date(),
-    updatedAt: null,
-  },
-];
 
 export default Home;

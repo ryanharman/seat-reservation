@@ -8,8 +8,11 @@ const initialState: Office = {
   id: 1,
   name: 'C1 Lower',
   officeManagers: [],
-  activeTimes: { start: addHours(startOfToday(), 6), end: subHours(endOfToday(), 5) },
-  bookingLength: 240,
+  activeTimes: {
+    start: addHours(startOfToday(), 6).toISOString(),
+    end: subHours(endOfToday(), 5).toISOString(),
+  },
+  bookingLength: 120,
   createdAt: new Date(),
 };
 

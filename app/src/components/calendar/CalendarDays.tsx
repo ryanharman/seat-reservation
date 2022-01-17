@@ -15,9 +15,8 @@ import {
 } from 'date-fns';
 import React from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../store';
-import { handleDateSelection } from '../../store/reducers/calendar';
-import { getCalendar } from '../../store/selectors/calendar';
+import { useCalendar } from '../../hooks/calendar';
+import { useAppSelector } from '../../store';
 import { getOffice } from '../../store/selectors/office';
 import { Reservation } from '../../types';
 import { TimelineHoursWidth, TimelineItemHeight } from './constants';
@@ -50,7 +49,7 @@ const generateDatesForCurrentWeek = (date: Date, reservations: Reservation[]) =>
 };
 
 const CalendarDaysMonth = () => {
-  const { activeDate, currReservations } = useAppSelector(getCalendar);
+  const { activeDate, currReservations } = useCalendar();
 
   const startOfDatesToRender = startOfMonth(activeDate);
   const endOfDatesToRender = endOfMonth(activeDate);
@@ -129,19 +128,22 @@ const generateContentForTimeline = (date: Date, timesToDisplay: Date[]) => {
 };
 
 const CalendarDaysTimeline = () => {
-  const { bookingLength } = useAppSelector(getOffice);
-  const { activeDate, currActiveTimes } = useAppSelector(getCalendar);
+  const { bookingLength, activeTimes } = useAppSelector(getOffice);
+  const { activeDate } = useCalendar();
 
   const startOfDatesToRender = startOfWeek(activeDate, { weekStartsOn: 1 });
   const startDate = startOfWeek(startOfDatesToRender, { weekStartsOn: 1 });
-  const timesToDisplay = eachMinuteOfInterval(currActiveTimes, { step: bookingLength });
+  const timesToDisplay = eachMinuteOfInterval(
+    { start: new Date(activeTimes.start), end: new Date(activeTimes.end) },
+    { step: bookingLength }
+  );
 
   const allWeeks = generateContentForTimeline(startDate, timesToDisplay);
   return <div>{allWeeks}</div>;
 };
 
 const CalendarDays = () => {
-  const { view } = useAppSelector(getCalendar);
+  const { view } = useCalendar();
 
   return (
     <>
@@ -159,7 +161,7 @@ interface DayGridContainerProps {
 }
 
 const DayGridContainer = ({ children }: DayGridContainerProps) => {
-  const { view } = useAppSelector(getCalendar);
+  const { view } = useCalendar();
 
   return (
     <div className={`${view === 'month' ? 'gap-2' : 'grow'} grid grid-cols-7`}>{children}</div>
@@ -174,8 +176,7 @@ interface TimelineDayContainerProps {
 }
 
 const TimelineDayContainer = ({ currentTime, isToday, children }: TimelineDayContainerProps) => {
-  const dispatch = useAppDispatch();
-  const { selectedDate } = useAppSelector(getCalendar);
+  const { selectedDate, handleDateSelection } = useCalendar();
 
   const isSelected =
     isSameDay(currentTime, selectedDate) && isSameMinute(currentTime, selectedDate);
@@ -186,7 +187,7 @@ const TimelineDayContainer = ({ currentTime, isToday, children }: TimelineDayCon
       className={`${isToday ? 'bg-blue-100 hover:bg-blue-200 ' : ''} ${
         isSelected ? 'bg-blue-200 text-blue-500' : 'hover:bg-gray-100'
       } cursor-pointer transition-all border-b border-gray-300 p-2`}
-      onClick={() => dispatch(handleDateSelection({ date: currentTime }))}
+      onClick={() => handleDateSelection(currentTime)}
     >
       {children}
     </div>
@@ -200,16 +201,14 @@ interface MonthDayContainerProps {
 }
 
 const MonthDayContainer = ({ currentDate, children }: MonthDayContainerProps) => {
-  const dispatch = useAppDispatch();
-  const { activeDate, selectedDate } = useAppSelector(getCalendar);
-
+  const { activeDate, selectedDate, handleDateSelection } = useCalendar();
   return (
     <div
       className={`transition-all ease-linear duration-300 text-right cursor-pointer border-t-2 h-32 py-1 px-2  ${
         isSameMonth(currentDate, activeDate) ? '' : 'text-gray-300'
       } ${isSameDay(currentDate, selectedDate) ? 'bg-blue-100 text-blue-500' : 'hover:bg-gray-100'}
           ${isSameDay(currentDate, new Date()) ? 'border-blue-600' : ''}`}
-      onClick={() => dispatch(handleDateSelection({ date: currentDate }))}
+      onClick={() => handleDateSelection(currentDate)}
     >
       {children}
     </div>

@@ -1,4 +1,4 @@
 export interface OfficeActiveTimes {
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
 }

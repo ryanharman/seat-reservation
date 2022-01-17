@@ -4,15 +4,15 @@ import React from 'react';
 
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
 
-import { useAppDispatch, useAppSelector } from '../../store';
-import { handleDateSelection, setActiveDate, setView } from '../../store/reducers/calendar';
-import { getCalendar } from '../../store/selectors/calendar';
+import { useCalendar } from '../../hooks/calendar';
+import { useAppDispatch } from '../../store';
+import { setView } from '../../store/reducers/calendar';
 
 const { Title } = Typography;
 
 const CalendarHeader = () => {
   const dispatch = useAppDispatch();
-  const { activeDate, view } = useAppSelector(getCalendar);
+  const { activeDate, view, handleActiveDateChange, handleDateSelection } = useCalendar();
 
   const startOfWeekFormatted = format(startOfWeek(activeDate, { weekStartsOn: 1 }), 'MMM do');
   const endOfWeekFormatted = format(endOfWeek(activeDate, { weekStartsOn: 1 }), 'do');
@@ -24,16 +24,16 @@ const CalendarHeader = () => {
           <LeftCircleOutlined
             className="text-2xl hover:text-blue-500 transition"
             onClick={() =>
-              dispatch(
-                setActiveDate(view === 'month' ? subMonths(activeDate, 1) : subWeeks(activeDate, 1))
+              handleActiveDateChange(
+                view === 'month' ? subMonths(activeDate, 1) : subWeeks(activeDate, 1)
               )
             }
           />
           <RightCircleOutlined
             className="text-2xl hover:text-blue-500 transition"
             onClick={() =>
-              dispatch(
-                setActiveDate(view === 'month' ? addMonths(activeDate, 1) : addWeeks(activeDate, 1))
+              handleActiveDateChange(
+                view === 'month' ? addMonths(activeDate, 1) : addWeeks(activeDate, 1)
               )
             }
           />
@@ -44,9 +44,7 @@ const CalendarHeader = () => {
         </Title>
         <div
           className="transition cursor-pointer text-gray-500 hover:text-blue-500"
-          onClick={() => {
-            dispatch(handleDateSelection({ date: new Date() }));
-          }}
+          onClick={() => handleDateSelection(new Date())}
         >
           Today
         </div>
