@@ -1,5 +1,6 @@
 import { Alert, Badge, Button, Col, Divider, Row, Space, Steps, Typography } from 'antd';
-import { format, isSameDay } from 'date-fns';
+import { addMinutes, format, isSameDay } from 'date-fns';
+import isSameMinute from 'date-fns/isSameMinute';
 import React, { useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
@@ -14,6 +15,7 @@ import {
 
 import { useCalendar } from '../../../hooks/calendar';
 import { useAppSelector } from '../../../store';
+import { getOffice } from '../../../store/selectors/office';
 import { getUser } from '../../../store/selectors/user';
 import { Reservation, Seat } from '../../../types';
 
@@ -26,8 +28,10 @@ interface ItemSelectionProps {
 }
 
 interface SelectedItem extends Seat {
-  date: Date;
+  dateBookedFrom: Date;
+  dateBookedTo: Date;
   userId: number;
+  isAllDay: boolean;
 }
 
 const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
@@ -35,20 +39,41 @@ const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
 
   const user = useAppSelector(getUser);
-  const { selectedDate, handleDateSelection } = useCalendar();
+  const office = useAppSelector(getOffice);
+  const { view, selectedDate, handleDateSelection } = useCalendar();
 
-  const selectedItemOnDate = selectedItems.find(
-    (e) => e.userId === user.id && isSameDay(e.date, selectedDate)
-  );
+  const isAllDay = view === 'month';
+
+  // User id must match, if it's not an all day booking then check the start date of the booking
+  // if it's an all day booking check to make sure it's the same day and assigned the isAllDay property
+  const findSelectedItemQuery = (item: SelectedItem) => {
+    return (
+      isSameMinute(item.dateBookedFrom, selectedDate) ||
+      (isSameDay(item.dateBookedFrom, selectedDate) && isAllDay)
+    );
+  };
+  const selectedItemOnDate = selectedItems.find((e) => findSelectedItemQuery(e));
 
   const addItemToSelected = (item: Seat) => {
-    if (selectedItems.find((e) => e.date === selectedDate)) {
+    if (selectedItems.find((e) => findSelectedItemQuery(e))) {
       // remove the item that matches the current date and then add our new one in
-      const selectedItemsFiltered = selectedItems.filter((item) => item.date !== selectedDate);
-      const newItem = { ...item, date: selectedDate, userId: user.id };
+      const selectedItemsFiltered = selectedItems.filter((e) => !findSelectedItemQuery(e));
+      const newItem = {
+        ...item,
+        dateBookedFrom: selectedDate,
+        dateBookedTo: addMinutes(selectedDate, office.bookingLength),
+        userId: user.id,
+        isAllDay,
+      };
       setSelectedItems([...selectedItemsFiltered, newItem]);
     } else {
-      const newItem = { ...item, date: selectedDate, userId: user.id };
+      const newItem = {
+        ...item,
+        dateBookedFrom: selectedDate,
+        dateBookedTo: addMinutes(selectedDate, office.bookingLength),
+        userId: user.id,
+        isAllDay,
+      };
       setSelectedItems([...selectedItems, newItem]);
     }
   };
@@ -58,7 +83,14 @@ const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
     event.stopPropagation();
-    const newItems = selectedItems.filter((e) => !isSameDay(e.date, item.date));
+    const newItems = selectedItems.filter(
+      // TODO: Probably add this into the findSelectedItemQuery and make it a bit clearer
+      (e) =>
+        !(
+          isSameMinute(item.dateBookedFrom, e.dateBookedFrom) ||
+          (isSameDay(item.dateBookedFrom, e.dateBookedFrom) && item.isAllDay)
+        )
+    );
     setSelectedItems(newItems);
   };
 
@@ -74,6 +106,14 @@ const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
 
     // Clear selected items and refresh reservations list from api. Websocket maybe?
   };
+
+  const selectedDateFormatted =
+    view === 'month'
+      ? format(selectedDate, "do 'of' MMMM yyyy")
+      : `${format(selectedDate, "do 'of' MMMM yyyy HH:mm")} - ${format(
+          addMinutes(selectedDate, office.bookingLength),
+          'HH:mm'
+        )}`;
 
   return (
     <Col className="flex flex-col h-full bg-white p-6">
@@ -101,7 +141,7 @@ const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
       </Row>
       <Row justify="space-between">
         <div className="flex items-baseline gap-4">
-          <Title level={4}>{format(selectedDate, "do 'of' MMMM yyyy")}</Title>
+          <Title level={4}>{selectedDateFormatted}</Title>
           {isSameDay(selectedDate, new Date()) && (
             <div style={{ color: 'rgb(107 114 128)', fontSize: '18px' }}>Today</div>
           )}
@@ -172,11 +212,22 @@ const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
                       <Row
                         key={item.id + '_' + idx}
                         className="flex items-center justify-between cursor-pointer transition-all py-2 px-3 hover:bg-slate-100 w-full"
-                        onClick={() => handleDateSelection(item.date)}
+                        onClick={() => handleDateSelection(item.dateBookedFrom)}
                       >
                         <div>
                           <Badge color="orange" />{' '}
-                          {`Seat ${item.id} - ${format(item.date, "do 'of' MMMM yyyy")}`}
+                          {item.isAllDay
+                            ? `Seat ${item.id} - ${format(
+                                item.dateBookedFrom,
+                                "do 'of' MMMM yyyy"
+                              )} - All day`
+                            : `Seat ${item.id} - ${format(
+                                item.dateBookedFrom,
+                                "do 'of' MMMM yyyy HH:mm"
+                              )} - ${format(
+                                addMinutes(item.dateBookedFrom, office.bookingLength),
+                                'HH:mm'
+                              )}`}
                         </div>
                         <div
                           className="flex items-center transition-all p-2 rounded-lg hover:bg-slate-300"

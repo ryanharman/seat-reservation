@@ -17,7 +17,6 @@ export const useCalendar = () => {
     onSelectedDateChange?: (date: Date) => void
   ) => {
     const convertedActiveDate = new Date(activeDate);
-    const convertedSelectedDate = new Date(selectedDate);
 
     // both are helper functions to ensure that when the user passes a
     // callback to update the date on page level (if necessary) that it
@@ -33,6 +32,12 @@ export const useCalendar = () => {
       dispatch(setActiveDate(parsedDate));
     };
 
+    // for the week view we dont need to account for the below logic
+    if (view === 'week') {
+      selectedDateChange(date);
+      return;
+    }
+
     // no need to change the active date as the selected date is not outside
     // of the current month
     if (isSameMonth(date, convertedActiveDate)) {
@@ -42,7 +47,7 @@ export const useCalendar = () => {
 
     // need to change the active date as the selected date is outside
     // of the current month
-    if (isAfter(convertedSelectedDate, convertedActiveDate)) {
+    if (isAfter(date, convertedActiveDate)) {
       activeDateChange(
         view === 'month' ? addMonths(convertedActiveDate, 1) : addWeeks(convertedActiveDate, 1)
       );

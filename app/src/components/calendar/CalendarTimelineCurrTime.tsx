@@ -5,9 +5,9 @@ import {
   getMinutes,
   isSameMinute,
   isSameWeek,
-  isWithinInterval,
-  startOfToday
+  isWithinInterval
 } from 'date-fns';
+import { startOfDay } from 'date-fns/esm';
 import React, { useEffect, useState } from 'react';
 
 import { useCalendar } from '../../hooks/calendar';
@@ -18,8 +18,13 @@ import { TimelineHoursWidth, TimelineItemHeight } from './constants';
 const CalendarTimelineCurrTime = () => {
   const [dateTime, setDateTime] = useState(new Date());
 
-  const { bookingLength } = useAppSelector(getOffice);
-  const { activeDate, view, currActiveTimes } = useCalendar();
+  const { bookingLength, activeTimes } = useAppSelector(getOffice);
+  const { activeDate, view } = useCalendar();
+
+  const currActiveTimes = {
+    start: new Date(activeTimes.start),
+    end: new Date(activeTimes.end),
+  };
 
   useEffect(() => {
     setInterval(() => setDateTime(new Date()), 60000);
@@ -29,11 +34,12 @@ const CalendarTimelineCurrTime = () => {
   if (!isSameWeek(dateTime, activeDate)) return <></>;
   if (!isWithinInterval(activeDate, currActiveTimes)) return <></>;
 
+  const startOfDayActiveTimes = startOfDay(currActiveTimes.start);
   // total containers to remove from the position value
-  const numberOfTimeValuesBefore = isSameMinute(startOfToday(), currActiveTimes.start)
+  const numberOfTimeValuesBefore = isSameMinute(startOfDayActiveTimes, currActiveTimes.start)
     ? 0
     : eachMinuteOfInterval(
-        { start: startOfToday(), end: currActiveTimes.start },
+        { start: startOfDayActiveTimes, end: currActiveTimes.start },
         { step: bookingLength }
       ).length - 1;
 

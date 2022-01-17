@@ -44,6 +44,7 @@ const CalendarHeader = () => {
         </Title>
         <div
           className="transition cursor-pointer text-gray-500 hover:text-blue-500"
+          // TODO: Refine how this works for week
           onClick={() => handleDateSelection(new Date())}
         >
           Today
