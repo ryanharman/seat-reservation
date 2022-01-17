@@ -21,19 +21,14 @@ import { Reservation, Seat } from '../../../types';
 
 const { Title, Text } = Typography;
 const { Step } = Steps;
-interface SelectedItem extends Seat {
-  dateBookedFrom: Date;
-  dateBookedTo: Date;
-  userId: number;
-  isAllDay: boolean;
-}
-// TODO: Possibly break down into separate components for each part
+
+// TODO: Possibly break down into separate components at a later date
 const ItemSelection = () => {
   const [step, setStep] = useState<number>(0);
-  const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
+  const [selectedItems, setSelectedItems] = useState<Reservation[]>([]);
 
   const { id: userId, reservations } = useAppSelector(getUser);
-  const { bookingLength, seats } = useAppSelector(getOffice);
+  const { id: officeId, bookingLength, seats } = useAppSelector(getOffice);
   const { view, selectedDate, handleDateSelection } = useCalendar();
 
   const isAllDay = view === 'month';
@@ -41,11 +36,21 @@ const ItemSelection = () => {
   // User id must match, if it's not an all day booking then check the start date of the booking
   // if it's an all day booking check to make sure it's the same day and assigned the isAllDay property
   // User id check is not necessary for selected items but for reservation checking it is.
-  const findSelectedItemOrReservation = (item: SelectedItem | Reservation) => {
-    const checkForWeekBooking = isSameMinute(item.dateBookedFrom, selectedDate) && !item.isAllDay;
-    const checkForDayBooking = isSameDay(item.dateBookedFrom, selectedDate) && item.isAllDay;
+  const findSelectedItemOrReservation = (item: Reservation) => {
     const checkForUser = item.userId === userId;
-    return (checkForWeekBooking || checkForDayBooking) && checkForUser;
+    // If it's an all day booking we match day only and remove all time
+    // based selections.
+    if (isAllDay) {
+      return isSameDay(item.dateBookedFrom, selectedDate) && checkForUser;
+    }
+
+    const checkForDayBooking = isSameDay(item.dateBookedFrom, selectedDate) && item.isAllDay;
+    if (checkForDayBooking) return checkForUser;
+
+    const checkForTimeBooking = isSameMinute(item.dateBookedFrom, selectedDate) && !item.isAllDay;
+    if (checkForTimeBooking) return checkForUser;
+
+    return false;
   };
 
   // Check for a confirmed booking
@@ -56,38 +61,32 @@ const ItemSelection = () => {
   const selectedItemOnDate = selectedItems.find((e) => findSelectedItemOrReservation(e));
 
   const handleSelectedItemOnClick = (item: Seat) => {
-    console.log('after this');
+    const newSelectedItem: Reservation = {
+      id: -1,
+      bookedItemId: item.id,
+      cancelled: false,
+      dateBookedFrom: selectedDate,
+      dateBookedTo: addMinutes(selectedDate, bookingLength),
+      officeId,
+      userId,
+      isAllDay,
+    };
+
     if (selectedItems.find((e) => findSelectedItemOrReservation(e))) {
-      // remove the item that matches the current date and then add our new one in
       const selectedItemsFiltered = selectedItems.filter((e) => !findSelectedItemOrReservation(e));
-      console.log({ selectedItemsFiltered });
-      const newItem = {
-        ...item,
-        dateBookedFrom: selectedDate,
-        dateBookedTo: addMinutes(selectedDate, bookingLength),
-        userId: userId,
-        isAllDay,
-      };
-      setSelectedItems([...selectedItemsFiltered, newItem]);
+      setSelectedItems([...selectedItemsFiltered, newSelectedItem]);
     } else {
-      const newItem = {
-        ...item,
-        dateBookedFrom: selectedDate,
-        dateBookedTo: addMinutes(selectedDate, bookingLength),
-        userId: userId,
-        isAllDay,
-      };
-      setSelectedItems([...selectedItems, newItem]);
+      setSelectedItems([...selectedItems, newSelectedItem]);
     }
   };
 
   const removeItemFromSelected = (
-    item: SelectedItem,
+    item: Reservation,
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
     event.stopPropagation();
     const newItems = selectedItems.filter(
-      // TODO: Probably add this into the findSelectedItemQuery and make it a bit clearer
+      // TODO: Probably add this into the findSelectedItemQuery and make it a bit clearer?
       (e) =>
         !(
           isSameMinute(item.dateBookedFrom, e.dateBookedFrom) ||
@@ -221,12 +220,13 @@ const ItemSelection = () => {
                       >
                         <div>
                           <Badge color="orange" />{' '}
+                          {/* TODO: Tidy this mess up if it's even possible */}
                           {item.isAllDay
-                            ? `Seat ${item.id} - ${format(
+                            ? `Seat ${item.bookedItemId} - ${format(
                                 item.dateBookedFrom,
                                 "do 'of' MMMM yyyy"
                               )} - All day`
-                            : `Seat ${item.id} - ${format(
+                            : `Seat ${item.bookedItemId} - ${format(
                                 item.dateBookedFrom,
                                 "do 'of' MMMM yyyy HH:mm"
                               )} - ${format(

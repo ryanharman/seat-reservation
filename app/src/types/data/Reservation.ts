@@ -6,7 +6,7 @@ export type Reservation = {
   dateBookedFrom: Date;
   dateBookedTo: Date;
   cancelled: Boolean;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date;
   isAllDay: boolean;
 };

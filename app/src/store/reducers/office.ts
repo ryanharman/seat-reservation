@@ -6,7 +6,7 @@ import { Office } from '../../types';
 
 const initialState: Office = {
   id: 1,
-  name: 'C1 Lower',
+  name: 'Generic Office Name',
   officeManagers: [],
   // TODO: dates need to be in string values yikes
   seats: [

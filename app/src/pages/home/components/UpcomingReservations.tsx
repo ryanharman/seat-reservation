@@ -29,7 +29,7 @@ const UpcomingReservations = () => {
               className="mb-6 relative"
             >
               <div className="flex items-baseline gap-2">
-                <Title level={5}>C1 Lower</Title>—<Text>Seat {res.bookedItemId}</Text>
+                <Title level={5}>Generic Office Name</Title>—<Text>Seat {res.bookedItemId}</Text>
               </div>
               {res.cancelled && (
                 <div className="absolute top-11 flex gap-2 items-center text-red-600">
