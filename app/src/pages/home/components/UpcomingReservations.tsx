@@ -9,15 +9,14 @@ import {
   RightOutlined
 } from '@ant-design/icons';
 
-import { Reservation } from '../../../types';
+import { useAppSelector } from '../../../store';
+import { getUser } from '../../../store/selectors/user';
 
 const { Title, Text } = Typography;
 
-interface ItemSelectionProps {
-  reservations: Reservation[];
-}
+const UpcomingReservations = () => {
+  const { reservations } = useAppSelector(getUser);
 
-const UpcomingReservations = ({ reservations }: ItemSelectionProps) => {
   return (
     <Row className="overflow-x-auto scroll-p-6 py-2">
       <Space size="large">

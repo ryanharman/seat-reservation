@@ -8,7 +8,7 @@ interface CalendarStore {
   view: CalendarViewEnum;
   selectedDate: string;
   activeDate: string;
-  currReservations: Reservation[];
+  currReservations: Reservation[]; // TODO: Review whether this should be here at all and not in the user or office store?
   currActiveTimes: OfficeActiveTimes;
 }
 

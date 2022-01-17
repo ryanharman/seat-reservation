@@ -8,6 +8,37 @@ const initialState: Office = {
   id: 1,
   name: 'C1 Lower',
   officeManagers: [],
+  // TODO: dates need to be in string values yikes
+  seats: [
+    {
+      id: 1,
+      type: 'Seat',
+      availableForBooking: true,
+      createdAt: new Date(),
+      updatedAt: null,
+    },
+    {
+      id: 2,
+      type: 'Seat',
+      availableForBooking: true,
+      createdAt: new Date(),
+      updatedAt: null,
+    },
+    {
+      id: 3,
+      type: 'Seat',
+      availableForBooking: false,
+      createdAt: new Date(),
+      updatedAt: null,
+    },
+    {
+      id: 4,
+      type: 'Seat',
+      availableForBooking: true,
+      createdAt: new Date(),
+      updatedAt: null,
+    },
+  ],
   activeTimes: {
     start: addHours(startOfToday(), 6).toISOString(),
     end: subHours(endOfToday(), 5).toISOString(),

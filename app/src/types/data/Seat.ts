@@ -1,8 +1,8 @@
-import { Office } from '../';
+// import { Office } from '../';
 
 export interface Seat {
   id: number;
-  office: Office;
+  // office: Office;
   type: string;
   availableForBooking: boolean;
   createdAt: Date;

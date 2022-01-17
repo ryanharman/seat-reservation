@@ -1,21 +1,16 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-import { useAppDispatch } from '../../store';
+import { useAppDispatch, useAppSelector } from '../../store';
 import { setCurrReservations } from '../../store/reducers/calendar';
-import { Reservation } from '../../types';
+import { getUser } from '../../store/selectors/user';
 import CalendarDays from './CalendarDays';
 import CalendarHeader from './CalendarHeader';
 import CalendarTimelineCurrTime from './CalendarTimelineCurrTime';
 import CalendarWeekDays from './CalendarWeekDays';
 
-interface CalendarProps {
-  onSelectedDateChange?: Dispatch<SetStateAction<Date>>;
-  onActiveDateChange?: Dispatch<SetStateAction<Date>>;
-  reservations: Reservation[];
-}
-
-const Calendar = ({ reservations }: CalendarProps) => {
+const Calendar = () => {
   const dispatch = useAppDispatch();
+  const { reservations } = useAppSelector(getUser);
 
   useEffect(() => {
     dispatch(setCurrReservations(reservations));

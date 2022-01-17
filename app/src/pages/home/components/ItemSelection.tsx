@@ -21,48 +21,51 @@ import { Reservation, Seat } from '../../../types';
 
 const { Title, Text } = Typography;
 const { Step } = Steps;
-
-interface ItemSelectionProps {
-  seats: Seat[];
-  userBooking?: Reservation;
-}
-
 interface SelectedItem extends Seat {
   dateBookedFrom: Date;
   dateBookedTo: Date;
   userId: number;
   isAllDay: boolean;
 }
-
-const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
+// TODO: Possibly break down into separate components for each part
+const ItemSelection = () => {
   const [step, setStep] = useState<number>(0);
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
 
-  const user = useAppSelector(getUser);
-  const office = useAppSelector(getOffice);
+  const { id: userId, reservations } = useAppSelector(getUser);
+  const { bookingLength, seats } = useAppSelector(getOffice);
   const { view, selectedDate, handleDateSelection } = useCalendar();
 
   const isAllDay = view === 'month';
 
   // User id must match, if it's not an all day booking then check the start date of the booking
   // if it's an all day booking check to make sure it's the same day and assigned the isAllDay property
-  const findSelectedItemQuery = (item: SelectedItem) => {
-    return (
-      isSameMinute(item.dateBookedFrom, selectedDate) ||
-      (isSameDay(item.dateBookedFrom, selectedDate) && isAllDay)
-    );
+  // User id check is not necessary for selected items but for reservation checking it is.
+  const findSelectedItemOrReservation = (item: SelectedItem | Reservation) => {
+    const checkForWeekBooking = isSameMinute(item.dateBookedFrom, selectedDate) && !item.isAllDay;
+    const checkForDayBooking = isSameDay(item.dateBookedFrom, selectedDate) && item.isAllDay;
+    const checkForUser = item.userId === userId;
+    return (checkForWeekBooking || checkForDayBooking) && checkForUser;
   };
-  const selectedItemOnDate = selectedItems.find((e) => findSelectedItemQuery(e));
 
-  const addItemToSelected = (item: Seat) => {
-    if (selectedItems.find((e) => findSelectedItemQuery(e))) {
+  // Check for a confirmed booking
+  const userHasReservationOnSelectedDate = () => {
+    return !!reservations.find((r) => findSelectedItemOrReservation(r));
+  };
+  // Check for an unconfirmed booking
+  const selectedItemOnDate = selectedItems.find((e) => findSelectedItemOrReservation(e));
+
+  const handleSelectedItemOnClick = (item: Seat) => {
+    console.log('after this');
+    if (selectedItems.find((e) => findSelectedItemOrReservation(e))) {
       // remove the item that matches the current date and then add our new one in
-      const selectedItemsFiltered = selectedItems.filter((e) => !findSelectedItemQuery(e));
+      const selectedItemsFiltered = selectedItems.filter((e) => !findSelectedItemOrReservation(e));
+      console.log({ selectedItemsFiltered });
       const newItem = {
         ...item,
         dateBookedFrom: selectedDate,
-        dateBookedTo: addMinutes(selectedDate, office.bookingLength),
-        userId: user.id,
+        dateBookedTo: addMinutes(selectedDate, bookingLength),
+        userId: userId,
         isAllDay,
       };
       setSelectedItems([...selectedItemsFiltered, newItem]);
@@ -70,8 +73,8 @@ const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
       const newItem = {
         ...item,
         dateBookedFrom: selectedDate,
-        dateBookedTo: addMinutes(selectedDate, office.bookingLength),
-        userId: user.id,
+        dateBookedTo: addMinutes(selectedDate, bookingLength),
+        userId: userId,
         isAllDay,
       };
       setSelectedItems([...selectedItems, newItem]);
@@ -111,7 +114,7 @@ const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
     view === 'month'
       ? format(selectedDate, "do 'of' MMMM yyyy")
       : `${format(selectedDate, "do 'of' MMMM yyyy HH:mm")} - ${format(
-          addMinutes(selectedDate, office.bookingLength),
+          addMinutes(selectedDate, bookingLength),
           'HH:mm'
         )}`;
 
@@ -150,9 +153,9 @@ const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
       </Row>
       <div className="flex flex-col justify-between h-full overflow-y-auto">
         <Row wrap>
-          <CSSTransition in={!!userBooking} timeout={300} classNames="alert">
+          <CSSTransition in={userHasReservationOnSelectedDate()} timeout={300} classNames="alert">
             <>
-              {userBooking && (
+              {userHasReservationOnSelectedDate() && (
                 <div className="py-4 w-full">
                   <Alert
                     message="Booking already confirmed"
@@ -187,11 +190,13 @@ const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
                 key={seat.id}
                 span={12}
                 className={`transition-all py-2 px-3 ${
-                  !!userBooking
+                  userHasReservationOnSelectedDate()
                     ? 'text-gray-400 cursor-not-allowed'
                     : 'hover:bg-slate-100 cursor-pointer'
                 }`}
-                onClick={() => !userBooking && addItemToSelected(seat)}
+                onClick={() =>
+                  !userHasReservationOnSelectedDate() && handleSelectedItemOnClick(seat)
+                }
               >
                 <Badge color="green" /> {`${seat.type} ${seat.id}`}
               </Col>
@@ -225,7 +230,7 @@ const ItemSelection = ({ seats, userBooking }: ItemSelectionProps) => {
                                 item.dateBookedFrom,
                                 "do 'of' MMMM yyyy HH:mm"
                               )} - ${format(
-                                addMinutes(item.dateBookedFrom, office.bookingLength),
+                                addMinutes(item.dateBookedFrom, bookingLength),
                                 'HH:mm'
                               )}`}
                         </div>

@@ -30,7 +30,7 @@ const generateDatesForCurrentWeek = (date: Date, reservations: Reservation[]) =>
   for (let day = 0; day < 7; day++) {
     const reservationsForToday = reservations.filter(
       // eslint-disable-next-line no-loop-func
-      (r) => isSameDay(r.dateBookedFrom, currentDate) && r.allDay
+      (r) => isSameDay(r.dateBookedFrom, currentDate) && r.isAllDay
     );
 
     // TODO: This needs a better key
