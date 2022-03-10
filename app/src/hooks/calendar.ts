@@ -1,35 +1,32 @@
 import { addMonths, addWeeks, isAfter, isSameMonth, subMonths, subWeeks } from 'date-fns';
 
-import { useAppDispatch, useAppSelector } from '../store';
-import { setActiveDate, setCurrActiveTimes, setSelectedDate } from '../store/reducers/calendar';
-import { getCalendar } from '../store/selectors/calendar';
+import { useStore } from '../store';
+import { SelectedDate } from '../store/calendarSlice';
 import { OfficeActiveTimes } from '../types';
 
-// We use this hook rather than the selector so that we can handle type conversion
+// TODO: Consider breaking this down into a reducer and using the useStore hook for data collection
+// on page level
 export const useCalendar = () => {
-  const dispatch = useAppDispatch();
-  const { selectedDate, activeDate, currActiveTimes, currReservations, view } =
-    useAppSelector(getCalendar);
+  const { selectedDate, activeDate, activeTimes, reservations, view, selectedItems } = useStore(
+    (state) => state.calendar
+  );
+  const { setSelectedDate, setActiveDate, setActiveTimes, setSelectedItems, setView } = useStore();
 
   const handleDateSelection = (
-    date: Date,
+    date: SelectedDate,
     onActiveDateChange?: (date: Date) => void,
-    onSelectedDateChange?: (date: Date) => void
+    onSelectedDateChange?: (date: SelectedDate) => void
   ) => {
-    const convertedActiveDate = new Date(activeDate);
-
     // both are helper functions to ensure that when the user passes a
     // callback to update the date on page level (if necessary) that it
     // gets invoked
-    const selectedDateChange = (newSelectedDate: Date) => {
-      const parsedDate = newSelectedDate.toISOString();
+    const selectedDateChange = (newSelectedDate: SelectedDate) => {
       if (onSelectedDateChange) onSelectedDateChange(newSelectedDate);
-      dispatch(setSelectedDate(parsedDate));
+      setSelectedDate(newSelectedDate);
     };
     const activeDateChange = (newActiveDate: Date) => {
-      const parsedDate = newActiveDate.toISOString();
       if (onActiveDateChange) onActiveDateChange(newActiveDate);
-      dispatch(setActiveDate(parsedDate));
+      setActiveDate(newActiveDate);
     };
 
     // for the week view we dont need to account for the below logic
@@ -40,47 +37,44 @@ export const useCalendar = () => {
 
     // no need to change the active date as the selected date is not outside
     // of the current month
-    if (isSameMonth(date, convertedActiveDate)) {
+    if (isSameMonth(date.dateFrom, activeDate)) {
       selectedDateChange(date);
       return;
     }
 
     // need to change the active date as the selected date is outside
     // of the current month
-    if (isAfter(date, convertedActiveDate)) {
-      activeDateChange(
-        view === 'month' ? addMonths(convertedActiveDate, 1) : addWeeks(convertedActiveDate, 1)
-      );
+    if (isAfter(date.dateFrom, activeDate)) {
+      activeDateChange(view === 'month' ? addMonths(activeDate, 1) : addWeeks(activeDate, 1));
       selectedDateChange(date);
     } else {
-      activeDateChange(
-        view === 'month' ? subMonths(convertedActiveDate, 1) : subWeeks(convertedActiveDate, 1)
-      );
+      activeDateChange(view === 'month' ? subMonths(activeDate, 1) : subWeeks(activeDate, 1));
       selectedDateChange(date);
     }
   };
 
   const handleActiveDateChange = (newActiveDate: Date) => {
-    const parsedDate = newActiveDate.toISOString();
-    dispatch(setActiveDate(parsedDate));
+    const parsedDate = newActiveDate;
+    setActiveDate(parsedDate);
   };
 
   const handleOfficeActiveTimes = (activeTimes: OfficeActiveTimes) => {
     const parsedStart = activeTimes.start;
     const parsedEnd = activeTimes.end;
-    dispatch(setCurrActiveTimes({ start: parsedStart, end: parsedEnd }));
+    setActiveTimes({ start: parsedStart, end: parsedEnd });
   };
 
-  // TODO: Convert dates in the reservations to strings and vice versa
-
   return {
-    selectedDate: new Date(selectedDate),
-    activeDate: new Date(activeDate),
-    currActiveTimes: { start: new Date(currActiveTimes.start), end: new Date(currActiveTimes.end) },
-    currReservations,
+    selectedDate,
+    activeDate,
+    currActiveTimes: { start: activeTimes.start, end: activeTimes.end },
+    currReservations: reservations,
     view,
+    setView,
     handleDateSelection,
     handleActiveDateChange,
     handleOfficeActiveTimes,
+    selectedItems,
+    setSelectedItems,
   };
 };

@@ -2,15 +2,14 @@ import { Avatar, Breadcrumb, Card, Col, Divider, Row, Space, Statistic, Typograp
 import React from 'react';
 
 import { Calendar, PageLayout } from '../../components';
-import { useAppSelector } from '../../store';
-import { getUser } from '../../store/selectors/user';
+import { useStore } from '../../store/index';
 import ItemSelection from './components/ItemSelection';
 import UpcomingReservations from './components/UpcomingReservations';
 
 const { Title, Text } = Typography;
 
 const Home = () => {
-  const user = useAppSelector(getUser);
+  const user = useStore((state) => state.user);
 
   return (
     <PageLayout className="flex flex-col gap-6">
@@ -29,7 +28,6 @@ const Home = () => {
                 <Text strong className="text-2xl">
                   Welcome back {user.firstName}
                 </Text>
-                {/* <Text>This is your home page</Text> */}
               </div>
             </div>
             <div className="flex gap-4">

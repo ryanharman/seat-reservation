@@ -50,9 +50,9 @@ const CalendarProvider = ({
   onActiveDateChange,
   reservations,
   activeTimes = {
-    start: addHours(startOfToday(), 6).toISOString(),
+    start: addHours(startOfToday(), 6),
     // start: startOfToday(),
-    end: subHours(endOfToday(), 5).toISOString(),
+    end: subHours(endOfToday(), 5),
   },
   children,
 }: CalendarProviderProps) => {

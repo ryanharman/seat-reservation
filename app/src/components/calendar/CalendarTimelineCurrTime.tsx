@@ -5,20 +5,19 @@ import {
   getMinutes,
   isSameMinute,
   isSameWeek,
-  isWithinInterval
+  isWithinInterval,
+  startOfDay
 } from 'date-fns';
-import { startOfDay } from 'date-fns/esm';
 import React, { useEffect, useState } from 'react';
 
 import { useCalendar } from '../../hooks/calendar';
-import { useAppSelector } from '../../store';
-import { getOffice } from '../../store/selectors/office';
+import { useStore } from '../../store';
 import { TimelineHoursWidth, TimelineItemHeight } from './constants';
 
 const CalendarTimelineCurrTime = () => {
   const [dateTime, setDateTime] = useState(new Date());
 
-  const { bookingLength, activeTimes } = useAppSelector(getOffice);
+  const { bookingLength, activeTimes } = useStore((state) => state.office);
   const { activeDate, view } = useCalendar();
 
   const currActiveTimes = {

@@ -1,6 +1,5 @@
 import { Alert, Badge, Button, Col, Divider, Row, Space, Steps, Typography } from 'antd';
-import { addMinutes, format, isSameDay } from 'date-fns';
-import isSameMinute from 'date-fns/isSameMinute';
+import { format, isSameDay, isSameMinute } from 'date-fns';
 import React, { useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
@@ -14,22 +13,20 @@ import {
 } from '@ant-design/icons';
 
 import { useCalendar } from '../../../hooks/calendar';
-import { useAppSelector } from '../../../store';
-import { getOffice } from '../../../store/selectors/office';
-import { getUser } from '../../../store/selectors/user';
+import { useStore } from '../../../store/index';
 import { Reservation, Seat } from '../../../types';
+import { formatSelectionTimeDate } from '../../../utils/formatSelectionDateTime';
 
 const { Title, Text } = Typography;
 const { Step } = Steps;
 
-// TODO: Possibly break down into separate components at a later date
+// TODO: Break down into separate components at a later date
 const ItemSelection = () => {
   const [step, setStep] = useState<number>(0);
-  const [selectedItems, setSelectedItems] = useState<Reservation[]>([]);
-
-  const { id: userId, reservations } = useAppSelector(getUser);
-  const { id: officeId, bookingLength, seats } = useAppSelector(getOffice);
-  const { view, selectedDate, handleDateSelection } = useCalendar();
+  const { id: userId, reservations } = useStore((state) => state.user);
+  const { id: officeId, bookingLength, seats } = useStore((state) => state.office);
+  const { view, selectedDate, handleDateSelection, selectedItems, setSelectedItems, setView } =
+    useCalendar();
 
   const isAllDay = view === 'month';
 
@@ -41,13 +38,15 @@ const ItemSelection = () => {
     // If it's an all day booking we match day only and remove all time
     // based selections.
     if (isAllDay) {
-      return isSameDay(item.dateBookedFrom, selectedDate) && checkForUser;
+      return isSameDay(item.dateBookedFrom, selectedDate.dateFrom) && checkForUser;
     }
 
-    const checkForDayBooking = isSameDay(item.dateBookedFrom, selectedDate) && item.isAllDay;
+    const checkForDayBooking =
+      isSameDay(item.dateBookedFrom, selectedDate.dateFrom) && item.isAllDay;
     if (checkForDayBooking) return checkForUser;
 
-    const checkForTimeBooking = isSameMinute(item.dateBookedFrom, selectedDate) && !item.isAllDay;
+    const checkForTimeBooking =
+      isSameMinute(item.dateBookedFrom, selectedDate.dateFrom) && !item.isAllDay;
     if (checkForTimeBooking) return checkForUser;
 
     return false;
@@ -55,24 +54,28 @@ const ItemSelection = () => {
 
   // Check for a confirmed booking
   const userHasReservationOnSelectedDate = () => {
-    return !!reservations.find((r) => findSelectedItemOrReservation(r));
+    return !!reservations.find(findSelectedItemOrReservation);
   };
   // Check for an unconfirmed booking
-  const selectedItemOnDate = selectedItems.find((e) => findSelectedItemOrReservation(e));
+  const selectedItemOnDate = selectedItems.find(findSelectedItemOrReservation);
+  // TODO: This needs to account for multiple bookings on one day
+  const reservedItemOnDate = reservations.find((r) =>
+    isSameDay(r.dateBookedFrom, selectedDate.dateFrom)
+  );
 
   const handleSelectedItemOnClick = (item: Seat) => {
     const newSelectedItem: Reservation = {
       id: -1,
       bookedItemId: item.id,
       cancelled: false,
-      dateBookedFrom: selectedDate,
-      dateBookedTo: addMinutes(selectedDate, bookingLength),
+      dateBookedFrom: selectedDate.dateFrom,
+      dateBookedTo: selectedDate.dateTo,
       officeId,
       userId,
       isAllDay,
     };
 
-    if (selectedItems.find((e) => findSelectedItemOrReservation(e))) {
+    if (selectedItems.find(findSelectedItemOrReservation)) {
       const selectedItemsFiltered = selectedItems.filter((e) => !findSelectedItemOrReservation(e));
       setSelectedItems([...selectedItemsFiltered, newSelectedItem]);
     } else {
@@ -102,6 +105,10 @@ const ItemSelection = () => {
     // Step + 1 to confirming
     setStep(step + 1);
     // API call during
+    setTimeout(() => {
+      setStep(step + 2);
+      setSelectedItems([]);
+    }, 5000);
 
     // On response of the API either go next step or set error
     // Toast for error + Steps turn red
@@ -111,9 +118,9 @@ const ItemSelection = () => {
 
   const selectedDateFormatted =
     view === 'month'
-      ? format(selectedDate, "do 'of' MMMM yyyy")
-      : `${format(selectedDate, "do 'of' MMMM yyyy HH:mm")} - ${format(
-          addMinutes(selectedDate, bookingLength),
+      ? format(selectedDate.dateFrom, "do 'of' MMMM yyyy")
+      : `${format(selectedDate.dateFrom, "do 'of' MMMM yyyy HH:mm")} - ${format(
+          selectedDate.dateTo,
           'HH:mm'
         )}`;
 
@@ -141,10 +148,11 @@ const ItemSelection = () => {
           />
         </Steps>
       </Row>
+      {/* TODO: The below code needs to be extracted into individual components to reduce amount being rerendered */}
       <Row justify="space-between">
         <div className="flex items-baseline gap-4">
           <Title level={4}>{selectedDateFormatted}</Title>
-          {isSameDay(selectedDate, new Date()) && (
+          {isSameDay(selectedDate.dateFrom, new Date()) && (
             <div style={{ color: 'rgb(107 114 128)', fontSize: '18px' }}>Today</div>
           )}
         </div>
@@ -157,9 +165,14 @@ const ItemSelection = () => {
               {userHasReservationOnSelectedDate() && (
                 <div className="py-4 w-full">
                   <Alert
-                    message="Booking already confirmed"
-                    // description={`Seat ${userBooking.bookedItemId}`}
-                    description=" "
+                    message="Booking confirmed"
+                    // TODO: Figure out how to handle multiple bookings on one day
+                    description={`${formatSelectionTimeDate(
+                      reservedItemOnDate!,
+                      bookingLength,
+                      true
+                    )}`}
+                    // description=""
                     type="success"
                     showIcon
                     className="w-full"
@@ -216,23 +229,18 @@ const ItemSelection = () => {
                       <Row
                         key={item.id + '_' + idx}
                         className="flex items-center justify-between cursor-pointer transition-all py-2 px-3 hover:bg-slate-100 w-full"
-                        onClick={() => handleDateSelection(item.dateBookedFrom)}
+                        onClick={() => {
+                          handleDateSelection({
+                            dateFrom: item.dateBookedFrom,
+                            dateTo: item.dateBookedTo,
+                          });
+                          if (!item.isAllDay) {
+                            setView('week');
+                          }
+                        }}
                       >
                         <div>
-                          <Badge color="orange" />{' '}
-                          {/* TODO: Tidy this mess up if it's even possible */}
-                          {item.isAllDay
-                            ? `Seat ${item.bookedItemId} - ${format(
-                                item.dateBookedFrom,
-                                "do 'of' MMMM yyyy"
-                              )} - All day`
-                            : `Seat ${item.bookedItemId} - ${format(
-                                item.dateBookedFrom,
-                                "do 'of' MMMM yyyy HH:mm"
-                              )} - ${format(
-                                addMinutes(item.dateBookedFrom, bookingLength),
-                                'HH:mm'
-                              )}`}
+                          <Badge color="orange" /> {formatSelectionTimeDate(item, bookingLength)}
                         </div>
                         <div
                           className="flex items-center transition-all p-2 rounded-lg hover:bg-slate-300"
@@ -247,7 +255,7 @@ const ItemSelection = () => {
               )}
             </div>
             <Button
-              disabled={selectedItems.length === 0}
+              disabled={selectedItems.length === 0 || step > 0}
               size="large"
               type="primary"
               onClick={() => onConfirm()}

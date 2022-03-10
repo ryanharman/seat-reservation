@@ -5,14 +5,13 @@ import React from 'react';
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
 
 import { useCalendar } from '../../hooks/calendar';
-import { useAppDispatch } from '../../store';
-import { setView } from '../../store/reducers/calendar';
+import { useStore } from '../../store';
 
 const { Title } = Typography;
 
 const CalendarHeader = () => {
-  const dispatch = useAppDispatch();
   const { activeDate, view, handleActiveDateChange, handleDateSelection } = useCalendar();
+  const setView = useStore((state) => state.setView);
 
   const startOfWeekFormatted = format(startOfWeek(activeDate, { weekStartsOn: 1 }), 'MMM do');
   const endOfWeekFormatted = format(endOfWeek(activeDate, { weekStartsOn: 1 }), 'do');
@@ -45,12 +44,12 @@ const CalendarHeader = () => {
         <div
           className="transition cursor-pointer text-gray-500 hover:text-blue-500"
           // TODO: Refine how this works for week
-          onClick={() => handleDateSelection(new Date())}
+          onClick={() => handleDateSelection({ dateFrom: new Date(), dateTo: new Date() })}
         >
           Today
         </div>
       </div>
-      <Radio.Group value={view} onChange={(e) => dispatch(setView(e.target.value))}>
+      <Radio.Group value={view} onChange={(e) => setView(e.target.value)}>
         <Radio.Button value="month">Month</Radio.Button>
         <Radio.Button value="week">Week</Radio.Button>
       </Radio.Group>

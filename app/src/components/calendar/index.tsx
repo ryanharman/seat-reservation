@@ -1,20 +1,19 @@
 import React, { useEffect } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../store';
-import { setCurrReservations } from '../../store/reducers/calendar';
-import { getUser } from '../../store/selectors/user';
+import { useStore } from '../../store';
 import CalendarDays from './CalendarDays';
 import CalendarHeader from './CalendarHeader';
 import CalendarTimelineCurrTime from './CalendarTimelineCurrTime';
 import CalendarWeekDays from './CalendarWeekDays';
 
 const Calendar = () => {
-  const dispatch = useAppDispatch();
-  const { reservations } = useAppSelector(getUser);
+  const { reservations } = useStore((state) => state.user);
+  const setReservations = useStore((state) => state.setReservations);
 
+  // TODO: Revisit this. It needs to set user reservations AND calendar reservations
   useEffect(() => {
-    dispatch(setCurrReservations(reservations));
-  }, [reservations, dispatch]);
+    setReservations(reservations);
+  }, [reservations, setReservations]);
 
   return (
     <section className="w-full px-1 bg-white">

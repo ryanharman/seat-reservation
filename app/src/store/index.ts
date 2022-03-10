@@ -1,27 +1,18 @@
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import create, { GetState, SetState } from 'zustand';
 
-import { configureStore } from '@reduxjs/toolkit';
+import { calendarSlice, CalendarSlice } from './calendarSlice';
+import { officeSlice, OfficeSlice } from './officeSlice';
+import { UserSlice, userSlice } from './userSlice';
 
-import calendarReducer from './reducers/calendar';
-import officeReducer from './reducers/office';
-import userReducer from './reducers/user';
+// Typing slices
+// https://github.com/pmndrs/zustand/issues/508#issuecomment-955722581
 
-export const store = configureStore({
-  reducer: {
-    user: userReducer,
-    calendar: calendarReducer,
-    office: officeReducer,
-    // posts: postsReducer,
-    // comments: commentsReducer,
-    // users: usersReducer,
-  },
-});
+export type StoreSlice<T> = (set: SetState<StoreState>, get: GetState<StoreState>) => T;
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch;
+type StoreState = UserSlice & CalendarSlice & OfficeSlice;
 
-// Hooks to be used throughout the app that can infer the types
-export const useAppDispatch = () => useDispatch<AppDispatch>();
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useStore = create<StoreState>((set, get) => ({
+  ...userSlice(set, get),
+  ...calendarSlice(set, get),
+  ...officeSlice(set, get),
+}));
