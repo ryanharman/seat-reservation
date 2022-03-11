@@ -7,17 +7,29 @@ import {
   getMinutes,
   isSameDay,
   isSameMinute,
+  isWithinInterval,
   set,
   startOfWeek
 } from 'date-fns';
 import React from 'react';
 
 import { useCalendar } from '../../hooks/calendar';
-import { useStore } from '../../store';
-import { SelectedDate } from '../../store/calendarSlice';
+import { SelectedDate, useStore } from '../../store';
 import { CalendarViewEnum, Reservation } from '../../types';
 import { DayGridContainer } from './CalendarDayGridContainer';
 import { TimelineHoursWidth, TimelineItemHeight } from './constants';
+
+// TODO: Refator these components so that an API is provided via a hook
+// to allow for content manipulation within the calendar and to allow for selectedDate
+// actions to be done elsewhere, styling to be applied based on information higher up
+// and content within to be changed dynamically higher.
+
+// These components/functions should aim to be as headless as possible for possible
+// reuse elsewhere within the application.
+
+// TODO: Figure out the above 🤡
+// Likely solution is to pass a custom render object to the calendar and a data object.
+// Calendar could expose custom hooks/props to change it and we build upon that.
 
 interface TimelineDayContainerProps {
   currentTime: SelectedDate;
@@ -110,7 +122,9 @@ const generateContentForTimeline = (
               }}
               isToday={isToday}
               selectedDate={selectedDate}
-              handleDateSelection={handleDateSelection}
+              handleDateSelection={
+                /*(_time) => handleDateSelection(currentDate)*/ handleDateSelection
+              } // TODO: This needs updating to prevent weird selection if an all day booking is chosen
               height={`${TimelineItemHeight * timesToDisplay.length}px`}
             >
               Seat {selectedItemsForToday[0].bookedItemId} selected.
@@ -167,24 +181,38 @@ const generateContentForTimeline = (
         return [
           {
             dateFrom: accurateDate,
-            dateTo: addMinutes(accurateDate, bookingLength),
+            dateTo:
+              reservationForCurrentTime?.dateBookedTo ?? addMinutes(accurateDate, bookingLength),
             size: 1,
             bookedItemId: reservationForCurrentTime?.bookedItemId,
           },
         ];
 
-      // Compare last entry against current time
-      const lastEntry = acc[acc.length - 1];
+      // Compare last entry against the current reservation (if it exists)
+      const lastEntry: ItemsToRenderType = acc[acc.length - 1];
       if (
-        // TODO: Fix this query at some point
-        isSameMinute(reservationForCurrentTime?.dateBookedFrom ?? new Date(), lastEntry.dateTo) &&
-        reservationForCurrentTime?.bookedItemId === lastEntry.bookedItemId
+        lastEntry.bookedItemId &&
+        lastEntry.bookedItemId === reservationForCurrentTime?.bookedItemId
+      ) {
+        const newAcc = acc.filter((i) => i.dateFrom !== lastEntry.dateFrom);
+        const updatedLastEntry = {
+          ...lastEntry,
+          dateTo: reservationForCurrentTime.dateBookedTo,
+          size: lastEntry.size + 1,
+        };
+        return [...newAcc, updatedLastEntry];
+      }
+
+      // Check accurateDate against previous item to see if it already exists in the calendar
+      if (
+        lastEntry.bookedItemId &&
+        isWithinInterval(accurateDate, { start: lastEntry.dateFrom, end: lastEntry.dateTo }) &&
+        !isSameMinute(lastEntry.dateTo, accurateDate) // If the accurate date matches the dateTo we don't want it to grow
       ) {
         const newAcc = acc.filter((i) => i.dateFrom !== lastEntry.dateFrom);
         const updatedLastEntry = {
           ...lastEntry,
           size: lastEntry.size + 1,
-          dateTo: addMinutes(lastEntry.dateTo, bookingLength),
         };
         return [...newAcc, updatedLastEntry];
       }
@@ -194,7 +222,8 @@ const generateContentForTimeline = (
         ...acc,
         {
           dateFrom: accurateDate,
-          dateTo: addMinutes(accurateDate, bookingLength),
+          dateTo:
+            reservationForCurrentTime?.dateBookedTo ?? addMinutes(accurateDate, bookingLength),
           size: 1,
           bookedItemId: reservationForCurrentTime?.bookedItemId,
         },

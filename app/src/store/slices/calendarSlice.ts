@@ -1,7 +1,7 @@
 import { endOfToday, startOfToday } from 'date-fns';
 
-import { CalendarViewEnum, OfficeActiveTimes, Reservation } from '../types';
-import { StoreSlice } from './index';
+import { CalendarViewEnum, OfficeActiveTimes, Reservation } from '../../types';
+import { StoreSlice } from '../index';
 
 export interface SelectedDate {
   dateFrom: Date;
@@ -31,7 +31,6 @@ export interface CalendarSlice {
 export const calendarSlice: StoreSlice<CalendarSlice> = (set, get) => ({
   calendar: {
     view: 'month',
-    // TODO: selected date needs to have the start and end time of the selection
     selectedDate: { dateFrom: new Date(), dateTo: new Date() },
     activeDate: new Date(),
     reservations: [],

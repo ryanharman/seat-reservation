@@ -1,7 +1,6 @@
-import { addMonths, addWeeks, isAfter, isSameMonth, subMonths, subWeeks } from 'date-fns';
+import { addMonths, isAfter, isSameMonth, subMonths } from 'date-fns';
 
-import { useStore } from '../store';
-import { SelectedDate } from '../store/calendarSlice';
+import { SelectedDate, useStore } from '../store';
 import { OfficeActiveTimes } from '../types';
 
 // TODO: Consider breaking this down into a reducer and using the useStore hook for data collection
@@ -29,26 +28,18 @@ export const useCalendar = () => {
       setActiveDate(newActiveDate);
     };
 
-    // for the week view we dont need to account for the below logic
-    if (view === 'week') {
-      selectedDateChange(date);
-      return;
-    }
-
     // no need to change the active date as the selected date is not outside
     // of the current month
-    if (isSameMonth(date.dateFrom, activeDate)) {
+    if (isSameMonth(date.dateFrom, activeDate) && view === 'month') {
       selectedDateChange(date);
       return;
     }
 
-    // need to change the active date as the selected date is outside
-    // of the current month
     if (isAfter(date.dateFrom, activeDate)) {
-      activeDateChange(view === 'month' ? addMonths(activeDate, 1) : addWeeks(activeDate, 1));
+      activeDateChange(view === 'month' ? addMonths(activeDate, 1) : date.dateFrom);
       selectedDateChange(date);
     } else {
-      activeDateChange(view === 'month' ? subMonths(activeDate, 1) : subWeeks(activeDate, 1));
+      activeDateChange(view === 'month' ? subMonths(activeDate, 1) : date.dateFrom);
       selectedDateChange(date);
     }
   };

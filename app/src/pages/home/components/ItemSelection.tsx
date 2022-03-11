@@ -24,7 +24,7 @@ const { Step } = Steps;
 const ItemSelection = () => {
   const [step, setStep] = useState<number>(0);
   const { id: userId, reservations } = useStore((state) => state.user);
-  const { id: officeId, bookingLength, seats } = useStore((state) => state.office);
+  const { id: officeId, seats } = useStore((state) => state.office);
   const { view, selectedDate, handleDateSelection, selectedItems, setSelectedItems, setView } =
     useCalendar();
 
@@ -59,7 +59,7 @@ const ItemSelection = () => {
   // Check for an unconfirmed booking
   const selectedItemOnDate = selectedItems.find(findSelectedItemOrReservation);
   // TODO: This needs to account for multiple bookings on one day
-  const reservedItemOnDate = reservations.find((r) =>
+  const reservedItemsOnDate = reservations.filter((r) =>
     isSameDay(r.dateBookedFrom, selectedDate.dateFrom)
   );
 
@@ -101,13 +101,15 @@ const ItemSelection = () => {
 
   // TODO: Finalise submission action
   const onConfirm = () => {
-    console.log({ selectedItems });
     // Step + 1 to confirming
-    setStep(step + 1);
+    setStep(1);
     // API call during
     setTimeout(() => {
-      setStep(step + 2);
+      setStep(2);
       setSelectedItems([]);
+      setTimeout(() => {
+        setStep(0);
+      }, 5000);
     }, 5000);
 
     // On response of the API either go next step or set error
@@ -166,16 +168,12 @@ const ItemSelection = () => {
                 <div className="py-4 w-full">
                   <Alert
                     message="Booking confirmed"
-                    // TODO: Figure out how to handle multiple bookings on one day
-                    description={`${formatSelectionTimeDate(
-                      reservedItemOnDate!,
-                      bookingLength,
-                      true
+                    description={`${reservedItemsOnDate.map(
+                      (i, idx) => (idx > 0 ? '\n' : '') + formatSelectionTimeDate(i, true)
                     )}`}
-                    // description=""
                     type="success"
                     showIcon
-                    className="w-full"
+                    className="w-full whitespace-pre-line"
                   />
                 </div>
               )}
@@ -240,7 +238,7 @@ const ItemSelection = () => {
                         }}
                       >
                         <div>
-                          <Badge color="orange" /> {formatSelectionTimeDate(item, bookingLength)}
+                          <Badge color="orange" /> {formatSelectionTimeDate(item)}
                         </div>
                         <div
                           className="flex items-center transition-all p-2 rounded-lg hover:bg-slate-300"

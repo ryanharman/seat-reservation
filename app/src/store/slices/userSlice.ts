@@ -1,7 +1,7 @@
 import { addDays, addHours, set } from 'date-fns';
 
-import { User } from '../types';
-import { StoreSlice } from './index';
+import { User } from '../../types';
+import { StoreSlice } from '../index';
 
 export interface UserSlice {
   user: User;
@@ -49,7 +49,7 @@ export const userSlice: StoreSlice<UserSlice> = (set, get) => ({
         bookedItemId: 3,
         createdAt: new Date(),
         dateBookedFrom: addHours(testDate, 2),
-        dateBookedTo: addHours(testDate, 4),
+        dateBookedTo: addHours(testDate, 6),
         isAllDay: false,
       },
     ],

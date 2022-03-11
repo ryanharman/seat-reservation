@@ -1,8 +1,13 @@
 import create, { GetState, SetState } from 'zustand';
 
-import { calendarSlice, CalendarSlice } from './calendarSlice';
-import { officeSlice, OfficeSlice } from './officeSlice';
-import { UserSlice, userSlice } from './userSlice';
+import {
+  CalendarSlice,
+  calendarSlice,
+  OfficeSlice,
+  officeSlice,
+  UserSlice,
+  userSlice
+} from './slices';
 
 // Typing slices
 // https://github.com/pmndrs/zustand/issues/508#issuecomment-955722581
@@ -16,3 +21,5 @@ export const useStore = create<StoreState>((set, get) => ({
   ...calendarSlice(set, get),
   ...officeSlice(set, get),
 }));
+
+export * from './slices';

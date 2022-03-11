@@ -5,7 +5,6 @@ import {
   getMinutes,
   isSameMinute,
   isSameWeek,
-  isWithinInterval,
   startOfDay
 } from 'date-fns';
 import React, { useEffect, useState } from 'react';
@@ -30,8 +29,7 @@ const CalendarTimelineCurrTime = () => {
   }, [dateTime]);
 
   if (view === 'month') return <></>;
-  if (!isSameWeek(dateTime, activeDate)) return <></>;
-  if (!isWithinInterval(activeDate, currActiveTimes)) return <></>;
+  if (!isSameWeek(dateTime, activeDate, { weekStartsOn: 1 })) return <></>;
 
   const startOfDayActiveTimes = startOfDay(currActiveTimes.start);
   // total containers to remove from the position value

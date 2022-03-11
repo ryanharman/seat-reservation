@@ -1,7 +1,7 @@
 import { addHours, endOfToday, startOfToday, subHours } from 'date-fns';
 
-import { Office } from '../types';
-import { StoreSlice } from './index';
+import { Office } from '../../types';
+import { StoreSlice } from '../index';
 
 export interface OfficeSlice {
   office: Office;
