@@ -5,7 +5,7 @@ export type User = {
   firstName: string;
   lastName: string;
   role: string;
-  reservations: Reservation[];
+  reservations: Reservation[] | [];
   createdAt: Date | string;
   updatedAt?: Date | string;
 };

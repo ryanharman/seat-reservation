@@ -1,12 +1,12 @@
 import { eachMinuteOfInterval } from 'date-fns';
 
 import { useStore } from '../../store';
-import { CalendarViewEnum } from '../../types';
+import { CalendarView } from '../../types';
 import { TimelineItemHeight } from './constants';
 
 interface DayGridContainerProps {
   children: React.ReactNode;
-  view: CalendarViewEnum;
+  view: CalendarView;
 }
 
 export const DayGridContainer = ({ children, view }: DayGridContainerProps) => {

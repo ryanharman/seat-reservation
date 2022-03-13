@@ -16,7 +16,7 @@ export const officeSlice: StoreSlice<OfficeSlice> = (set, get) => ({
     seats: [
       {
         id: 1,
-        type: 'Seat',
+        type: 'Room',
         availableForBooking: true,
         createdAt: new Date(),
         updatedAt: null,

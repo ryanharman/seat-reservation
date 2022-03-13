@@ -67,6 +67,7 @@ const ItemSelection = () => {
     const newSelectedItem: Reservation = {
       id: -1,
       bookedItemId: item.id,
+      bookedItemType: item.type,
       cancelled: false,
       dateBookedFrom: selectedDate.dateFrom,
       dateBookedTo: selectedDate.dateTo,
@@ -132,7 +133,7 @@ const ItemSelection = () => {
         <Steps size="small" current={step}>
           <Step
             icon={<SearchOutlined style={{ display: 'inline-block', verticalAlign: 'top' }} />}
-            title={step === 0 && 'Select Seats'}
+            title={step === 0 && 'Select Items'}
           />
           <Step
             icon={
@@ -219,7 +220,7 @@ const ItemSelection = () => {
             <div>
               <Title level={5}>Your Selections</Title>
               {selectedItems.length === 0 ? (
-                <Text italic>Selected seats are displayed here</Text>
+                <Text italic>Selected items are displayed here</Text>
               ) : (
                 <>
                   {selectedItems.map((item, idx) => {

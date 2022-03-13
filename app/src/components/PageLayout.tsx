@@ -1,11 +1,12 @@
-import React from 'react';
 import { Layout as AntdLayout, Menu } from 'antd';
+import React from 'react';
+
 import {
-  HomeOutlined,
   DesktopOutlined,
   FileOutlined,
+  HomeOutlined,
   TeamOutlined,
-  UserOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 
 const { Content, Footer, Sider } = AntdLayout;
@@ -32,8 +33,8 @@ const PageLayout = ({ children, footer, className }: LayoutProps) => {
             Your Profile
           </Menu.Item>
           <SubMenu key="sub2" icon={<TeamOutlined />} title="Offices">
-            <Menu.Item key="4">C1 Lower</Menu.Item>
-            <Menu.Item key="5">C1 Upper</Menu.Item>
+            <Menu.Item key="4">Generic Office Name</Menu.Item>
+            <Menu.Item key="5">Generic Office Name</Menu.Item>
           </SubMenu>
           <Menu.Item key="6" icon={<FileOutlined />}>
             Files

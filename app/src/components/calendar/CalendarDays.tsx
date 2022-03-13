@@ -11,7 +11,7 @@ import {
 import React from 'react';
 
 import { useCalendar } from '../../hooks/calendar';
-import { CalendarViewEnum, Reservation } from '../../types';
+import { CalendarView, Reservation } from '../../types';
 import { DayGridContainer } from './CalendarDayGridContainer';
 import { CalendarTimelineDays } from './CalendarTimelineDays';
 
@@ -44,7 +44,7 @@ const MonthDayContainer = ({ currentDate, children }: MonthDayContainerProps) =>
 const generateDatesForCurrentWeek = (
   date: Date,
   reservations: Reservation[],
-  view: CalendarViewEnum,
+  view: CalendarView,
   selectedItems: Reservation[]
 ) => {
   let currentDate = date;
@@ -55,7 +55,7 @@ const generateDatesForCurrentWeek = (
     const reservationOnCurrentDate = reservations.find((r) =>
       isSameDay(r.dateBookedFrom, currDayInLoop)
     );
-    const selectedItemOnToday = selectedItems.find((i) =>
+    const selectedItemOnToday = selectedItems.filter((i) =>
       isSameDay(i.dateBookedFrom, currDayInLoop)
     );
 
@@ -65,12 +65,19 @@ const generateDatesForCurrentWeek = (
           <div>{format(currentDate, 'd')}</div>
           <div className="text-left">
             {reservationOnCurrentDate.isAllDay ? (
-              `Seat ${reservationOnCurrentDate.bookedItemId} reserved.`
+              `${reservationOnCurrentDate.bookedItemType} ${reservationOnCurrentDate.bookedItemId} reserved.`
             ) : (
               <>
-                Seat {reservationOnCurrentDate.bookedItemId} reserved{' '}
+                {reservationOnCurrentDate.bookedItemType} {reservationOnCurrentDate.bookedItemId}{' '}
+                reserved{' '}
                 {selectedItemOnToday ? (
-                  <div>Seat {selectedItemOnToday.bookedItemId} selected</div>
+                  <>
+                    {selectedItemOnToday.map((i) => (
+                      <>
+                        {i.bookedItemType} {i.bookedItemId} selected
+                      </>
+                    ))}
+                  </>
                 ) : null}
               </>
             )}
@@ -82,7 +89,13 @@ const generateDatesForCurrentWeek = (
         <MonthDayContainer key={day} currentDate={currentDate}>
           <div>{format(currentDate, 'd')}</div>
           {selectedItemOnToday ? (
-            <div className="text-left">Seat {selectedItemOnToday.bookedItemId} selected</div>
+            <div className="text-left">
+              {selectedItemOnToday.map((i) => (
+                <>
+                  {i.bookedItemType} {i.bookedItemId} selected
+                </>
+              ))}
+            </div>
           ) : null}
         </MonthDayContainer>
       );

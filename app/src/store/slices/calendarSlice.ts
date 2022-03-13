@@ -1,6 +1,6 @@
 import { endOfToday, startOfToday } from 'date-fns';
 
-import { CalendarViewEnum, OfficeActiveTimes, Reservation } from '../../types';
+import { CalendarView, OfficeActiveTimes, Reservation } from '../../types';
 import { StoreSlice } from '../index';
 
 export interface SelectedDate {
@@ -9,7 +9,7 @@ export interface SelectedDate {
 }
 
 export interface CalendarStore {
-  view: CalendarViewEnum;
+  view: CalendarView;
   selectedDate: SelectedDate;
   activeDate: Date;
   activeTimes: OfficeActiveTimes;
@@ -19,7 +19,7 @@ export interface CalendarStore {
 
 export interface CalendarSlice {
   calendar: CalendarStore;
-  setView: (view: CalendarViewEnum) => void;
+  setView: (view: CalendarView) => void;
   setSelectedDate: (selectedDate: SelectedDate) => void;
   setActiveDate: (date: Date) => void;
   setReservations: (reservations: Reservation[]) => void;

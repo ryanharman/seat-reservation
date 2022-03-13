@@ -1,1 +1,1 @@
-export type CalendarViewEnum = 'month' | 'week' | 'day';
+export type CalendarView = 'month' | 'week' | 'day';

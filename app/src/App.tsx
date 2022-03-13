@@ -1,14 +1,24 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import Home from './pages/home';
+import { routes } from './routes';
+
+function Pages() {
+  // TODO: Pages that aren't public need to be out of render scope when authentication hook returns false
+  // TODO: Create auth hook / context / store
+  return (
+    <Routes>
+      {routes.map((page, idx) => (
+        <Route path={page.route} element={page.element} key={idx} />
+      ))}
+    </Routes>
+  );
+}
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
+      <Pages />
     </BrowserRouter>
   );
 }

@@ -32,9 +32,9 @@ const Home = () => {
             </div>
             <div className="flex gap-4">
               <Statistic title="Active Users" value={112} />
-              <Divider type="vertical" className="h-full" />
+              <Divider type="vertical" style={{ height: '100%' }} />
               <Statistic title="Reservations Made" value={12} />
-              <Divider type="vertical" className="h-full" />
+              <Divider type="vertical" style={{ height: '100%' }} />
               <Statistic title="Reservations Cancelled" value={24} />
             </div>
           </div>

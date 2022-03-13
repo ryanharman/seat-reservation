@@ -15,7 +15,7 @@ import React from 'react';
 
 import { useCalendar } from '../../hooks/calendar';
 import { SelectedDate, useStore } from '../../store';
-import { CalendarViewEnum, Reservation } from '../../types';
+import { CalendarView, Reservation } from '../../types';
 import { DayGridContainer } from './CalendarDayGridContainer';
 import { TimelineHoursWidth, TimelineItemHeight } from './constants';
 
@@ -86,7 +86,7 @@ const generateTimesForTimeline = (date: Date, timesToDisplay: Date[]) => {
 const generateContentForTimeline = (
   date: Date,
   timesToDisplay: Date[],
-  view: CalendarViewEnum,
+  view: CalendarView,
   selectedDate: SelectedDate,
   handleDateSelection: (date: SelectedDate) => void,
   selectedItems: Reservation[],
@@ -96,6 +96,7 @@ const generateContentForTimeline = (
   const week = [];
 
   for (let day = 0; day < 7; day++) {
+    // TODO: If the last per day exceeds {timesToDisplay}'s last value then we need to use that last value
     const currentDate = set(addDays(date, day), {
       hours: getHours(timesToDisplay[0]),
       minutes: getMinutes(timesToDisplay[0]),
@@ -127,7 +128,8 @@ const generateContentForTimeline = (
               } // TODO: This needs updating to prevent weird selection if an all day booking is chosen
               height={`${TimelineItemHeight * timesToDisplay.length}px`}
             >
-              Seat {selectedItemsForToday[0].bookedItemId} selected.
+              {selectedItemsForToday[0].bookedItemType} {selectedItemsForToday[0].bookedItemId}{' '}
+              selected.
             </TimelineDayContainer>
           </div>
         </div>
@@ -163,6 +165,7 @@ const generateContentForTimeline = (
       dateTo: Date;
       size: number;
       bookedItemId?: number;
+      bookedItemType?: string;
     }
 
     // We use this to group reservations (booked and confirmed) together
@@ -185,6 +188,7 @@ const generateContentForTimeline = (
               reservationForCurrentTime?.dateBookedTo ?? addMinutes(accurateDate, bookingLength),
             size: 1,
             bookedItemId: reservationForCurrentTime?.bookedItemId,
+            bookedItemType: reservationForCurrentTime?.bookedItemType,
           },
         ];
 
@@ -226,6 +230,7 @@ const generateContentForTimeline = (
             reservationForCurrentTime?.dateBookedTo ?? addMinutes(accurateDate, bookingLength),
           size: 1,
           bookedItemId: reservationForCurrentTime?.bookedItemId,
+          bookedItemType: reservationForCurrentTime?.bookedItemType,
         },
       ];
     }, [] as ItemsToRenderType[]);
@@ -256,9 +261,15 @@ const generateContentForTimeline = (
                 handleDateSelection={handleDateSelection}
                 height={`${TimelineItemHeight * item.size}px`}
               >
-                {item.bookedItemId ? <div>Seat {item.bookedItemId} reserved.</div> : null}
+                {item.bookedItemId ? (
+                  <div>
+                    {item.bookedItemType} {item.bookedItemId} reserved.
+                  </div>
+                ) : null}
                 {selectedItemOnTime ? (
-                  <div>Seat {selectedItemOnTime.bookedItemId} selected.</div>
+                  <div>
+                    {selectedItemOnTime.bookedItemType} {selectedItemOnTime.bookedItemId} selected.
+                  </div>
                 ) : null}
               </TimelineDayContainer>
             );

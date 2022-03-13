@@ -12,7 +12,7 @@ import {
 } from 'date-fns';
 import React, { createContext, Dispatch, SetStateAction, useState } from 'react';
 
-import { CalendarViewEnum, OfficeActiveTimes, Reservation } from '../../types';
+import { CalendarView, OfficeActiveTimes, Reservation } from '../../types';
 import useContextAndErrorIfNull from '../../utils/useContextAndErrorIfNull';
 
 /*
@@ -23,7 +23,7 @@ import useContextAndErrorIfNull from '../../utils/useContextAndErrorIfNull';
 
 interface CalendarContextInterface {
   view: string;
-  setView: (viewType: CalendarViewEnum) => void;
+  setView: (viewType: CalendarView) => void;
   selectedDate: Date;
   setSelectedDate: Dispatch<SetStateAction<any>>;
   activeDate: Date;
