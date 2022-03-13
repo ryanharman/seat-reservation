@@ -13,7 +13,7 @@ export const officeSlice: StoreSlice<OfficeSlice> = (set, get) => ({
     id: 1,
     name: 'Generic Office Name',
     officeManagers: [],
-    seats: [
+    bookableItems: [
       {
         id: 1,
         type: 'Room',

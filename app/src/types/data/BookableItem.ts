@@ -1,6 +1,6 @@
 // import { Office } from '../';
 
-export interface Seat {
+export interface BookableItem {
   id: number;
   // office: Office;
   type: string;

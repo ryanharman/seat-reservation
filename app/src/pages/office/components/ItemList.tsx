@@ -3,22 +3,22 @@ import React from 'react';
 
 import { RightOutlined, TableOutlined } from '@ant-design/icons';
 
-import { Seat } from '../../../types';
+import { BookableItem } from '../../../types';
 
 const { Title } = Typography;
 
 interface ItemListProps {
-  seats: Seat[];
+  bookableItems: BookableItem[];
 }
 
-export const ItemList = ({ seats }: ItemListProps) => {
+export const ItemList = ({ bookableItems }: ItemListProps) => {
   return (
     <Row>
       <Title level={5} className="flex items-center gap-2">
         <TableOutlined />
         Bookable Items
       </Title>
-      {seats.map((i) => {
+      {bookableItems.map((i) => {
         return (
           <div className="flex items-center justify-between cursor-pointer transition-all py-2 px-3 hover:bg-slate-100 w-full group">
             <Col>

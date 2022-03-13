@@ -12,7 +12,7 @@ const { Title, Text } = Typography;
 const tempOfficeObj: Office = {
   id: 1,
   name: "Ryan's Office",
-  seats: [
+  bookableItems: [
     {
       id: 1,
       type: 'Seat',
@@ -108,7 +108,7 @@ const OfficePage = () => {
             <Divider />
             <Space size="large" direction="vertical" className="w-full">
               <ManagerList managers={tempOfficeObj.officeManagers} />
-              <ItemList seats={tempOfficeObj.seats} />
+              <ItemList bookableItems={tempOfficeObj.bookableItems} />
             </Space>
           </Card>
         </Col>

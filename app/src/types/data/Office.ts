@@ -1,12 +1,12 @@
+import { BookableItem } from './BookableItem';
 import { OfficeActiveTimes } from './OfficeActiveTimes';
-import { Seat } from './Seat';
 import { User } from './User';
 
 export type Office = {
   id: number;
   name: string;
   officeManagers: User[];
-  seats: Seat[];
+  bookableItems: BookableItem[];
   activeTimes: OfficeActiveTimes;
   bookingLength: number;
   createdAt: Date;

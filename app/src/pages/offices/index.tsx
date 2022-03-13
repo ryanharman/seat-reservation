@@ -47,7 +47,7 @@ const tempOffices: Office[] = [
     id: 1,
     name: 'Generic Office Name',
     officeManagers: [],
-    seats: [
+    bookableItems: [
       {
         id: 1,
         type: 'Room',
@@ -88,7 +88,7 @@ const tempOffices: Office[] = [
     id: 2,
     name: "Ryan's Bedroom",
     officeManagers: [],
-    seats: [
+    bookableItems: [
       {
         id: 1,
         type: 'Room',

@@ -14,7 +14,7 @@ import {
 
 import { useCalendar } from '../../../hooks/calendar';
 import { useStore } from '../../../store/index';
-import { Reservation, Seat } from '../../../types';
+import { BookableItem, Reservation } from '../../../types';
 import { formatSelectionTimeDate } from '../../../utils/formatSelectionDateTime';
 
 const { Title, Text } = Typography;
@@ -24,7 +24,7 @@ const { Step } = Steps;
 const ItemSelection = () => {
   const [step, setStep] = useState<number>(0);
   const { id: userId, reservations } = useStore((state) => state.user);
-  const { id: officeId, seats } = useStore((state) => state.office);
+  const { id: officeId, bookableItems } = useStore((state) => state.office);
   const { view, selectedDate, handleDateSelection, selectedItems, setSelectedItems, setView } =
     useCalendar();
 
@@ -63,7 +63,7 @@ const ItemSelection = () => {
     isSameDay(r.dateBookedFrom, selectedDate.dateFrom)
   );
 
-  const handleSelectedItemOnClick = (item: Seat) => {
+  const handleSelectedItemOnClick = (item: BookableItem) => {
     const newSelectedItem: Reservation = {
       id: -1,
       bookedItemId: item.id,
@@ -195,10 +195,10 @@ const ItemSelection = () => {
               )}
             </>
           </CSSTransition>
-          {seats.map((seat: Seat) => {
+          {bookableItems.map((item: BookableItem) => {
             return (
               <Col
-                key={seat.id}
+                key={item.id}
                 span={12}
                 className={`transition-all py-2 px-3 ${
                   userHasReservationOnSelectedDate()
@@ -206,10 +206,10 @@ const ItemSelection = () => {
                     : 'hover:bg-slate-100 cursor-pointer'
                 }`}
                 onClick={() =>
-                  !userHasReservationOnSelectedDate() && handleSelectedItemOnClick(seat)
+                  !userHasReservationOnSelectedDate() && handleSelectedItemOnClick(item)
                 }
               >
-                <Badge color="green" /> {`${seat.type} ${seat.id}`}
+                <Badge color="green" /> {`${item.type} ${item.id}`}
               </Col>
             );
           })}
