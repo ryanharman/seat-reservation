@@ -58,7 +58,6 @@ const ItemSelection = () => {
   };
   // Check for an unconfirmed booking
   const selectedItemOnDate = selectedItems.find(findSelectedItemOrReservation);
-  // TODO: This needs to account for multiple bookings on one day
   const reservedItemsOnDate = reservations.filter((r) =>
     isSameDay(r.dateBookedFrom, selectedDate.dateFrom)
   );

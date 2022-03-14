@@ -8,7 +8,7 @@ export interface UserSlice {
   setUser: (user: User) => void;
 }
 
-const testDate = set(addDays(new Date(), 1), { hours: 10, minutes: 0, seconds: 0 });
+export const testDate = set(addDays(new Date(), 1), { hours: 10, minutes: 0, seconds: 0 });
 
 export const userSlice: StoreSlice<UserSlice> = (set, get) => ({
   user: {

@@ -1,37 +1,25 @@
-import "reflect-metadata";
-import express from "express";
-import { ApolloServer } from "apollo-server-express";
-import { redis } from "./redis";
-import cors from "cors";
-import connectRedis from "connect-redis";
-import session from "express-session";
-import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-import { PrismaClient } from "@prisma/client";
-import { buildSchema } from "type-graphql";
-import { resolvers } from "../prisma/generated/type-graphql";
+import connectRedis from 'connect-redis';
+import cors from 'cors';
+import express from 'express';
+import session from 'express-session';
 
+import { PrismaClient } from '@prisma/client';
+
+import { redis } from './redis';
+
+const app: any = express();
+const RedisStore = connectRedis(session);
 const prisma = new PrismaClient();
 
 const main = async () => {
-  const schema = await buildSchema({
-    resolvers,
-    emitSchemaFile: true,
-  });
-
-  const apolloServer = new ApolloServer({
-    schema,
-    context: ({ req }: any) => ({ prisma, req }), // allows access to the request data and prisma in resolvers
-    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
-  });
-
-  const app: any = express();
-
-  const RedisStore = connectRedis(session);
-
   app.use(
     cors({
       credentials: true,
-      origin: ["http://localhost:3000", "http://localhost:5555", "https://studio.apollographql.com"],
+      origin: [
+        "http://localhost:3000",
+        "http://localhost:5555",
+        "https://studio.apollographql.com",
+      ],
     })
   );
 
@@ -52,11 +40,8 @@ const main = async () => {
     })
   );
 
-  await apolloServer.start();
-  apolloServer.applyMiddleware({ app });
-
   app.listen(4000, () => {
-    console.log(`🚀 Server started on http://localhost:4000${apolloServer.graphqlPath}`);
+    console.log(`🚀 Server started on http://localhost:4000`);
   });
 };
 

@@ -1,36 +1,45 @@
-datasource db {
-  url      = env("DATABASE_URL")
-  provider = "postgresql"
-}
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
 }
 
-generator typegraphql {
-  provider = "typegraphql-prisma"
-  output   = "../prisma/generated/type-graphql"
-}
-
-model User {
-  id              Int               @id @default(autoincrement())
-  email           String            @unique
-  firstName       String?
-  lastName        String?
-  password        String
-  role            Role              @default(USER)
-  createdAt       DateTime?         @default(now())
-  updatedAt       DateTime?         @updatedAt
-  reservations    Reservation[]
-  OfficeManager   OfficeManager[]
-  BuildingManager BuildingManager[]
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
+  VIEWER
   USER
-  OFFICE_MANAGER
-  BUILDING_MANAGER
+  MANAGER
   ADMIN
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  firstName    String?
+  lastName     String?
+  password     String
+  role         Role          @default(USER)
+  createdAt    DateTime?     @default(now())
+  updatedAt    DateTime?     @updatedAt
+  office       Office?       @relation(fields: [officeId], references: [id])
+  officeId     Int?
+  reservations Reservation[]
+}
+
+model Office {
+  id             Int            @id @default(autoincrement())
+  name           String
+  activeTimes    Json
+  bookingLength  Int            @default(60)
+  createdAt      DateTime?      @default(now())
+  updatedAt      DateTime?      @updatedAt
+  bookableItems  BookableItem[]
+  officeManagers User[]
 }
 
 model Reservation {
@@ -39,71 +48,23 @@ model Reservation {
   userId         Int
   bookedItem     BookableItem @relation(fields: [bookedItemId], references: [id])
   bookedItemId   Int
+  bookedItemType String
   dateBookedFrom DateTime
   dateBookedTo   DateTime
-  cancelled      Boolean
+  cancelled      Boolean      @default(false)
+  isAllDay       Boolean      @default(true)
   createdAt      DateTime?    @default(now())
   updatedAt      DateTime?    @updatedAt
 }
 
-model Office {
-  id             Int             @id @default(autoincrement())
-  building       Building        @relation(fields: [buildingId], references: [id])
-  buildingId     Int
-  name           String
-  createdAt      DateTime?       @default(now())
-  updatedAt      DateTime?       @updatedAt
-  bookableItems  BookableItem[]
-  officeManagers OfficeManager[]
-}
-
-model OfficeManager {
-  id        Int       @id @default(autoincrement())
-  office    Office    @relation(fields: [officeId], references: [id])
-  officeId  Int
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-}
-
 model BookableItem {
-  id              Int               @id @default(autoincrement())
-  office          Office            @relation(fields: [officeId], references: [id])
-  officeId        Int
-  type            BookableItemTypes @relation(fields: [typeId], references: [id])
-  typeId          Int
-  name            String
-  officeExclusive Boolean           @default(true)
-  available       Boolean?          @default(true)
-  createdAt       DateTime?         @default(now())
-  updatedAt       DateTime?         @updatedAt
-  reservations    Reservation[]
-}
-
-model BookableItemTypes {
-  id            Int            @id @default(autoincrement())
-  name          String
-  createdAt     DateTime?      @default(now())
-  updatedAt     DateTime?      @updatedAt
-  bookableItems BookableItem[]
-}
-
-model Building {
-  id               Int               @id @default(autoincrement())
-  name             String
-  createdAt        DateTime?         @default(now())
-  updatedAt        DateTime?         @updatedAt
-  offices          Office[]
-  buildingManagers BuildingManager[]
-}
-
-model BuildingManager {
-  id         Int       @id @default(autoincrement())
-  building   Building  @relation(fields: [buildingId], references: [id])
-  buildingId Int
-  user       User      @relation(fields: [userId], references: [id])
-  userId     Int
-  createdAt  DateTime? @default(now())
-  updatedAt  DateTime? @updatedAt
+  id                  Int           @id @default(autoincrement())
+  office              Office        @relation(fields: [officeId], references: [id])
+  officeId            Int
+  type                String        @default("Seat")
+  name                String
+  availableForBooking Boolean?      @default(true)
+  createdAt           DateTime?     @default(now())
+  updatedAt           DateTime?     @updatedAt
+  reservations        Reservation[]
 }

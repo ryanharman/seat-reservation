@@ -82,6 +82,7 @@ const tempOffices: Office[] = [
       end: subHours(endOfToday(), 5),
     },
     bookingLength: 120,
+    reservations: [],
     createdAt: new Date(),
   },
   {
@@ -123,6 +124,7 @@ const tempOffices: Office[] = [
       end: subHours(endOfToday(), 5),
     },
     bookingLength: 120,
+    reservations: [],
     createdAt: new Date(),
   },
 ];

@@ -5,7 +5,7 @@ import { Reservation } from '../types';
 export const formatSelectionTimeDate = (item: Reservation, timeOnly?: boolean) => {
   if (timeOnly) {
     return item.isAllDay
-      ? `${item.bookedItemType} ${item.bookedItemId} - All day`
+      ? `${item.bookedItemType} ${item.bookedItemId} — All day`
       : `${item.bookedItemType} ${item.bookedItemId} - ${format(
           item.dateBookedFrom,
           'HH:mm'
@@ -13,13 +13,13 @@ export const formatSelectionTimeDate = (item: Reservation, timeOnly?: boolean) =
   }
 
   if (item.isAllDay)
-    return `${item.bookedItemType} ${item.bookedItemId} - ${format(
+    return `${item.bookedItemType} ${item.bookedItemId} — ${format(
       item.dateBookedFrom,
-      "do 'of' MMMM yyyy"
+      "do 'of' MMMM"
     )} - All day`;
 
-  return `${item.bookedItemType} ${item.bookedItemId} - ${format(
+  return `${item.bookedItemType} ${item.bookedItemId} — ${format(
     item.dateBookedFrom,
-    "do 'of' MMMM yyyy HH:mm"
+    "do 'of' MMMM - HH:mm"
   )} - ${format(item.dateBookedTo, 'HH:mm')}`;
 };

@@ -1,16 +1,10 @@
 import { Layout as AntdLayout, Menu } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import {
-  DesktopOutlined,
-  FileOutlined,
-  HomeOutlined,
-  TeamOutlined,
-  UserOutlined
-} from '@ant-design/icons';
+import { HomeOutlined, ShopOutlined, UserOutlined } from '@ant-design/icons';
 
 const { Content, Footer, Sider } = AntdLayout;
-const { SubMenu } = Menu;
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -19,25 +13,39 @@ interface LayoutProps {
 }
 
 const PageLayout = ({ children, footer, className }: LayoutProps) => {
+  const { pathname } = useLocation();
+  console.log({ pathname });
+  console.log(pathname.split('/')[1]);
+  // TODO: {useLocation()} to calculate selectedItem after each render.
+  // If user opens the app on offices it currently wont show as being
+  // on the offices page
+  // TODO: Initial param of route needs to determine which item is selected
+  // EG: offices/:id should highlight office
+  const [selectedItem, setSelectedItem] = useState(['1']);
+  const navigate = useNavigate();
+
   return (
     <AntdLayout className="h-screen">
       <Sider className="overflow-y-auto h-screen fixed left-0">
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-          <Menu.Item key="1" icon={<HomeOutlined />}>
+        <Menu
+          theme="dark"
+          selectedKeys={selectedItem}
+          mode="inline"
+          onSelect={(i: any) => setSelectedItem(i.keyPath)}
+        >
+          <Menu.Item key="1" icon={<HomeOutlined />} onClick={() => navigate('/')}>
             Home
           </Menu.Item>
-          <Menu.Item key="2" icon={<DesktopOutlined />}>
-            Reservations
+          <Menu.Item key="2" icon={<UserOutlined />} onClick={() => navigate('/users')}>
+            Users
           </Menu.Item>
-          <Menu.Item key="3" icon={<UserOutlined />}>
-            Your Profile
-          </Menu.Item>
-          <SubMenu key="sub2" icon={<TeamOutlined />} title="Offices">
-            <Menu.Item key="4">Generic Office Name</Menu.Item>
-            <Menu.Item key="5">Generic Office Name</Menu.Item>
-          </SubMenu>
-          <Menu.Item key="6" icon={<FileOutlined />}>
-            Files
+          <Menu.Item
+            key="3"
+            icon={<ShopOutlined />}
+            title="Offices"
+            onClick={() => navigate('/offices')}
+          >
+            Offices
           </Menu.Item>
         </Menu>
       </Sider>

@@ -1,0 +1,100 @@
+datasource db {
+  url      = env("DATABASE_URL")
+  provider = "postgresql"
+}
+
+model User {
+  id              Int               @id @default(autoincrement())
+  email           String            @unique
+  firstName       String?
+  lastName        String?
+  password        String
+  role            Role              @default(USER)
+  createdAt       DateTime?         @default(now())
+  updatedAt       DateTime?         @updatedAt
+  reservations    Reservation[]
+  OfficeManager   OfficeManager[]
+  BuildingManager BuildingManager[]
+}
+
+enum Role {
+  USER
+  OFFICE_MANAGER
+  BUILDING_MANAGER
+  ADMIN
+}
+
+model Reservation {
+  id             Int          @id @default(autoincrement())
+  user           User         @relation(fields: [userId], references: [id])
+  userId         Int
+  bookedItem     BookableItem @relation(fields: [bookedItemId], references: [id])
+  bookedItemId   Int
+  dateBookedFrom DateTime
+  dateBookedTo   DateTime
+  cancelled      Boolean
+  createdAt      DateTime?    @default(now())
+  updatedAt      DateTime?    @updatedAt
+}
+
+model Office {
+  id             Int             @id @default(autoincrement())
+  building       Building        @relation(fields: [buildingId], references: [id])
+  buildingId     Int
+  name           String
+  createdAt      DateTime?       @default(now())
+  updatedAt      DateTime?       @updatedAt
+  bookableItems  BookableItem[]
+  officeManagers OfficeManager[]
+}
+
+model OfficeManager {
+  id        Int       @id @default(autoincrement())
+  office    Office    @relation(fields: [officeId], references: [id])
+  officeId  Int
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model BookableItem {
+  id              Int               @id @default(autoincrement())
+  office          Office            @relation(fields: [officeId], references: [id])
+  officeId        Int
+  type            BookableItemTypes @relation(fields: [typeId], references: [id])
+  typeId          Int
+  name            String
+  officeExclusive Boolean           @default(true)
+  available       Boolean?          @default(true)
+  createdAt       DateTime?         @default(now())
+  updatedAt       DateTime?         @updatedAt
+  reservations    Reservation[]
+}
+
+model BookableItemTypes {
+  id            Int            @id @default(autoincrement())
+  name          String
+  createdAt     DateTime?      @default(now())
+  updatedAt     DateTime?      @updatedAt
+  bookableItems BookableItem[]
+}
+
+model Building {
+  id               Int               @id @default(autoincrement())
+  name             String
+  createdAt        DateTime?         @default(now())
+  updatedAt        DateTime?         @updatedAt
+  offices          Office[]
+  buildingManagers BuildingManager[]
+}
+
+model BuildingManager {
+  id         Int       @id @default(autoincrement())
+  building   Building  @relation(fields: [buildingId], references: [id])
+  buildingId Int
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+}

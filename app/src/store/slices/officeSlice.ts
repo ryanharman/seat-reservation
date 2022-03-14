@@ -48,6 +48,7 @@ export const officeSlice: StoreSlice<OfficeSlice> = (set, get) => ({
       end: subHours(endOfToday(), 5),
     },
     bookingLength: 120,
+    reservations: undefined,
     createdAt: new Date(),
   },
   setOffice: (newOfficeInfo) => set(() => ({ office: newOfficeInfo })),
