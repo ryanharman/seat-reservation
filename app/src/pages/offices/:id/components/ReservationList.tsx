@@ -3,6 +3,7 @@ import React from 'react';
 
 import { CalendarOutlined, RightOutlined } from '@ant-design/icons';
 
+import { IconWrapper } from '../../../../components';
 import { Reservation } from '../../../../types';
 import { formatSelectionTimeDate } from '../../../../utils/formatSelectionDateTime';
 
@@ -34,7 +35,9 @@ export const ReservationList = ({ reservations }: ReservationListProps) => {
                 <Badge color={i.cancelled ? 'red' : 'green'} />
                 {formatSelectionTimeDate(i)}
               </Space>
-              <RightOutlined className="transition-all group-hover:text-blue-500" key="visit" />
+              <IconWrapper>
+                <RightOutlined key="visit" />
+              </IconWrapper>
             </div>
           </List.Item>
         )}

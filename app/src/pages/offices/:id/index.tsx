@@ -108,7 +108,14 @@ export const tempOfficeObj: Office = {
   createdAt: new Date(),
 };
 
+// Temp hook to replicate react query API call
+const useOffice = () => {
+  return { office: tempOfficeObj };
+};
+
 const OfficePage = () => {
+  const { office } = useOffice();
+
   return (
     <OfficePageContainer>
       <Row gutter={24}>
@@ -117,9 +124,9 @@ const OfficePage = () => {
             <Title level={3}>Management</Title>
             <Divider />
             <Space size="large" direction="vertical" className="w-full">
-              <ManagerList managers={tempOfficeObj.officeManagers} />
-              <ItemList bookableItems={tempOfficeObj.bookableItems} />
-              <ReservationList reservations={tempOfficeObj.reservations} />
+              <ManagerList managers={office.officeManagers} />
+              <ItemList bookableItems={office.bookableItems} />
+              <ReservationList reservations={office.reservations} />
             </Space>
           </Card>
         </Col>

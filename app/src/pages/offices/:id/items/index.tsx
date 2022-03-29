@@ -2,11 +2,11 @@ import { Card, Col, Row, Typography } from 'antd';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { LeftOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 import { OfficePageContainer } from '../components/OfficePageContainer';
 
-const { Text } = Typography;
+const { Title } = Typography;
 
 const BookableItems = () => {
   const navigate = useNavigate();
@@ -15,13 +15,14 @@ const BookableItems = () => {
 
   return (
     <OfficePageContainer>
-      <Text
+      <Title
+        level={5}
         onClick={() => navigate(`/offices/${officeId}`)}
-        className="flex items-center gap-2 cursor-pointer group"
+        className="flex items-center gap-2 cursor-pointer group px-6 pt-2"
       >
-        <LeftOutlined className="transition-all group-hover:text-blue-500" />
-        Go back
-      </Text>
+        <ArrowLeftOutlined className="transition-all group-hover:text-blue-500" />
+        Return to Office Information
+      </Title>
       <Row gutter={24}>
         <Col span={12}>
           <Card>

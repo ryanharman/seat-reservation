@@ -18,28 +18,37 @@ enum Role {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique
-  firstName    String?
-  lastName     String?
-  password     String
-  role         Role          @default(USER)
-  createdAt    DateTime?     @default(now())
-  updatedAt    DateTime?     @updatedAt
-  office       Office?       @relation(fields: [officeId], references: [id])
-  officeId     Int?
-  reservations Reservation[]
+  id             Int              @id @default(autoincrement())
+  email          String           @unique
+  firstName      String?
+  lastName       String?
+  password       String
+  role           Role             @default(USER)
+  createdAt      DateTime?        @default(now())
+  updatedAt      DateTime?        @updatedAt
+  reservations   Reservation[]
+  officeManagers OfficeManagers[]
 }
 
 model Office {
-  id             Int            @id @default(autoincrement())
-  name           String
+  id             Int              @id @default(autoincrement())
+  name           String           @unique
   activeTimes    Json
-  bookingLength  Int            @default(60)
-  createdAt      DateTime?      @default(now())
-  updatedAt      DateTime?      @updatedAt
+  bookingLength  Int              @default(60)
+  createdAt      DateTime?        @default(now())
+  updatedAt      DateTime?        @updatedAt
   bookableItems  BookableItem[]
-  officeManagers User[]
+  officeManagers OfficeManagers[]
+}
+
+model OfficeManagers {
+  id        Int       @id @default(autoincrement())
+  office    Office    @relation(fields: [officeId], references: [id])
+  officeId  Int
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Reservation {
