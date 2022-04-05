@@ -3,3 +3,4 @@ export * from './OfficeActiveTimes';
 export * from './Reservation';
 export * from './BookableItem';
 export * from './User';
+export * from './OfficeManager';

@@ -25,6 +25,11 @@ export const ReservationList = ({ reservations }: ReservationListProps) => {
       </Title>
       <List
         itemLayout="horizontal"
+        pagination={{
+          pageSize: 10,
+          size: 'small',
+          hideOnSinglePage: true,
+        }}
         dataSource={reservations}
         split={false}
         size={'small'}

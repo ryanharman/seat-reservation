@@ -1,16 +1,17 @@
 import { Breadcrumb, Card, Divider, Space, Statistic, Typography } from 'antd';
 import { format, minutesToHours } from 'date-fns';
 
-import { tempOfficeObj } from '../';
 import { PageLayout } from '../../../../components';
+import { Office } from '../../../../types';
 
 const { Text } = Typography;
 
 interface OfficePageContainerProps {
+  office?: Office;
   children: React.ReactNode;
 }
 
-export const OfficePageContainer = ({ children }: OfficePageContainerProps) => {
+export const OfficePageContainer = ({ office, children }: OfficePageContainerProps) => {
   return (
     <PageLayout className="flex flex-col gap-6">
       <Breadcrumb className="pb-4">
@@ -21,29 +22,37 @@ export const OfficePageContainer = ({ children }: OfficePageContainerProps) => {
         <Space direction="vertical" className="w-full">
           <div className="flex justify-between">
             <div className="flex flex-col justify-evenly">
-              <Text strong className="text-2xl">
-                {tempOfficeObj.name}
-              </Text>
-              <Text italic>Created on {format(tempOfficeObj.createdAt, 'dd/MM/yyyy')}</Text>
+              {!!office && (
+                <>
+                  <Text strong className="text-2xl">
+                    {office.name}
+                  </Text>
+                  <Text italic>Created on {format(office.createdAt, 'dd/MM/yyyy')}</Text>
+                </>
+              )}
             </div>
             <div className="flex gap-4">
-              <Statistic
-                title="Active Hours"
-                value={`${format(tempOfficeObj.activeTimes.start, 'HH:mm')} - ${format(
-                  tempOfficeObj.activeTimes.end,
-                  'HH:mm'
-                )}`}
-              />
-              <Divider
-                type="vertical"
-                style={{
-                  height: '100%',
-                }}
-              />
-              <Statistic
-                title="Booking Length"
-                value={`${minutesToHours(tempOfficeObj.bookingLength)} hours`} // TODO: Create value check function to display minutes, hours etc
-              />
+              {!!office && (
+                <>
+                  <Statistic
+                    title="Active Hours"
+                    value={`${format(office!.activeTimes.start, 'HH:mm')} - ${format(
+                      office!.activeTimes.end,
+                      'HH:mm'
+                    )}`}
+                  />
+                  <Divider
+                    type="vertical"
+                    style={{
+                      height: '100%',
+                    }}
+                  />
+                  <Statistic
+                    title="Booking Length"
+                    value={`${minutesToHours(office!.bookingLength)} hours`} // TODO: Create value check function to display minutes, hours etc
+                  />
+                </>
+              )}
             </div>
           </div>
         </Space>

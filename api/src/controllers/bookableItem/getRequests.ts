@@ -1,6 +1,6 @@
 import { ControllerFunction } from 'src/types';
 
-import { BookableItem, PrismaClient, Reservation } from '@prisma/client';
+import { BookableItem, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 

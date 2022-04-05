@@ -6,17 +6,19 @@ import {
   CloseOutlined,
   DeleteOutlined,
   EditOutlined,
-  RightOutlined,
-  TableOutlined
+  PlusOutlined,
+  RightOutlined
 } from '@ant-design/icons';
 
+import { useBookableItemDelete } from '../../../../api';
 import { IconWrapper } from '../../../../components';
 import { BookableItem } from '../../../../types';
+import { CreateBookableItemForm } from './CreateItemForm';
 
 const { Title } = Typography;
 
 interface ItemListProps {
-  bookableItems: BookableItem[];
+  bookableItems?: BookableItem[];
 }
 
 export const ItemList = ({ bookableItems }: ItemListProps) => {
@@ -43,11 +45,25 @@ export const ItemList = ({ bookableItems }: ItemListProps) => {
       </Title>
       <List
         itemLayout="horizontal"
-        dataSource={bookableItems}
+        pagination={{
+          pageSize: 10,
+          size: 'small',
+          hideOnSinglePage: true,
+        }}
+        dataSource={bookableItems?.sort((a, b) => (a.type > b.type ? -1 : 1))}
         split={false}
         size={'small'}
         renderItem={(i) => (editMode ? <NotEditableItem item={i} /> : <EditableItem item={i} />)}
+        footer={
+          editMode && (
+            <IconWrapper onClick={() => setAddNewItem(true)}>
+              <PlusOutlined />
+              Add new item
+            </IconWrapper>
+          )
+        }
       />
+      <CreateBookableItemForm closeModal={() => setAddNewItem(false)} visible={addNewItem} />
     </div>
   );
 };
@@ -69,7 +85,7 @@ const EditableItem = ({ item }: ItemProps) => {
         <Space size={'small'}>
           <Badge color={item.availableForBooking ? 'green' : 'red'} />
           <div>
-            {item.type} {item.id}
+            {item.type} {item.label}
           </div>
         </Space>
         <IconWrapper>
@@ -81,16 +97,18 @@ const EditableItem = ({ item }: ItemProps) => {
 };
 
 const NotEditableItem = ({ item }: ItemProps) => {
+  const { mutateAsync } = useBookableItemDelete();
+
   return (
     <List.Item className="transition-all hover:bg-slate-100">
       <div className="flex items-center justify-between w-full">
         <Space size={'small'}>
           <Badge color={item.availableForBooking ? 'green' : 'red'} />
           <div>
-            {item.type} {item.id}
+            {item.type} {item.label}
           </div>
         </Space>
-        <IconWrapper>
+        <IconWrapper onClick={() => mutateAsync(item.id)}>
           <DeleteOutlined />
         </IconWrapper>
       </div>

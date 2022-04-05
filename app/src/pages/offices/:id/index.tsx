@@ -1,7 +1,12 @@
 import { Card, Col, Divider, Row, Space, Typography } from 'antd';
 import { addHours, endOfToday, startOfToday, subHours } from 'date-fns';
 import React from 'react';
+import { useMatch } from 'react-router-dom';
 
+import { useOfficeGet } from '../../../api';
+import { useBookableItemGet } from '../../../api/useBookableItem';
+import { useOfficeManagerGet } from '../../../api/useOfficeManager';
+import { useReservationGet } from '../../../api/useReservation';
 import { testDate } from '../../../store';
 import { Office } from '../../../types';
 import { ItemList } from './components/ItemList';
@@ -18,30 +23,34 @@ export const tempOfficeObj: Office = {
     {
       id: 1,
       type: 'Seat',
+      label: '1',
       availableForBooking: true,
       createdAt: new Date(),
-      updatedAt: null,
+      updatedAt: new Date(),
     },
     {
       id: 2,
       type: 'Room',
+      label: '1',
       availableForBooking: true,
       createdAt: new Date(),
-      updatedAt: null,
+      updatedAt: new Date(),
     },
     {
       id: 3,
       type: 'Seat',
+      label: '3',
       availableForBooking: false,
       createdAt: new Date(),
-      updatedAt: null,
+      updatedAt: new Date(),
     },
     {
       id: 4,
       type: 'Seat',
+      label: '4',
       availableForBooking: true,
       createdAt: new Date(),
-      updatedAt: null,
+      updatedAt: new Date(),
     },
   ],
   officeManagers: [
@@ -109,24 +118,30 @@ export const tempOfficeObj: Office = {
 };
 
 // Temp hook to replicate react query API call
-const useOffice = () => {
+export const useOffice = () => {
   return { office: tempOfficeObj };
 };
 
 const OfficePage = () => {
-  const { office } = useOffice();
+  const match = useMatch('offices/:id');
+  const officeId = match?.pathname.split('/')[2];
+  const { data: office } = useOfficeGet({ id: officeId });
+  const enabled = !!office;
+  const { data: reservations } = useReservationGet({ officeId }, { enabled });
+  const { data: items } = useBookableItemGet({ officeId }, { enabled });
+  const { data: managers } = useOfficeManagerGet({ officeId }, { enabled });
 
   return (
-    <OfficePageContainer>
+    <OfficePageContainer office={office}>
       <Row gutter={24}>
         <Col span={10}>
           <Card>
             <Title level={3}>Management</Title>
             <Divider />
-            <Space size="large" direction="vertical" className="w-full">
-              <ManagerList managers={office.officeManagers} />
-              <ItemList bookableItems={office.bookableItems} />
-              <ReservationList reservations={office.reservations} />
+            <Space size="middle" direction="vertical" className="w-full">
+              <ManagerList managers={managers} />
+              <ItemList bookableItems={items} />
+              <ReservationList reservations={reservations} />
             </Space>
           </Card>
         </Col>

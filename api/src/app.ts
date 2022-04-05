@@ -1,3 +1,4 @@
+var bodyParser = require("body-parser");
 import connectRedis from 'connect-redis';
 import cors from 'cors';
 import express from 'express';
@@ -13,6 +14,8 @@ const RedisStore = connectRedis(session);
 const prisma = new PrismaClient();
 
 const main = async () => {
+  app.use(bodyParser.json());
+
   app.use(
     cors({
       credentials: true,

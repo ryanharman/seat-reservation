@@ -1,15 +1,18 @@
 import { addMonths, isAfter, isSameMonth, subMonths } from 'date-fns';
 
+import { useReservationGet } from '../api';
 import { SelectedDate, useStore } from '../store';
 import { OfficeActiveTimes } from '../types';
 
 // TODO: Consider breaking this down into a reducer and using the useStore hook for data collection
 // on page level
 export const useCalendar = () => {
-  const { selectedDate, activeDate, activeTimes, reservations, view, selectedItems } = useStore(
+  const { selectedDate, activeDate, activeTimes, view, selectedItems } = useStore(
     (state) => state.calendar
   );
   const { setSelectedDate, setActiveDate, setActiveTimes, setSelectedItems, setView } = useStore();
+
+  const { data: reservations = [] } = useReservationGet({ officeId: 1 }); // TODO: Fix officeId
 
   const handleDateSelection = (
     date: SelectedDate,

@@ -14,8 +14,7 @@ interface LayoutProps {
 
 const PageLayout = ({ children, footer, className }: LayoutProps) => {
   const { pathname } = useLocation();
-  console.log({ pathname });
-  console.log(pathname.split('/')[1]);
+
   // TODO: {useLocation()} to calculate selectedItem after each render.
   // If user opens the app on offices it currently wont show as being
   // on the offices page

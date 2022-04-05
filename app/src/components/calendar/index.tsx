@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 
+import { useReservationGet } from '../../api';
 import { useStore } from '../../store';
 import CalendarDays from './CalendarDays';
 import CalendarHeader from './CalendarHeader';
@@ -7,10 +8,10 @@ import CalendarTimelineCurrTime from './CalendarTimelineCurrTime';
 import CalendarWeekDays from './CalendarWeekDays';
 
 const Calendar = () => {
-  const { reservations } = useStore((state) => state.user);
+  const { id: userId } = useStore((state) => state.user);
+  const { data: reservations = [] } = useReservationGet({ userId });
   const setReservations = useStore((state) => state.setReservations);
 
-  // TODO: Revisit this. It needs to set user reservations AND calendar reservations
   useEffect(() => {
     setReservations(reservations);
   }, [reservations, setReservations]);

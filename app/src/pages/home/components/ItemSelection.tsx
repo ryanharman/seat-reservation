@@ -12,6 +12,7 @@ import {
   SearchOutlined
 } from '@ant-design/icons';
 
+import { useBookableItemGet, useOfficeGet, useReservationGet } from '../../../api';
 import { useCalendar } from '../../../hooks/calendar';
 import { useStore } from '../../../store/index';
 import { BookableItem, Reservation } from '../../../types';
@@ -23,8 +24,11 @@ const { Step } = Steps;
 // TODO: Break down into separate components at a later date
 const ItemSelection = () => {
   const [step, setStep] = useState<number>(0);
-  const { id: userId, reservations } = useStore((state) => state.user);
-  const { id: officeId, bookableItems } = useStore((state) => state.office);
+  const { id: userId } = useStore((state) => state.user);
+  const { data: reservations = [] } = useReservationGet({ userId });
+  const { data: office } = useOfficeGet({ id: 1 }); // TODO: Hardcoded -- fix
+  const officeId = office?.id as number;
+  const { data: bookableItems = [] } = useBookableItemGet({ officeId }, { enabled: !!officeId });
   const { view, selectedDate, handleDateSelection, selectedItems, setSelectedItems, setView } =
     useCalendar();
 
