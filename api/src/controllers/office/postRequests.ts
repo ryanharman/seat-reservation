@@ -4,28 +4,31 @@ import { Office, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const updateOffice: ControllerFunction<Office, Office> = async (req, res) => {
-  const office = await prisma.office.update({
-    where: { id: req.body.id },
-    data: req.body,
-  });
+export const updateManyOffices: ControllerFunction<
+  Record<"count", number>,
+  Office | Office[]
+> = async (req, res) => {
+  let office = [];
+
+  if (Array.isArray(req.body)) {
+    for await (const i of req.body) {
+      const response = await prisma.office.update({
+        where: { id: i.id },
+        data: i,
+      });
+      office.push(response);
+    }
+  } else {
+    const response = await prisma.office.update({
+      where: { id: req.body.id },
+      data: req.body,
+    });
+    office.push(response);
+  }
 
   if (!office) {
-    res.send({ response: "Failed to update office" });
+    res.send({ response: "Failed to update bookable item" });
   } else {
-    res.send(office);
-  }
-};
-
-export const updateManyOffices: ControllerFunction<Record<"count", number>, Office[]> = async (
-  req,
-  res
-) => {
-  const updateCount = await prisma.office.updateMany({ data: req.body });
-
-  if (!updateCount) {
-    res.send({ response: "Failed to update offices" });
-  } else {
-    res.send(updateCount);
+    res.send({ count: office.length });
   }
 };

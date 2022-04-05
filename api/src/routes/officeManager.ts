@@ -6,7 +6,7 @@ import {
   getOfficeManager,
   getOfficeManagers,
   getOfficeManagersByOffice,
-  updateOfficeManager
+  updateManyOfficeManagers
 } from '../controllers';
 
 const officeManagerRouter = express.Router();
@@ -15,7 +15,7 @@ officeManagerRouter.get("/office-manager", getOfficeManagers);
 officeManagerRouter.get("/office-manager/by-id", getOfficeManager);
 officeManagerRouter.get("/office-manager/by-office", getOfficeManagersByOffice);
 officeManagerRouter.delete("/office-manager", deleteOfficeManager);
-officeManagerRouter.post("/office-manager", updateOfficeManager);
+officeManagerRouter.post("/office-manager", updateManyOfficeManagers);
 officeManagerRouter.put("/office-manager", createOfficeManager);
 
 export default officeManagerRouter;

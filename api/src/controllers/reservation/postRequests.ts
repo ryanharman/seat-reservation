@@ -4,28 +4,31 @@ import { PrismaClient, Reservation } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const updateReservation: ControllerFunction<Reservation, Reservation> = async (req, res) => {
-  const reservation = await prisma.reservation.update({
-    where: { id: req.body.id },
-    data: req.body,
-  });
-
-  if (!reservation) {
-    res.send({ response: "Failed to update reservation" });
-  } else {
-    res.send(reservation);
-  }
-};
-
 export const updateManyReservations: ControllerFunction<
   Record<"count", number>,
-  Reservation[]
+  Reservation | Reservation[]
 > = async (req, res) => {
-  const updateCount = await prisma.reservation.updateMany({ data: req.body });
+  let reservation = [];
 
-  if (!updateCount) {
-    res.send({ response: "Failed to update reservations" });
+  if (Array.isArray(req.body)) {
+    for await (const i of req.body) {
+      const response = await prisma.reservation.update({
+        where: { id: i.id },
+        data: i,
+      });
+      reservation.push(response);
+    }
   } else {
-    res.send(updateCount);
+    const response = await prisma.reservation.update({
+      where: { id: req.body.id },
+      data: req.body,
+    });
+    reservation.push(response);
+  }
+
+  if (!reservation) {
+    res.send({ response: "Failed to update bookable item" });
+  } else {
+    res.send({ count: reservation.length });
   }
 };
