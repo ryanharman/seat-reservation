@@ -72,11 +72,6 @@ export const CreateBookableItemForm = ({ visible, closeModal }: CreateBookableIt
         >
           <Checkbox></Checkbox>
         </Form.Item>
-        {/* <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item> */}
       </Form>
     </Modal>
   );

@@ -4,8 +4,6 @@ import { useReservationGet } from '../api';
 import { SelectedDate, useStore } from '../store';
 import { OfficeActiveTimes } from '../types';
 
-// TODO: Consider breaking this down into a reducer and using the useStore hook for data collection
-// on page level
 export const useCalendar = () => {
   const { selectedDate, activeDate, activeTimes, view, selectedItems } = useStore(
     (state) => state.calendar
@@ -48,14 +46,11 @@ export const useCalendar = () => {
   };
 
   const handleActiveDateChange = (newActiveDate: Date) => {
-    const parsedDate = newActiveDate;
-    setActiveDate(parsedDate);
+    setActiveDate(newActiveDate);
   };
 
   const handleOfficeActiveTimes = (activeTimes: OfficeActiveTimes) => {
-    const parsedStart = activeTimes.start;
-    const parsedEnd = activeTimes.end;
-    setActiveTimes({ start: parsedStart, end: parsedEnd });
+    setActiveTimes(activeTimes);
   };
 
   return {

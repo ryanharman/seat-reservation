@@ -1,9 +1,9 @@
 export type Reservation = {
-  id: number;
+  id?: number;
   userId: number;
   bookedItemId: number;
   bookedItemType: string;
-  officeId: number;
+  // officeId: number;
   dateBookedFrom: Date;
   dateBookedTo: Date;
   cancelled: Boolean;

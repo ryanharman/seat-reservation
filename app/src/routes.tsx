@@ -1,4 +1,12 @@
-import { BookableItem, Home, OfficePage, OfficesPage, UserPage, UsersPage } from './pages';
+import {
+  BookableItem,
+  Home,
+  OfficePage,
+  OfficeReservation,
+  OfficesPage,
+  UserPage,
+  UsersPage
+} from './pages';
 
 export const routes = [
   {
@@ -19,6 +27,11 @@ export const routes = [
   {
     route: '/offices/:id/bookable-item/:id',
     element: <BookableItem />,
+    public: false,
+  },
+  {
+    route: '/offices/:id/reservation/:id',
+    element: <OfficeReservation />,
     public: false,
   },
   {

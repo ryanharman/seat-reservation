@@ -13,6 +13,7 @@ import {
 } from 'date-fns';
 import React from 'react';
 
+import { useReservationGet } from '../../api';
 import { useCalendar } from '../../hooks/calendar';
 import { SelectedDate, useStore } from '../../store';
 import { CalendarView, Reservation } from '../../types';
@@ -291,7 +292,8 @@ const generateContentForTimeline = (
 
 export const CalendarTimelineDays = () => {
   const { bookingLength, activeTimes } = useStore((state) => state.office);
-  const { reservations } = useStore((state) => state.user);
+  const { id: userId } = useStore((state) => state.user);
+  const { data: reservations = [] } = useReservationGet({ userId });
   const { activeDate, view, selectedDate, handleDateSelection, selectedItems } = useCalendar();
 
   const startOfDatesToRender = startOfWeek(activeDate, { weekStartsOn: 1 });

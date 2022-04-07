@@ -7,6 +7,7 @@ import {
 } from 'react-query';
 
 import { axiosQuery } from './axios';
+import { createQueryKey } from './createQueryKey';
 
 type ObjectOrArray = Record<string, unknown> | Record<string, unknown>[];
 
@@ -19,7 +20,7 @@ export type MutationOptions<ResT = any, ErrT = any, Body = ObjectOrArray> = Omit
   'mutationFn'
 >;
 
-interface Key {
+export interface Key {
   URL_KEY: string;
   subRoute?: string;
 }
@@ -29,11 +30,10 @@ export const useGet = <Response, Error>(
   params?: Record<string, unknown>,
   options?: QueryOptions<any, any>
 ) => {
-  const { URL_KEY, subRoute } = key;
-  const QUERY_KEY = subRoute ? [URL_KEY, subRoute] : [URL_KEY];
+  const { URL, QUERY_KEY } = createQueryKey(key, params);
 
   return useQuery<Response, Error>(QUERY_KEY, {
-    queryFn: () => axiosQuery('get', QUERY_KEY.join(''), params),
+    queryFn: () => axiosQuery('get', URL.join(''), params),
     select: options?.select ? options?.select : (data: any) => data.data,
     ...options,
   });
@@ -44,12 +44,12 @@ export const usePost = <Response, Error>(
   params?: Record<string, unknown>,
   options?: MutationOptions<Response, Error>
 ) => {
-  const { URL_KEY, subRoute } = key;
-  const QUERY_KEY = subRoute ? [URL_KEY, subRoute] : [URL_KEY];
+  const { URL_KEY } = key;
+  const { URL, QUERY_KEY } = createQueryKey(key, params);
   const queryClient = useQueryClient();
 
   const mutation = useMutation(QUERY_KEY, {
-    mutationFn: (data) => axiosQuery('post', QUERY_KEY.join(''), params, data),
+    mutationFn: (data) => axiosQuery('post', URL.join(''), params, data),
     onSuccess: () => queryClient.invalidateQueries(URL_KEY),
     ...options,
   });
@@ -65,12 +65,12 @@ export const usePut = <Response, Error>(
   params?: Record<string, unknown>,
   options?: MutationOptions<Response, Error>
 ) => {
-  const { URL_KEY, subRoute } = key;
-  const QUERY_KEY = subRoute ? [URL_KEY, subRoute] : [URL_KEY];
+  const { URL_KEY } = key;
+  const { URL, QUERY_KEY } = createQueryKey(key, params);
   const queryClient = useQueryClient();
 
   const mutation = useMutation(QUERY_KEY, {
-    mutationFn: (data) => axiosQuery('put', QUERY_KEY.join(''), params, data),
+    mutationFn: (data) => axiosQuery('put', URL.join(''), params, data),
     onSuccess: () => queryClient.invalidateQueries(URL_KEY),
     ...options,
   });
@@ -86,12 +86,12 @@ export const useDelete = <Response, Error>(
   params?: Record<string, unknown>,
   options?: MutationOptions<Response, Error, string | number>
 ) => {
-  const { URL_KEY, subRoute } = key;
-  const QUERY_KEY = subRoute ? [URL_KEY, subRoute] : [URL_KEY];
+  const { URL_KEY } = key;
+  const { URL, QUERY_KEY } = createQueryKey(key, params);
   const queryClient = useQueryClient();
 
   const mutation = useMutation(QUERY_KEY, {
-    mutationFn: (id) => axiosQuery('delete', QUERY_KEY.join(''), { ...params, id }),
+    mutationFn: (id) => axiosQuery('delete', URL.join(''), { ...params, id }),
     onSuccess: () => queryClient.invalidateQueries(URL_KEY),
     ...options,
   });
@@ -100,4 +100,19 @@ export const useDelete = <Response, Error>(
     ...mutation,
     mutateAsync: <T extends string | number>(id: T) => mutation.mutateAsync(id),
   };
+};
+
+export const useGetPost = <Response, Error>(
+  key: Key,
+  params?: Record<string, unknown>,
+  options?: QueryOptions<any, any>,
+  data?: any
+) => {
+  const { URL, QUERY_KEY } = createQueryKey(key, { params, data });
+
+  return useQuery<Response, Error>(QUERY_KEY, {
+    queryFn: () => axiosQuery('post', URL.join(''), params, data),
+    select: options?.select ? options?.select : (data: any) => data.data,
+    ...options,
+  });
 };

@@ -15,7 +15,7 @@ import { IconWrapper } from '../../../../components';
 import { OfficeManager } from '../../../../types';
 import { CreateManagerForm } from './CreateManagerForm';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 interface ManagerListProps {
   managers?: OfficeManager[];
@@ -24,6 +24,8 @@ interface ManagerListProps {
 export const ManagerList = ({ managers }: ManagerListProps) => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [addNewManager, setAddNewManager] = useState<boolean>(false);
+
+  if (!managers || managers.length === 0) return <Text>No managers found for this office...</Text>;
 
   return (
     <div>

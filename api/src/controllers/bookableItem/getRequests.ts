@@ -1,3 +1,4 @@
+import { addDays, endOfDay, endOfToday, startOfDay, startOfToday, subDays } from 'date-fns';
 import { ControllerFunction } from 'src/types';
 
 import { BookableItem, PrismaClient } from '@prisma/client';
@@ -57,6 +58,65 @@ export const getBookableItemsByOfficeAndType: ControllerFunction<BookableItem[]>
 
   if (!bookableItems) {
     res.send({ response: "No bookable items found for the specified office and type" });
+  } else {
+    res.send(bookableItems);
+  }
+};
+
+export interface SelectedDate {
+  dateFrom: Date;
+  dateTo: Date;
+}
+
+interface GetAvailableBookableItemsBody {
+  // selectedDate: SelectedDate;
+  dateFrom: string;
+  dateTo: string;
+  officeId: string | number;
+}
+
+export const getAvailableBookableItems: ControllerFunction<
+  BookableItem[],
+  GetAvailableBookableItemsBody
+> = async (req, res) => {
+  const officeId = Number(req.body.officeId);
+  const dateFrom = req.body.dateFrom as string;
+  const dateTo = req.body.dateTo as string;
+
+  const bookableItems = await prisma.bookableItem.findMany({
+    where: {
+      officeId,
+      availableForBooking: true,
+      reservations: {
+        every: {
+          cancelled: false,
+          NOT: {
+            dateBookedFrom: {
+              gte: startOfDay(new Date(dateFrom)).toISOString(),
+              lt: endOfDay(new Date(dateTo)).toISOString(),
+            },
+            // OR: [
+            //   {
+            //     isAllDay: false,
+            //     dateBookedFrom: { gte: new Date(dateFrom).toISOString() },
+            //     dateBookedTo: { lt: new Date(dateTo).toISOString() },
+            //   },
+            //   {
+            //     isAllDay: true,
+            //     dateBookedFrom: {
+            //       gte: startOfDay(new Date(dateFrom)).toISOString(),
+            //       lt: endOfDay(new Date(dateTo)).toISOString(),
+            //     },
+            //   },
+            // ],
+          },
+        },
+      },
+    },
+  });
+
+  if (!bookableItems) {
+    res.send({ response: "No bookable items found" });
   } else {
     res.send(bookableItems);
   }

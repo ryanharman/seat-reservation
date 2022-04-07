@@ -20,10 +20,14 @@ export const useReservationGet = <T extends UrlParams>(
 ) => {
   const subRoute = createRoute(params, urls);
 
-  return useGet<Reservation[], any>({ URL_KEY, subRoute }, params, {
-    ...options,
-    select: (data) => convertReservationDates(data.data),
-  });
+  return useGet<keyof SingleUrlParameterOnly<T> extends 'id' ? Reservation : Reservation[], any>(
+    { URL_KEY, subRoute },
+    params,
+    {
+      ...options,
+      select: (data) => convertReservationDates(data.data),
+    }
+  );
 };
 
 export const useReservationPost = () => {

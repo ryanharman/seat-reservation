@@ -15,7 +15,7 @@ import { IconWrapper } from '../../../../components';
 import { BookableItem } from '../../../../types';
 import { CreateBookableItemForm } from './CreateItemForm';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 interface ItemListProps {
   bookableItems?: BookableItem[];
@@ -24,6 +24,9 @@ interface ItemListProps {
 export const ItemList = ({ bookableItems }: ItemListProps) => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [addNewItem, setAddNewItem] = useState<boolean>(false);
+
+  if (!bookableItems || bookableItems.length === 0)
+    return <Text>No bookable items found for this office...</Text>;
 
   return (
     <div>

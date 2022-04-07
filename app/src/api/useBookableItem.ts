@@ -6,6 +6,7 @@ import {
   QueryOptions,
   useDelete,
   useGet,
+  useGetPost,
   usePost,
   usePut
 } from './helpers';
@@ -36,6 +37,31 @@ export const useBookableItemGet = <T extends UrlParams>(
       ...options,
       select: (data) => convertResponseDates(data.data),
     }
+  );
+};
+
+interface AvailableItemsData {
+  dateFrom: Date;
+  dateTo: Date;
+  officeId: number;
+  isAllDay: 'true' | 'false';
+}
+
+export const useAvailableBookableItemsGet = <T extends UrlParams>(
+  options?: QueryOptions,
+  data?: AvailableItemsData
+) => {
+  return useGetPost<
+    keyof SingleUrlParameterOnly<T> extends 'id' ? BookableItem : BookableItem[],
+    any
+  >(
+    { URL_KEY, subRoute: '/available' },
+    undefined,
+    {
+      ...options,
+      select: (data) => convertResponseDates(data.data),
+    },
+    data
   );
 };
 
