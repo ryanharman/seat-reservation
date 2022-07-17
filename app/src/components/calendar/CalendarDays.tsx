@@ -131,6 +131,8 @@ const CalendarDaysMonth = () => {
 const CalendarDays = () => {
   const { view } = useCalendar();
 
+  console.log('hit');
+
   return (
     <>
       {view === 'week' && <CalendarTimelineDays />}

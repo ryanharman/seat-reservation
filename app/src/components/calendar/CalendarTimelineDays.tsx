@@ -11,7 +11,7 @@ import {
   set,
   startOfWeek
 } from 'date-fns';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useReservationGet } from '../../api';
 import { useCalendar } from '../../hooks/calendar';
@@ -39,6 +39,14 @@ interface TimelineDayContainerProps {
   handleDateSelection: (date: SelectedDate) => void;
   height: string;
   children?: React.ReactNode;
+}
+
+interface ItemsToRenderType {
+  dateFrom: Date;
+  dateTo: Date;
+  size: number;
+  bookedItemId?: number;
+  bookedItemType?: string;
 }
 
 const TimelineDayContainer = ({
@@ -159,14 +167,6 @@ const generateContentForTimeline = (
         </div>
       );
       continue;
-    }
-
-    interface ItemsToRenderType {
-      dateFrom: Date;
-      dateTo: Date;
-      size: number;
-      bookedItemId?: number;
-      bookedItemType?: string;
     }
 
     // We use this to group reservations (booked and confirmed) together
@@ -296,12 +296,24 @@ export const CalendarTimelineDays = () => {
   const { data: reservations = [] } = useReservationGet({ userId });
   const { activeDate, view, selectedDate, handleDateSelection, selectedItems } = useCalendar();
 
-  const startOfDatesToRender = startOfWeek(activeDate, { weekStartsOn: 1 });
-  const startDate = startOfWeek(startOfDatesToRender, { weekStartsOn: 1 });
-  const timesToDisplay = eachMinuteOfInterval(
-    { start: activeTimes.start, end: activeTimes.end },
-    { step: bookingLength }
+  const startOfDatesToRender = useMemo(
+    () => startOfWeek(activeDate, { weekStartsOn: 1 }),
+    [activeDate]
   );
+  const startDate = useMemo(
+    () => startOfWeek(startOfDatesToRender, { weekStartsOn: 1 }),
+    [startOfDatesToRender]
+  );
+  const timesToDisplay = useMemo(
+    () =>
+      eachMinuteOfInterval(
+        { start: activeTimes.start, end: activeTimes.end },
+        { step: bookingLength }
+      ),
+    [activeTimes, bookingLength]
+  );
+
+  console.log('hit in timeline days');
 
   const allWeeks = generateContentForTimeline(
     startDate,
@@ -313,5 +325,6 @@ export const CalendarTimelineDays = () => {
     reservations,
     bookingLength
   );
+
   return <div>{allWeeks}</div>;
 };

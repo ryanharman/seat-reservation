@@ -20,6 +20,7 @@ import useContextAndErrorIfNull from '../../utils/useContextAndErrorIfNull';
  * if I ever make any. Redux is pretty good but I like storing
  * functions and non serialized data in a context it turns out
  */
+// Later comment from this: Zustand is even better
 
 interface CalendarContextInterface {
   view: string;

@@ -1,5 +1,5 @@
 import { addDays, format, startOfWeek } from 'date-fns';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useCalendar } from '../../hooks/calendar';
 import { TimelineHoursWidth } from './constants';
@@ -7,7 +7,7 @@ import { TimelineHoursWidth } from './constants';
 const CalendarWeekDays = () => {
   const { activeDate, view } = useCalendar();
 
-  const weekStartDate = startOfWeek(activeDate, { weekStartsOn: 1 });
+  const weekStartDate = useMemo(() => startOfWeek(activeDate, { weekStartsOn: 1 }), [activeDate]);
   const weekDays = [];
 
   for (let day = 0; day < 7; day++) {

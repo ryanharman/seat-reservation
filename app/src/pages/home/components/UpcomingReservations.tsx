@@ -1,5 +1,5 @@
 import { Card, Divider, Row, Skeleton, Space, Typography } from 'antd';
-import { format } from 'date-fns';
+import { format, isAfter } from 'date-fns';
 import React from 'react';
 
 import { ExclamationCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
@@ -11,11 +11,15 @@ const { Title, Text } = Typography;
 const UpcomingReservations = () => {
   const { data: reservations, isFetching } = useReservationGet({ userId: 1 }); // TODO: Hardcoded -- fix
 
+  const upcomingReservationsOnly = reservations?.filter(
+    (reservation) => isAfter(reservation.dateBookedFrom, new Date()) && !reservation.cancelled
+  );
+
   return (
     <Skeleton loading={isFetching} className="min-h-[250px] py-2">
       <Row className="overflow-x-auto scroll-p-6 py-2">
         <Space size="large">
-          {reservations?.map((res) => {
+          {upcomingReservationsOnly?.map((res) => {
             return (
               <Card
                 key={res.id}

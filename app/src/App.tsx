@@ -23,7 +23,7 @@ function App() {
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={true} />
+        <ReactQueryDevtools initialIsOpen={false} />
         <Pages />
       </QueryClientProvider>
     </BrowserRouter>

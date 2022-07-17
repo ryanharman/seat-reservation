@@ -1,6 +1,6 @@
 import { Button, Col, Divider, Row, Space, Typography } from 'antd';
-import { format, isSameDay, isSameMinute } from 'date-fns';
-import React, { useState } from 'react';
+import { format, getHours, isSameDay, isSameMinute, set } from 'date-fns';
+import React, { useCallback, useState } from 'react';
 
 import { EllipsisOutlined } from '@ant-design/icons';
 
@@ -37,24 +37,27 @@ const ItemSelection = () => {
   // User id must match, if it's not an all day booking then check the start date of the booking
   // if it's an all day booking check to make sure it's the same day and assigned the isAllDay property
   // User id check is not necessary for selected items but for reservation checking it is.
-  const findSelectedItemOrReservation = (item: Reservation) => {
-    const checkForUser = item.userId === userId;
-    // If it's an all day booking we match day only and remove all time
-    // based selections.
-    if (isAllDay) {
-      return isSameDay(item.dateBookedFrom, selectedDate.dateFrom) && checkForUser;
-    }
+  const findSelectedItemOrReservation = useCallback(
+    (item: Reservation) => {
+      const checkForUser = item.userId === userId;
+      // If it's an all day booking we match day only and remove all time
+      // based selections.
+      if (isAllDay) {
+        return isSameDay(item.dateBookedFrom, selectedDate.dateFrom) && checkForUser;
+      }
 
-    const checkForDayBooking =
-      isSameDay(item.dateBookedFrom, selectedDate.dateFrom) && item.isAllDay;
-    if (checkForDayBooking) return checkForUser;
+      const checkForDayBooking =
+        isSameDay(item.dateBookedFrom, selectedDate.dateFrom) && item.isAllDay;
+      if (checkForDayBooking) return checkForUser;
 
-    const checkForTimeBooking =
-      isSameMinute(item.dateBookedFrom, selectedDate.dateFrom) && !item.isAllDay;
-    if (checkForTimeBooking) return checkForUser;
+      const checkForTimeBooking =
+        isSameMinute(item.dateBookedFrom, selectedDate.dateFrom) && !item.isAllDay;
+      if (checkForTimeBooking) return checkForUser;
 
-    return false;
-  };
+      return false;
+    },
+    [isAllDay, userId, selectedDate.dateFrom]
+  );
 
   // Check for a confirmed booking
   const userHasReservationOnSelectedDate = () => {
@@ -66,40 +69,73 @@ const ItemSelection = () => {
     isSameDay(r.dateBookedFrom, selectedDate.dateFrom)
   );
 
-  const handleSelectedItemOnClick = (item: BookableItem) => {
-    const newSelectedItem: Reservation = {
-      id: undefined,
-      bookedItemId: item.id,
-      bookedItemType: item.type,
-      cancelled: false,
-      dateBookedFrom: selectedDate.dateFrom,
-      dateBookedTo: selectedDate.dateTo,
-      userId,
+  const handleSelectedItemOnClick = useCallback(
+    (item: BookableItem) => {
+      const officeHours = {
+        start: getHours(office?.activeTimes.start ?? selectedDate.dateFrom),
+        end:
+          getHours(office?.activeTimes.end ?? selectedDate.dateTo) +
+          (office!.bookingLength ?? 0) / 60,
+      };
+
+      console.log({ selectedDate });
+      console.log({ officeHours });
+
+      // If it's an all day booking we use the office hours for start & finish times.
+      // Otherwise it's the selected date's hours.
+      const dateBookedFrom = isAllDay
+        ? set(selectedDate.dateFrom, { hours: officeHours.start })
+        : selectedDate.dateFrom;
+      const dateBookedTo = isAllDay
+        ? set(selectedDate.dateTo, { hours: officeHours.end })
+        : selectedDate.dateTo;
+
+      const newSelectedItem: Reservation = {
+        id: undefined,
+        bookedItemId: item.id,
+        bookedItemType: item.type,
+        cancelled: false,
+        dateBookedFrom,
+        dateBookedTo,
+        userId,
+        isAllDay,
+      };
+
+      // Find existing item selection on date & time and replace or append
+      if (selectedItems.find(findSelectedItemOrReservation)) {
+        const selectedItemsFiltered = selectedItems.filter(
+          (e) => !findSelectedItemOrReservation(e)
+        );
+        setSelectedItems([...selectedItemsFiltered, newSelectedItem]);
+      } else {
+        setSelectedItems([...selectedItems, newSelectedItem]);
+      }
+    },
+    [
       isAllDay,
-    };
+      office,
+      userId,
+      selectedDate,
+      selectedItems,
+      setSelectedItems,
+      findSelectedItemOrReservation,
+    ]
+  );
 
-    if (selectedItems.find(findSelectedItemOrReservation)) {
-      const selectedItemsFiltered = selectedItems.filter((e) => !findSelectedItemOrReservation(e));
-      setSelectedItems([...selectedItemsFiltered, newSelectedItem]);
-    } else {
-      setSelectedItems([...selectedItems, newSelectedItem]);
-    }
-  };
-
-  const removeItemFromSelected = (
-    item: Reservation,
-    event: React.MouseEvent<HTMLElement, MouseEvent>
-  ) => {
-    event.stopPropagation();
-    const newItems = selectedItems.filter(
-      (e) =>
-        !(
-          isSameMinute(item.dateBookedFrom, e.dateBookedFrom) ||
-          (isSameDay(item.dateBookedFrom, e.dateBookedFrom) && item.isAllDay)
-        )
-    );
-    setSelectedItems(newItems);
-  };
+  const removeItemFromSelected = useCallback(
+    (item: Reservation, event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      event.stopPropagation();
+      const newItems = selectedItems.filter(
+        (e) =>
+          !(
+            isSameMinute(item.dateBookedFrom, e.dateBookedFrom) ||
+            (isSameDay(item.dateBookedFrom, e.dateBookedFrom) && item.isAllDay)
+          )
+      );
+      setSelectedItems(newItems);
+    },
+    [selectedItems, setSelectedItems]
+  );
 
   const onConfirm = () => {
     setStep(1);
@@ -141,6 +177,7 @@ const ItemSelection = () => {
             bookableItems={bookableItems}
             handleSelectedItemOnClick={handleSelectedItemOnClick}
             userHasReservationOnSelectedDate={userHasReservationOnSelectedDate}
+            selectedDate={selectedDate}
           />
         </Row>
         <div>

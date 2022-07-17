@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 
 import { useReservationGet } from '../../api';
 import { useStore } from '../../store';
@@ -9,10 +9,10 @@ import CalendarWeekDays from './CalendarWeekDays';
 
 const Calendar = () => {
   const { id: userId } = useStore((state) => state.user);
-  const { data: reservations = [] } = useReservationGet({ userId });
   const setReservations = useStore((state) => state.setReservations);
+  const { data: reservations = [] } = useReservationGet({ userId });
 
-  useEffect(() => {
+  useMemo(() => {
     setReservations(reservations);
   }, [reservations, setReservations]);
 
